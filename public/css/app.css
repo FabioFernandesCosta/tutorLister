@@ -1,0 +1,375 @@
+/* cor de fundo */
+html {
+    background-color: rgb(216, 216, 216);
+}
+
+/* elementos da tela de login */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif
+}
+
+
+.wrapper {
+    max-width: 350px;
+    min-height: 407px;
+    margin: 80px auto;
+    padding: 40px 30px 30px 30px;
+    background-color: #ecf0f3;
+    border-radius: 15px;
+    box-shadow: 13px 13px 20px #a4a5a7, -13px -13px 20px #c7c7c7;
+}
+
+.logo {
+    width: 80px;
+    margin: auto
+}
+
+.logo img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0px 0px 3px #5f5f5f, 0px 0px 0px 5px #ecf0f3, 8px 8px 15px #a7aaa7, -8px -8px 15px #fff
+}
+
+.wrapper .name {
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: 1.3px;
+    padding-left: 10px;
+    color: #555;
+    margin-bottom: 3rem;
+    margin-top: 1rem;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.2rem;
+    color: #666;
+    padding: 10px 15px 10px 10px;
+    box-shadow: none;
+}
+
+.form-field textarea {
+    resize: none
+}
+
+.form-field {
+    padding-left: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+}
+
+
+.form-field .fas {
+    color: #555
+}
+
+.btn {
+    box-shadow: none;
+    width: 100%;
+    height: 40px;
+    background-color: #f48f03;
+    color: #fff;
+    border-radius: 25px;
+    box-shadow: 3px 3px 3px #b1b1b1, -3px -3px 3px #fff;
+    letter-spacing: 1.3px;
+    margin-top: 25px;
+}
+
+.miniBtn {
+    box-shadow: none;
+    width: 5rem;
+    height: 25px;
+    background-color: #f48f03;
+    color: #fff;
+    border-radius: 25px;
+    box-shadow: 3px 3px 3px #b1b1b1, -3px -3px 3px #fff;
+    letter-spacing: 1.3px;
+    margin-top: 25px;
+    margin-bottom: 2px;
+}
+
+.btn:hover {
+    background-color: #cc6d00
+}
+
+.wrapper a {
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #f48f03
+}
+
+.wrapper a:hover {
+    color: #cc6d00
+}
+
+@media(max-width: 380px) {
+    .wrapper {
+        margin: 30px 20px;
+        padding: 40px 15px 15px 15px
+    }
+}
+
+/* select na tela de login */
+
+select {
+    padding: 5px;
+    background: #edf2ff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+    color: #666;
+}
+
+/* sidemenu */
+
+.mainHead {
+    position: fixed;
+    bottom: 0;
+    width: 4.5rem;
+    height: 100%;
+    z-index: 1;
+    background: #f46303;
+    transition: width 300ms;
+    box-shadow: 13px 13px 20px #a4a5a7, -13px -13px 20px #c7c7c7;
+}
+
+.mainHead span {
+    display: none;
+}
+
+.mainHead:hover {
+    width: 13rem;
+}
+
+.mainHead:hover span {
+    display: inline;
+    color: white;
+}
+
+.mainHead a {
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.mainHead a:hover {
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+
+.menu li {
+    margin-top: 0.8rem;
+}
+
+.menu li:last-child {
+    position: absolute;
+    bottom: 20px;
+}
+
+/* posição do body com relação ao header */
+
+.wrapAll {
+    margin-left: 7rem;
+    margin-top: 2rem;
+    transition: margin-left 300ms;
+    width: 90%;
+
+}
+
+#eventBody {
+    overflow-x: hidden;
+}
+
+header:hover~.wrapAll {
+    margin-left: 15.5rem;
+}
+
+/*elementos dentro do body*/
+
+#pageTitle {
+    font-size: 3rem;
+    font-weight: bolder;
+}
+
+/* Tabelas */
+table {
+    border-collapse: collapse;
+    width: 96%;
+}
+
+td,
+th {
+    border: 1px solid #cfcfcf;
+    padding: 10px;
+}
+
+tr:hover:not(:first-child) {
+    box-shadow: 13px 13px 20px #939496, -13px -13px 20px #b4b4b4;
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    padding: 1px;
+}
+
+tr:nth-child(odd) {
+    background-color: #cfcfcf;
+}
+
+tr:nth-child(even) {
+    background-color: #e9e9e9;
+}
+
+#atvTable {
+    height: 40rem;
+    overflow-y: scroll;
+}
+
+.atvDetalhes {
+    margin-top: 2rem;
+    border: #b8b8b8 2px solid;
+    border-radius: 0.5rem;
+    padding: 2rem 3rem;
+    background-color: #e9e9e9;
+
+}
+
+/*detalhes dos detalhes*/
+
+.atvForm {
+    display: grid;
+    grid-template-columns: 48% 48%;
+    column-gap: 4%;
+}
+
+.desc {
+    height: 100%;
+}
+
+#repart2 {
+    display: grid;
+    grid-template-columns: 48% 48%;
+    column-gap: 4%;
+}
+
+#repart3 {
+    display: grid;
+    grid-template-columns: 30.6% 30.6% 30.6%;
+    column-gap: 4%;
+}
+
+/*botões Atv*/
+.AtvBtns {
+    margin-top: 3rem;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: right;
+    gap: 5px;
+}
+
+td>a {
+    color: black;
+    text-decoration: none;
+}
+
+.btnSideInput {
+    display: grid;
+    grid-template-columns: 95% 4%;
+    gap: 10px;
+}
+
+.btnSideInput>button {
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+    border: none;
+    border-radius: 5px;
+    height: 2.4rem;
+}
+
+/*pego do bootstrap*/
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 0.25rem;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.readonly {
+    pointer-events: none;
+    touch-action: none;
+}
+
+.filterForm{
+    margin-top: 1.55rem;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: left;
+    gap: 5px;
+}
+#filter{
+    width: 14rem;
+}
+
+.ontopMenu{
+    display: flex;
+    width: 100vw;
+}
+
+svg.w-5{
+    visibility: hidden;
+    width: 0;
+}
+
+#indexNotFound{
+    margin-top: 30ex;
+    text-align: center;
+    width: 100%;
+}
+
+#indexNotFound>p{
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.miniImp{
+    padding: 5px;
+    background: #edf2ff;
+    border: solid 1px rgb(185, 185, 185);
+    border-radius: 5px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+    color: #666;
+}

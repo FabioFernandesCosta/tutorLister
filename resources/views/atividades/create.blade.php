@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Shark App</title>
+    <title>Nova Atividade - TutorLister</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
@@ -58,7 +58,7 @@
                 Descrição
                 <div class="form-field desc"> <span></span>
 
-                    <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc"></textarea>
+                    <textarea name="descricao" required='required' id="descricao" cols="30" rows="10" class="desc"></textarea>
                 </div>
             </div>
 
@@ -66,13 +66,13 @@
                 <div style="display: flex;">
 
                     Usuarios envolvidos <button type="button" onclick="addField()" class="miniBtn"
-                        style="margin-top: 0; margin-left:5px; height:20px">add</button><button type="button"
-                        onclick="rmvField()" class="miniBtn" style="margin-top: 0;height:20px">rmv</button>
+                        style="margin-top: 0; margin-left:5px; height:20px">adicionar</button><button type="button"
+                        onclick="rmvField()" class="miniBtn" style="margin-top: 0;height:20px">remover</button>
                 </div>
                 <div id="userContainer">
 
                     <div class="form-field" id="involv">
-                        <input type="text" class="usuario" name="InvolvedUsers[]" id="usuario" list="users">
+                        <input type="text" class="usuario" required='required' name="InvolvedUsers[]" id="usuario" list="users">
                     </div>
                     
                 </div>
@@ -80,7 +80,7 @@
                 <div>
                     <span>Requisitante</span>
                     <div class="form-field" id="req"> <span></span>
-                        <input type="text" name="Requisitante" id="Requisitante" list="reqs">
+                        <input type="text" name="Requisitante" required='required' id="Requisitante" list="reqs">
                     </div>
 
 
@@ -92,31 +92,36 @@
                 <div id="repart3">
                     <span>Data da atividade</span>
                     <span>Hora da atividade</span>
-                    <span>Carga Horária</span>
+                    <span>Carga horária</span>
                     <div class="form-field dth"> <span></span>
-                        <input type="date" name="DoneData" id="DoneData">
+                        <input type="date" required='required' name="DoneData" id="DoneData">
                     </div>
                     <div class="form-field dth"> <span></span>
-                        <input type="time" name="DoneHour" id="DoneHour">
+                        <input type="time" required='required' name="DoneHour" id="DoneHour">
                     </div>
                     <div class="form-field" id="ch"> <span></span>
-                        <input type="time" name="CargaHoraria" id="CargaHoraria" value="00:00">
+                        <input type="time" required='required' name="CargaHoraria" id="CargaHoraria" value="00:00">
                     </div>
                     <div>
                         <span>Status</span>
                         <div class="form-field" id="ch"> <span></span>
-                            <select name="status" id="status">
+                            <select name="status" required='required' id="status">
                                 <option value="Aberto">Aberto</option>
                                 <option value="Em andamento">Em andanmento</option>
                                 <option value="Fechado">Fechado</option>
-                                <option value="Arquivado">Arquivado</option>
                               </select>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{ Form::submit('Criar atividade!', ['class' => 'btn mt-3', 'style' => 'width: 12rem; margin-top: 45px']) }}
+            <div class="atvFormBtn">
+
+                {{ Form::submit('Criar atividade', ['class' => 'btn mt-3', 'style' => 'width: 12rem; margin-top: 45px']) }}
+                <a href="{{url('atividades')}}">
+                    <button type="button" class="btn" style="margin-top: 45px; width:8rem">Cancelar</button>
+                </a>
+            </div>
 
             {{ Form::close() }}
         </div>

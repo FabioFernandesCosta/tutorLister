@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>TutorLister</title>
+    <title>Atividade ID-{{$atv->atividade_id}} - TutorLister</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
@@ -73,7 +73,7 @@
                     @foreach ($atv->usuarios as $key => $value)
                         <div class="form-field" id="involv">
                             <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario" list="users"
-                                value={{ $value->nome }}>
+                                value='{{ $value->nome }}'>
                             @include('autocomplete', ['campo' => '.usuario'])
                         </div>
                     @endforeach
@@ -116,8 +116,13 @@
                 </div>
             </div>
 
-            {{ Form::submit('Editar atividade!', ['class' => 'btn mt-3', 'style' => 'width: 12rem']) }}
+            <div class="atvFormBtn">
 
+                {{ Form::submit('Editar atividade', ['class' => 'btn mt-3', 'style' => 'width: 12rem; margin-top: 45px']) }}
+                <a href="{{url('atividades')}}">
+                    <button type="button" class="btn" style="margin-top: 45px; width:8rem">Cancelar</button>
+                </a>
+            </div>
             {{ Form::close() }}
         </div>
 

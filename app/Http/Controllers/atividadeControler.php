@@ -64,10 +64,13 @@ class atividadeControler extends Controller
                 DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
                 DB::raw('group_concat(DISTINCT usuario.nome) as nome'))
         ->where('atividade.atividade_id', '=', $filter)
+        ->where('atividade.status', 'not like', 'Arquivado')
         ->orWhere('atividade.descricao', 'like', '%'.$filter.'%')
         ->orWhere('usuario.nome', 'like', '%'.$filter.'%')
         ->orWhere('requisitante.nome', 'like', '%'.$filter.'%')
+        ->orWhere('atividade.status', 'like', '%'.$filter.'%')
         ->groupBy('atividade.atividade_id')
+        ->orderBy('atividade.atividade_id', 'DESC')
         ->paginate(15);
 
         // load the view and pass the data
@@ -97,84 +100,88 @@ class atividadeControler extends Controller
     public function store(Request $request)
     {
         $sucesso = false;
-        try {
+        
             //code...
         
+        $rules = array(
+            'InvolvedUsers' => 'required|exists:usuario,nome',
+            'DoneData' => 'required',
+            'DoneHour' => 'required',
+            'CargaHoraria' => 'required',
+            'descricao' => 'required',
+            'Requisitante' => 'required|exists:requisitante,nome',
+            
+        );
+        $mensagens = array(
+            'Requisitante.exists' => 'O valor no campo Requsitante é invalido',
+            'InvolvedUsers.exists' => 'O valor no campo Usuarios envolvidos é invalido',
+            'DoneData.required' => 'O campo Data da atividade é obrigatorio',
+            'Donehour.required' => 'O campo Hora da atividade é obrigatorio',
+            'CargaHoraria.required' => 'O campo Carga horária é obrigatorio',
+            'descricao.required' => 'O campo Descrição horária é obrigatorio',
+        );
+        $validator = Validator::make(Request::all(), $rules, $mensagens);
+        // validate
+        // read more on validation at http://laravel.com/docs/validation
+        
+        // process the login
+        if ($validator->fails()) {
+            return Redirect::to('atividades/create')
+                ->withErrors($validator);
+        } else {
             DB::transaction(function () {
-                // validate
-                // read more on validation at http://laravel.com/docs/validation
-                $rules = array(
-                    'InvolvedUsers' => 'required',
-                    'DoneData' => 'required',
-                    'DoneHour' => 'required',
-                    'CargaHoraria' => 'required',
-                    'descricao' => 'required',
-                    'Requisitante' => 'required',
+                //informações para registro da atividade em si
+                $atividade = new atividade;
+                $atividade->data_atividade = Request::get('DoneData');
+                $atividade->hora_atividade = Request::get('DoneHour');
+                $atividade->carga = Request::get('CargaHoraria');
+                $atividade->descricao = Request::get('descricao');
+                $atividade->data_registro = date("Y-m-d");
+                $atividade->hora_registro = date("h:i:s");
+                $atividade->save();
+
+                //procura pelos usuarios no banco e se existirem cria a relação com a atividade
+                $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
+                foreach ($invUs as &$key) {
+                    $usuario = '';
+                    $usuario = DB::table("usuario")
+                    ->select("usuario_id", "nome")
+                    ->where("nome", "=", $key)
+                    ->get();
+                    if (strtolower($usuario[0]->nome)== strtolower($key)) {
+                        $us_atv = new usuario_atividade;
+                        $us_atv->usuario_id = $usuario[0]->usuario_id;
+                        $us_atv->atividade_id = $atividade->atividade_id;
                     
-                );
-                $validator = Validator::make(Request::all(), $rules);
-                
-                    // process the login
-                    if ($validator->fails()) {
-                        return Redirect::to('atividades/create')
-                            ->withErrors($validator)
-                            ->withInput(Request::except('password'));
-                    } else {
-                        //informações para registro da atividade em si
-                        $atividade = new atividade;
-                        $atividade->data_atividade = Request::get('DoneData');
-                        $atividade->hora_atividade = Request::get('DoneHour');
-                        $atividade->carga = Request::get('CargaHoraria');
-                        $atividade->descricao = Request::get('descricao');
-                        $atividade->data_registro = date("Y-m-d");
-                        $atividade->hora_registro = date("h:i:s");
-                        $atividade->save();
-
-                        //procura pelos usuarios no banco e se existirem cria a relação com a atividade
-                        $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
-                        foreach ($invUs as &$key) {
-                            $usuario = '';
-                            $usuario = DB::table("usuario")
-                            ->select("usuario_id", "nome")
-                            ->where("nome", "=", $key)
-                            ->get();
-                            if (strtolower($usuario[0]->nome)== strtolower($key)) {
-                                $us_atv = new usuario_atividade;
-                                $us_atv->usuario_id = $usuario[0]->usuario_id;
-                                $us_atv->atividade_id = $atividade->atividade_id;
-                            
-                                
-                            }else{
-                                dd($usuario[0]->nome, $key);
-                                dd("error, 111");
-                            }
-                            $us_atv->save();
-                        }
-
-                        $req = Request::get('Requisitante');
-                        $requisitante = DB::table("requisitante") 
-                        ->select("requisitante_id","nome")
-                        ->where("nome", "=", $req)
-                        ->get();
-                        if (strtolower($requisitante[0]->nome) == strtolower($req)) {
-                            $atv_req = new atividade_requisitante;
-                            $atv_req->requisitante_id = $requisitante[0]->requisitante_id;
-                            $atv_req->atividade_id = $atividade->atividade_id;
-                        }else{
-                            dd("error, 111");
-                        }
-                        $atv_req->save();
-                        // redirect
-                        Session::flash('message', 'Atividade registrada com successo!');
-                        $sucesso = true;
-                        return Redirect::to('atividades/' . $atividade->atividade_id);
+                        
+                    }else{
+                        dd($usuario[0]->nome, $key);
+                        dd("error, 111");
                     }
-            });
-        } catch (\Throwable $th) {
-            echo '<script>alert("Erro, não foi possivel salvar os dados, verifique-os")</script>';
-        }
+                    $us_atv->save();
+                }
 
-        return Redirect::to('atividades');
+                $req = Request::get('Requisitante');
+                $requisitante = DB::table("requisitante") 
+                ->select("requisitante_id","nome")
+                ->where("nome", "=", $req)
+                ->get();
+                if (strtolower($requisitante[0]->nome) == strtolower($req)) {
+                    $atv_req = new atividade_requisitante;
+                    $atv_req->requisitante_id = $requisitante[0]->requisitante_id;
+                    $atv_req->atividade_id = $atividade->atividade_id;
+                }else{
+                    dd("error, 111");
+                }
+                $atv_req->save();
+                // redirect
+                Session::flash('message', 'Atividade registrada com successo!');
+                $sucesso = true;
+                return Redirect::to('atividades/' . $atividade->atividade_id);
+                
+            });
+            return Redirect::to('atividades/');
+        }
         
     }
 
@@ -205,8 +212,10 @@ class atividadeControler extends Controller
         ->groupBy('atividade.atividade_id')
         ->where('atividade.atividade_id', '=', $id)
         ->get();
+        
         $atv[0]->nome = explode(",",$atv[0]->nome);
         $atv[0]->requisitante = RequisitanteController::consultar($atv[0]->requisitante);
+
         return View::make('atividades.show') ->with('atv', $atv);
     }
 
@@ -252,16 +261,24 @@ class atividadeControler extends Controller
 
          // validate
                 // read more on validation at http://laravel.com/docs/validation
+                
                 $rules = array(
-                    'InvolvedUsers' => 'required',
+                    'InvolvedUsers' => 'required|exists:usuario,nome',
                     'DoneData' => 'required',
                     'DoneHour' => 'required',
                     'CargaHoraria' => 'required',
                     'descricao' => 'required',
-                    'Requisitante' => 'required',
-                    
+                    'Requisitante' => 'required|exists:requisitante,nome',
                 );
-                $validator = Validator::make(Request::all(), $rules);
+                $mensagens = array(
+                    'Requisitante.exists' => 'O valor no campo Requsitante é invalido',
+                    'InvolvedUsers.exists' => 'O valor no campo Usuarios envolvidos é invalido',
+                    'DoneData.required' => 'O campo Data da atividade é obrigatorio',
+                    'Donehour.required' => 'O campo Hora da atividade é obrigatorio',
+                    'CargaHoraria.required' => 'O campo Carga horária é obrigatorio',
+                    'descricao.required' => 'O campo Descrição horária é obrigatorio',
+                );
+                $validator = Validator::make(Request::all(), $rules, $mensagens);
                 
                 // process the login
                 if ($validator->fails()) {
@@ -276,7 +293,6 @@ class atividadeControler extends Controller
                         $atv->carga = Request::get('CargaHoraria');
                         $atv->descricao = Request::get('descricao');
                         $atv->save();
-
                         //procura pelos usuarios no banco e se existirem cria a relação com a atividade
                         $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
                         foreach ($invUs as &$key) {
@@ -285,18 +301,18 @@ class atividadeControler extends Controller
                             ->select("usuario_id", "nome")
                             ->where("nome", "=", $key)
                             ->get();
-
+                            
                             DB::table("usuario_atividade")
                             ->where("atividade_id", "=", $atv->atividade_id)
                             ->delete();
-
+                            
                             //dd($atv->atividade_id, $usuario[0]->usuario_id);
                             if (strtolower($usuario[0]->nome)== strtolower($key)) {
                                 $us_atv = new usuario_atividade;
                                 $us_atv->usuario_id = $usuario[0]->usuario_id;
-
+                                
                                 $us_atv->atividade_id = $atv->atividade_id;
-                            
+                                
                                 
                             }else{
                                 dd($usuario[0]->nome, $key);
@@ -310,14 +326,12 @@ class atividadeControler extends Controller
                         $requisitante = DB::table("requisitante") 
                         ->select("requisitante_id","nome")
                         ->where("nome", "=", $req)
-                        ->get();
-                        if (strtolower($requisitante[0]->nome) == strtolower($req)) {
+                        ->first();
+                        if (strtolower($requisitante->nome) == strtolower($req)) {
                             $atv_req = atividade_requisitante::where("atividade_id", "=", $atv->atividade_id)
-                            ->Where("requisitante_id","=", $usuario[0]->usuario_id)
                             ->first();
-
-
-                            $atv_req->requisitante_id = $requisitante[0]->requisitante_id;
+                            //dd($atv_req);
+                            $atv_req->requisitante_id = $requisitante->requisitante_id;
                             $atv_req->atividade_id = $atv->atividade_id;
                         }else{
                             dd("error, 111");
@@ -326,8 +340,8 @@ class atividadeControler extends Controller
                         $atv_req->save();
                         // redirect
                         Session::flash('message', 'Atividade registrada com successo!');
-                        return Redirect::to('atividades');
                     });
+                    return Redirect::to('atividades');
                 }
 
     }

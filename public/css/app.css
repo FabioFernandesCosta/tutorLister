@@ -232,7 +232,7 @@ tr:nth-child(even) {
 
 #atvTable {
     height: 40rem;
-    overflow-y: scroll;
+    width: 94vw;
 }
 
 .atvDetalhes {
@@ -270,7 +270,7 @@ tr:nth-child(even) {
 
 /*botões Atv*/
 .AtvBtns {
-    margin-top: 3rem;
+    margin-top: 1.5rem;
     margin-bottom: 6px;
     display: flex;
     justify-content: right;
@@ -373,3 +373,14 @@ svg.w-5{
     box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
     color: #666;
 }
+
+.atvFormBtn{
+    display: grid;
+    grid-template-columns: 24% 18%;
+    column-gap: 4%;
+}
+
+.form-error {
+
+    border: 2px solid #e74c3c;
+  }

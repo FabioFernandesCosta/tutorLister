@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Login</title>
+    <title>Atividades - TutorLister</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
@@ -73,12 +73,13 @@
                         <th>ID</th>
                         <th>Descrição</th>
                         <th>Usuarios envolvidos</th>
+                        <th>Requisitante</th>
                         <th>Data de realização</th>
                         <th>Hora de realização</th>
-                        <th>Requisitante</th>
                         <th>Data do Registro</th>
                         <th>Hora do Registro</th>
                         <th>Carga Horária da Atividade</th>
+                        <th>Status</th>
                     </tr>
                     {{-- parte com as infos, seguir exemplo do link do web.php --}}
 
@@ -95,13 +96,13 @@
                                     href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->nome }}</a>
                             </td>
                             <td><a
+                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->requisitante }}</a>
+                            </td>
+                            <td><a
                                     href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->data_atividade }}</a>
                             </td>
                             <td><a
                                     href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->hora_atividade }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->requisitante }}</a>
                             </td>
                             <td><a
                                     href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->data_registro }}</a>
@@ -111,6 +112,9 @@
                             </td>
                             <td><a
                                     href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->carga }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ URL::to('atividades/' . $value->status) }}">{{ $value->status }}</a>
                             </td>
 
                         </tr>
@@ -137,8 +141,10 @@
 </body>
 <script>
     let filter = (window.location.href).split('=')[1];
+    if (filter = 'undefined') {
+        filter = '';
+    }
     document.getElementById("filter").value = filter;
-    console.log(document.getElementById('filter').value);
 </script>
 
 </html>

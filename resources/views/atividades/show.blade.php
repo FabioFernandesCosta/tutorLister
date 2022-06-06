@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Login</title>
+    <title>Atividade ID-{{$atv[0]->atividade_id}} - TutorLister</title>
+    
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
@@ -30,16 +31,16 @@
     </div>
     <div class="wrapAll">
         
-        <span id="pageTitle">
+        <h1 >
             Atividade ID-{{$atv[0]->atividade_id}}
-        </span>
+        </h1>
 
 
         {{-- detalhes do selecionado --}}
         <div class="AtvBtns">
 
-            <a href={{ url('atividades/create') }}>
-                <button class="miniBtn">Novo</button>
+            <a href={{ url('atividades') }}>
+                <button class="miniBtn">Voltar</button>
             </a>
             <a href={{ url('atividades/' . $atv[0]->atividade_id .'/edit') }}>
                 <button class="miniBtn">Editar</button>
@@ -63,12 +64,12 @@
                     </div>
 
                     @foreach ($atv[0]->nome as $key => $value)
-    
+                    
                     <div id="userContainer">
 
                         <div class="form-field" id="involv"> <span></span>
                             
-                            <input type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value={{$value}}>
+                            <input type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value='{{$value}}'>
                             <datalist id="users">
                                 <option value="(puxar de acordo com usuarios existentes no banco)"></option>
                             </datalist>

@@ -46,8 +46,21 @@ class atividadeControler extends Controller
     {
         // get all
         $filter = Request::get('filter');
+        $fechado = Request::get('fec');
+        $arquivado = Request::get('arq');
+        if (Request::get('fec') == "on") {
+            $fechado = "like";
+        }else{
+            $fechado = "not like";
+        }
 
-        
+        if (Request::get('arq') == "on") {
+            $arquivado = "like";
+        }else{
+            $arquivado = "not like";
+        }
+        //dd($fechado, $arquivado, !empty($filter));
+
         $atv = DB::table('atividade')
         ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
         ->join('usuario','usuario_atividade.usuario_id', '=', 'usuario.usuario_id')
@@ -62,20 +75,38 @@ class atividadeControler extends Controller
                 "atividade.descricao",
                 "atividade.status",
                 DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
-                DB::raw('group_concat(DISTINCT usuario.nome) as nome'))
-        ->where('atividade.atividade_id', '=', $filter)
-        ->where('atividade.status', 'not like', 'Arquivado')
-        ->orWhere('atividade.descricao', 'like', '%'.$filter.'%')
-        ->orWhere('usuario.nome', 'like', '%'.$filter.'%')
-        ->orWhere('requisitante.nome', 'like', '%'.$filter.'%')
-        ->orWhere('atividade.status', 'like', '%'.$filter.'%')
-        ->groupBy('atividade.atividade_id')
-        ->orderBy('atividade.atividade_id', 'DESC')
-        ->paginate(15);
+                DB::raw('group_concat(DISTINCT usuario.nome) as nome'));
+        
+
+
+        if (!empty($filter)) {
+            $atv = $atv->orWhere('atividade.atividade_id', '=', $filter)
+           ->orWhere('atividade.descricao', 'like', '%'.$filter.'%')
+           ->orWhere('usuario.nome', 'like', '%'.$filter.'%')
+           ->orWhere('requisitante.nome', 'like', '%'.$filter.'%');
+
+        }
+
+
+        if (Request::get('fec') != "on" and Request::get('arq') != "on") {
+            $atv = $atv->whereNotIn('atividade.status', ['Arquivado', 'Fechado']);
+        }elseif(empty($filter)){
+            $atv = $atv
+            ->orWhere('atividade.status', $arquivado, 'Arquivado')
+            ->orWhere('atividade.status', $fechado, 'Fechado');
+        }
+        
+
+        
+        $atv->groupBy('atividade.atividade_id')
+        ->orderBy('atividade.atividade_id', 'DESC');
+
+        $atv2 = $atv->paginate(15);
+        
 
         // load the view and pass the data
         return View::make('atividades.index')
-            ->with(['atv'=> $atv, 'filter' => $filter]);
+            ->with(['atv'=> $atv2, 'filter' => $filter, 'fec' => Request::get('fec'), 'arq' => Request::get('arq')]);
 
 
     }
@@ -138,6 +169,7 @@ class atividadeControler extends Controller
                 $atividade->descricao = Request::get('descricao');
                 $atividade->data_registro = date("Y-m-d");
                 $atividade->hora_registro = date("h:i:s");
+                $atividade->status = Request::get('status');
                 $atividade->save();
 
                 //procura pelos usuarios no banco e se existirem cria a relação com a atividade
@@ -292,6 +324,7 @@ class atividadeControler extends Controller
                         $atv->hora_atividade = Request::get('DoneHour');
                         $atv->carga = Request::get('CargaHoraria');
                         $atv->descricao = Request::get('descricao');
+                        $atv->status = Request::get('status');
                         $atv->save();
                         //procura pelos usuarios no banco e se existirem cria a relação com a atividade
                         $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
@@ -359,6 +392,6 @@ class atividadeControler extends Controller
 
     
     public function export(Request $request){
-        return Excel::download(new AtvExport(Request::get('filter')), 'atividades.csv');
+        return Excel::download(new AtvExport(Request::get('filter'), Request::get('fec'), Request::get('arq')), 'atividades.csv');
     }
 }

@@ -21,11 +21,19 @@
     <nav class="headNav">
       <ul class="menu">
         <li>
+          <a>
+            <img id="menuIcon" src="{{url('/image/Menu.png')}}" />
+            <span style="font-size: 1.6rem;">TutorLister</span>
+          </a>
+        </li>
+        <li>
           <a href={{ url('atividades') }}>
+            <img src="{{url('/image/notes.png')}}" />
             <span>Atividade</span></a>
         </li>
         <li>
           <a href={{ url('dashboard') }}>
+            <img src="{{url('/image/activity.png')}}" />
             <span>Dashboard</span></a>
         </li>
         <li>
@@ -38,6 +46,7 @@
         </li>
         <li>
           <a href="">
+            <img src="{{url('/image/user.png')}}" />
             <span>user</span></a>
         </li>
       </ul>

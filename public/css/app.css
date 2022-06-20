@@ -146,17 +146,39 @@ select {
     box-shadow: 13px 13px 20px #a4a5a7, -13px -13px 20px #c7c7c7;
 }
 
+.mainHead:hover {
+    width: 14rem;
+}
 .mainHead span {
-    display: none;
+    display: inline;
+    color: white;
+    position: fixed;
+    transition: left 300ms;
+    left: -10rem;
 }
 
-.mainHead:hover {
-    width: 13rem;
-}
 
 .mainHead:hover span {
     display: inline;
     color: white;
+    left: 1.5rem;
+}
+
+.mainHead img{
+    margin-left: 0;
+    transition: margin 300ms;
+    width: 24px;
+    height: 24px;
+
+}
+.mainHead:hover img{
+    margin-left: 9rem;
+}
+
+#menuIcon{
+    width: 32px;
+    height: 32px;
+    margin-bottom: 1rem
 }
 
 .mainHead a {
@@ -194,7 +216,7 @@ select {
 }
 
 header:hover~.wrapAll {
-    margin-left: 15.5rem;
+    margin-left: 16.5rem;
 }
 
 /*elementos dentro do body*/

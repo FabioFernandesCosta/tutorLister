@@ -119,7 +119,7 @@
             <div class="atvFormBtn">
 
                 {{ Form::submit('Editar atividade', ['class' => 'btn mt-3', 'style' => 'width: 12rem; margin-top: 45px']) }}
-                <a href="{{url('atividades')}}">
+                <a href="{{url('atividades/'. $atv->atividade_id)}}">
                     <button type="button" class="btn" style="margin-top: 45px; width:8rem">Cancelar</button>
                 </a>
             </div>

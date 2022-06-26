@@ -23,7 +23,7 @@
         <li>
           <a>
             <img id="menuIcon" src="{{url('/image/Menu.png')}}" />
-            <span style="font-size: 1.6rem;">TutorLister</span>
+            <span style="font-size: 1.6rem; margin-top: 1rem;">TutorLister</span>
           </a>
         </li>
         <li>

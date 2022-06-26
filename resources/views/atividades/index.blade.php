@@ -41,11 +41,7 @@
         <div class="AtvBtns">
             <form class="filterForm" autocomplete="off" method="GET">
                 <div class="">
-                    <input type="checkbox" id="arq" name="arq" >
-                    <label style="margin-right: 0.8rem" for="arq">Arquivados</label>
-
-                    <input type="checkbox" id="fec" name="fec">
-                    <label style="margin-right: 1.2rem" for="fec">Fechados</label>
+                    
 
                     <label for="filter" class="" style="font-weight: bold">Filtro</label>
                     <input type="text" class="miniImp" id="filter" name="filter"
@@ -63,8 +59,7 @@
             <form method="POST" action="{{ route('atividade.export') }}">
                 @csrf
                 <input hidden value="{{ $filter }}" name="filter" type="text">
-                <input hidden value="{{ $fec }}" name="fec" type="checkbox">
-                <input hidden value="{{ $arq }}" name="arq" type="checkbox">
+                
 
                 <button class="miniBtn" type="submit">Exportar</button>
 

@@ -182,7 +182,8 @@ select {
 #menuIcon{
     width: 32px;
     height: 32px;
-    margin-bottom: 1rem
+    margin-bottom: 2.5rem;
+    margin-top: 1rem;
 }
 
 .mainHead a {

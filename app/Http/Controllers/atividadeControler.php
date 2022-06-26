@@ -46,20 +46,7 @@ class atividadeControler extends Controller
     {
         // get all
         $filter = Request::get('filter');
-        $fechado = Request::get('fec');
-        $arquivado = Request::get('arq');
-        if (Request::get('fec') == "on") {
-            $fechado = "like";
-        }else{
-            $fechado = "not like";
-        }
-
-        if (Request::get('arq') == "on") {
-            $arquivado = "like";
-        }else{
-            $arquivado = "not like";
-        }
-        //dd($fechado, $arquivado, !empty($filter));
+        
 
         $atv = DB::table('atividade')
         ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
@@ -75,25 +62,22 @@ class atividadeControler extends Controller
                 "atividade.descricao",
                 "atividade.status",
                 DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
-                DB::raw('group_concat(DISTINCT usuario.nome) as nome'));
+                DB::raw('group_concat(DISTINCT usuario.nome) as nome'))
+        ;
         
+        if(strtolower($filter) != 'arquivado' and empty($filter)){
+            $atv = $atv->where('atividade.status', '<>', 'Arquivado');
+        }else if (strtolower($filter) == 'arquivado'){
+            $atv = $atv->where('atividade.status', '=', 'Arquivado');
+        }
 
-
-        if (!empty($filter)) {
+        if (!empty($filter) and strtolower($filter) != 'arquivado') {
             $atv = $atv->orWhere('atividade.atividade_id', '=', $filter)
            ->orWhere('atividade.descricao', 'like', '%'.$filter.'%')
            ->orWhere('usuario.nome', 'like', '%'.$filter.'%')
-           ->orWhere('requisitante.nome', 'like', '%'.$filter.'%');
+           ->orWhere('requisitante.nome', 'like', '%'.$filter.'%')
+           ->orWhere('atividade.status', 'like', $filter);
 
-        }
-
-
-        if (Request::get('fec') != "on" and Request::get('arq') != "on") {
-            $atv = $atv->whereNotIn('atividade.status', ['Arquivado', 'Fechado']);
-        }elseif(empty($filter)){
-            $atv = $atv
-            ->orWhere('atividade.status', $arquivado, 'Arquivado')
-            ->orWhere('atividade.status', $fechado, 'Fechado');
         }
         
 
@@ -106,7 +90,7 @@ class atividadeControler extends Controller
 
         // load the view and pass the data
         return View::make('atividades.index')
-            ->with(['atv'=> $atv2, 'filter' => $filter, 'fec' => Request::get('fec'), 'arq' => Request::get('arq')]);
+            ->with(['atv'=> $atv2, 'filter' => $filter]);
 
 
     }
@@ -392,6 +376,6 @@ class atividadeControler extends Controller
 
     
     public function export(Request $request){
-        return Excel::download(new AtvExport(Request::get('filter'), Request::get('fec'), Request::get('arq')), 'atividades.csv');
+        return Excel::download(new AtvExport(Request::get('filter')), 'atividades.csv');
     }
 }

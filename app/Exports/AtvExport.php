@@ -22,22 +22,8 @@ class AtvExport implements FromCollection
     */
     public function collection()
     {
-        $filter = $this->filter;
-        $fechadoV = $this->fechado;
-        $arquivadoV = $this->arquivado;
-
-        if ($fechadoV == "on") {
-            $fechado = "like";
-        }else{
-            $fechado = "not like";
-        }
-
-        if ($arquivadoV == "on") {
-            $arquivado = "like";
-        }else{
-            $arquivado = "not like";
-        }
-
+        $filter = Request::get('filter');
+        
 
         $atv = DB::table('atividade')
         ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
@@ -53,25 +39,22 @@ class AtvExport implements FromCollection
                 "atividade.descricao",
                 "atividade.status",
                 DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
-                DB::raw('group_concat(DISTINCT usuario.nome) as nome'));
+                DB::raw('group_concat(DISTINCT usuario.nome) as nome'))
+        ;
         
+        if(strtolower($filter) != 'arquivado' and empty($filter)){
+            $atv = $atv->where('atividade.status', '<>', 'Arquivado');
+        }else if (strtolower($filter) == 'arquivado'){
+            $atv = $atv->where('atividade.status', '=', 'Arquivado');
+        }
 
-
-        if (!empty($filter)) {
+        if (!empty($filter) and strtolower($filter) != 'arquivado') {
             $atv = $atv->orWhere('atividade.atividade_id', '=', $filter)
            ->orWhere('atividade.descricao', 'like', '%'.$filter.'%')
            ->orWhere('usuario.nome', 'like', '%'.$filter.'%')
-           ->orWhere('requisitante.nome', 'like', '%'.$filter.'%');
+           ->orWhere('requisitante.nome', 'like', '%'.$filter.'%')
+           ->orWhere('atividade.status', 'like', $filter);
 
-        }
-
-
-        if (Request::get('fec') != "on" and Request::get('arq') != "on") {
-            $atv = $atv->whereNotIn('atividade.status', ['Arquivado', 'Fechado']);
-        }elseif(empty($filter)){
-            $atv = $atv
-            ->orWhere('atividade.status', $arquivado, 'Arquivado')
-            ->orWhere('atividade.status', $fechado, 'Fechado');
         }
         
 

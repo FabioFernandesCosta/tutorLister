@@ -60,6 +60,7 @@ class AtvExport implements FromCollection
 
         
         $atv->groupBy('atividade.atividade_id')
+        ->orderBy('atividade.status', 'asc')
         ->orderBy('atividade.atividade_id', 'DESC');
         #add header to the file
         $atv = $atv->get()->toArray();

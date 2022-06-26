@@ -83,6 +83,7 @@ class atividadeControler extends Controller
 
         
         $atv->groupBy('atividade.atividade_id')
+        ->orderBy('atividade.status', 'asc')
         ->orderBy('atividade.atividade_id', 'DESC');
 
         $atv2 = $atv->paginate(15);

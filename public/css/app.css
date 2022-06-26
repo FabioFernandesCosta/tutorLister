@@ -101,7 +101,11 @@ html {
     margin-bottom: 2px;
 }
 
-.btn:hover {
+.miniBtn a{
+    color: #fff;
+}
+
+.btn:hover{
     background-color: #cc6d00
 }
 
@@ -255,6 +259,7 @@ tr:nth-child(even) {
 #atvTable {
     height: 40rem;
     width: 94vw;
+    
 }
 
 .atvDetalhes {
@@ -411,4 +416,8 @@ svg.w-5{
     color: red;
     font-size: 0.8rem;
     list-style-type: none;
+}
+
+#paginacao{
+    border-top: solid 1px #41414123;
 }

@@ -78,8 +78,13 @@ class AtvExport implements FromCollection
         
         $atv->groupBy('atividade.atividade_id')
         ->orderBy('atividade.atividade_id', 'DESC');
+        #add header to the file
+        $atv = $atv->get()->toArray();
+        array_unshift($atv, $atv[0]);
+        $atv[0] = (array) $atv[0];
+        $atv[0] = $this->headings();
+        return collect($atv);
 
-        return $atv->get();
 
 
 
@@ -92,6 +97,6 @@ class AtvExport implements FromCollection
 
     public function headings(): array
     {
-        return ["ID", "Descrição", "Usuarios", "Requisitante", "Status", "Data da atividade", "Hora da atividade", "Data do registro", "Hora do registro", "Carga"];
+        return ["ID","Data da atividade","Data do registro","Hora da atividade","Hora do registro","Carga","Descrição","Status","Requisitante","Usuarios"];
     }
 }

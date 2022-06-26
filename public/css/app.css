@@ -405,4 +405,10 @@ svg.w-5{
 .form-error {
 
     border: 2px solid #e74c3c;
-  }
+}
+
+.ulError{
+    color: red;
+    font-size: 0.8rem;
+    list-style-type: none;
+}

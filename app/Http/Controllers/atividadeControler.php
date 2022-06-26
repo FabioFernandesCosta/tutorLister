@@ -149,7 +149,7 @@ class atividadeControler extends Controller
             'DoneData.required' => 'O campo Data da atividade é obrigatorio',
             'Donehour.required' => 'O campo Hora da atividade é obrigatorio',
             'CargaHoraria.required' => 'O campo Carga horária é obrigatorio',
-            'descricao.required' => 'O campo Descrição horária é obrigatorio',
+            'descricao.required' => 'O campo Descrição é obrigatorio',
         );
         $validator = Validator::make(Request::all(), $rules, $mensagens);
         // validate
@@ -374,7 +374,7 @@ class atividadeControler extends Controller
                         // redirect
                         Session::flash('message', 'Atividade registrada com successo!');
                     });
-                    return Redirect::to('atividades');
+                    return Redirect::to('atividades/'.$id);
                 }
 
     }

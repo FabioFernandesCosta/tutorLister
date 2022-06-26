@@ -42,12 +42,11 @@
 
         <h1>Editar Atividade ID-{{ $atv->atividade_id }}</h1>
 
-        <!-- if there are creation errors, they will show here -->
-        {{ Html::ul($errors->all()) }}
+
 
         <div class="atvDetalhes" style="height: auto">
 
-            {{ HTML::ul($errors->all()) }}
+
             {{ Form::model($atv, ['route' => ['atividades.update', $atv->atividade_id], 'method' => 'PUT', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
 
 
@@ -55,6 +54,7 @@
             <div>
 
                 Descrição
+                {{ Html::ul($errors->get('descricao'), array('class' => 'ulError')) }}
                 <div class="form-field desc"> <span></span>
 
                     <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc">{{ $atv->descricao }}</textarea>
@@ -70,6 +70,7 @@
 
                 </div>
                 <div id="userContainer">
+                    {{ Html::ul($errors->get('InvolvedUsers'), array('class' => 'ulError')) }}
                     @foreach ($atv->usuarios as $key => $value)
                         <div class="form-field" id="involv">
                             <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario" list="users"
@@ -81,6 +82,7 @@
 
                 <span>Requisitante</span>
 
+                {{ Html::ul($errors->get('Requisitante'), array('class' => 'ulError')) }}
                 <div class="form-field" id="req"> <span></span>
                     <input type="text" name="Requisitante" id="Requisitante" list="reqs"
                         value={{ $atv->requisitante->nome }}>
@@ -93,14 +95,25 @@
                     <span>Data da atividade</span>
                     <span>Hora da atividade</span>
                     <span>Carga Horária</span>
-                    <div class="form-field dth"> <span></span>
-                        <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }}>
+                    <div>
+                        {{ Html::ul($errors->get('DoneData'), array('class' => 'ulError')) }}
+                        <div class="form-field dth"> <span></span>
+                            <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }}>
+                        </div>
                     </div>
-                    <div class="form-field dth"> <span></span>
-                        <input type="time" name="DoneHour" id="DoneHour" value={{ $atv->hora_atividade }}>
+
+                    <div>
+                        {{ Html::ul($errors->get('DoneHour'), array('class' => 'ulError')) }}
+                        <div class="form-field dth"> <span></span>
+                            <input type="time" name="DoneHour" id="DoneHour" value={{ $atv->hora_atividade }}>
+                        </div>
                     </div>
-                    <div class="form-field" id="ch"> <span></span>
-                        <input type="time" name="CargaHoraria" id="CargaHoraria" value={{ $atv->carga }}>
+
+                    <div>
+                        {{ Html::ul($errors->get('CargaHoraria'), array('class' => 'ulError')) }}
+                        <div class="form-field" id="ch"> <span></span>
+                            <input type="time" name="CargaHoraria" id="CargaHoraria" value={{ $atv->carga }}>
+                        </div>
                     </div>
                     <div>
                         <span>Status</span>

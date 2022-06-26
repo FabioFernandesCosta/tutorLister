@@ -45,7 +45,6 @@
         <h1>Registrar Atividade</h1>
 
         <!-- if there are creation errors, they will show here -->
-        {{ Html::ul($errors->all()) }}
 
         <div class="atvDetalhes" style="height: auto">
 
@@ -56,9 +55,9 @@
             <div>
 
                 Descrição
+                {{ Html::ul($errors->get('descricao'), array('class' => 'ulError')) }}
                 <div class="form-field desc"> <span></span>
-
-                    <textarea name="descricao" required='required' id="descricao" cols="30" rows="10" class="desc"></textarea>
+                    <textarea name="descricao" required="required" id="descricao" cols="30" rows="10" class="desc"></textarea>
                 </div>
             </div>
 
@@ -71,6 +70,7 @@
                 </div>
                 <div id="userContainer">
 
+                    {{ Html::ul($errors->get('InvolvedUsers'), array('class' => 'ulError')) }}
                     <div class="form-field" id="involv">
                         <input type="text" class="usuario" required='required' name="InvolvedUsers[]" id="usuario" list="users">
                     </div>
@@ -79,6 +79,7 @@
                 
                 <div>
                     <span>Requisitante</span>
+                    {{ Html::ul($errors->get('Requisitante'), array('class' => 'ulError')) }}
                     <div class="form-field" id="req"> <span></span>
                         <input type="text" name="Requisitante" required='required' id="Requisitante" list="reqs">
                     </div>
@@ -93,15 +94,28 @@
                     <span>Data da atividade</span>
                     <span>Hora da atividade</span>
                     <span>Carga horária</span>
-                    <div class="form-field dth"> <span></span>
-                        <input type="date" required='required' name="DoneData" id="DoneData">
+                    <div>
+                        {{ Html::ul($errors->get('DoneData'), array('class' => 'ulError')) }}
+                        <div class="form-field dth"> <span></span>
+                            <input type="date" required='required' name="DoneData" id="DoneData">
+                        </div>
                     </div>
-                    <div class="form-field dth"> <span></span>
-                        <input type="time" required='required' name="DoneHour" id="DoneHour">
+
+                    <div>
+                        {{ Html::ul($errors->get('DoneHour'), array('class' => 'ulError')) }}
+                        <div class="form-field dth"> <span></span>
+                            <input type="time" required='required' name="DoneHour" id="DoneHour">
+                        </div>
                     </div>
-                    <div class="form-field" id="ch"> <span></span>
-                        <input type="time" required='required' name="CargaHoraria" id="CargaHoraria" value="00:00">
+
+
+                    <div>
+                        {{ Html::ul($errors->get('CargaHoraria'), array('class' => 'ulError')) }}
+                        <div class="form-field" id="ch"> <span></span>
+                            <input type="time" required='required' name="CargaHoraria" id="CargaHoraria" value="00:00">
+                        </div>
                     </div>
+                    
                     <div>
                         <span>Status</span>
                         <div class="form-field" id="ch"> <span></span>

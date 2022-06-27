@@ -119,10 +119,20 @@
                         <span>Status</span>
                         <div class="form-field" id="ch"> <span></span>
                             <select name="status" id="status">
-                                <option value="Aberto">Aberto</option>
-                                <option value="Em andamento">Em andanmento</option>
-                                <option value="Fechado">Fechado</option>
-                                <option value="Arquivado">Arquivado</option>
+                                @if($atv->status == 'Aberto')
+                                    <option value="Aberto" selected>Aberto</option>
+                                    <option value="Em andamento">Em andamento</option>
+                                    <option value="Fechado">Fechado</option>
+                                @elseif($atv->status == 'Em andamento')
+                                    <option value="Aberto">Aberto</option>
+                                    <option value="Em andamento" selected>Em andamento</option>
+                                    <option value="Fechado">Fechado</option>
+                                @elseif($atv->status == 'Fechado')
+                                    <option value="Aberto">Aberto</option>
+                                    <option value="Em andamento">Em andamento</option>
+                                    <option value="Fechado" selected>Fechado</option>
+                                    <option value="Arquivado">Arquivado</option>
+                                @endif
                               </select>
                         </div>
                     </div>

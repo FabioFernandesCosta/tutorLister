@@ -122,7 +122,6 @@
                             <select name="status" required='required' id="status">
                                 <option value="Aberto">Aberto</option>
                                 <option value="Em andamento">Em andanmento</option>
-                                <option value="Fechado">Fechado</option>
                               </select>
                         </div>
                     </div>

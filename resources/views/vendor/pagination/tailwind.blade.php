@@ -2,7 +2,7 @@
     <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex items-center justify-between">
         <div class="flex justify-between flex-1 sm:hidden">
             @if ($paginator->onFirstPage())
-            <button class="miniBtn" style="color: rgb(255, 192, 163)">
+            <button class="miniBtn" disabled>
 
                 <span style="text-decoration: none" class="">
                     {!! __('pagination.previous') !!}
@@ -23,7 +23,7 @@
                 </a>
             </button>
             @else
-            <button class="miniBtn" style="color: rgb(255, 192, 163)">
+            <button class="miniBtn" disabled>
                 <span style="text-decoration: none" class="">
                     {!! __('pagination.next') !!}
                 </span>

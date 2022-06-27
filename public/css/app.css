@@ -241,7 +241,23 @@ td,
 th {
     border: 1px solid #cfcfcf;
     padding: 10px;
+   
 }
+
+
+
+.descr>a{
+    display: block;
+    width: 20rem;
+    white-space: nowrap;
+    overflow-x: scroll;
+}
+
+.descr>a::-webkit-scrollbar {
+    height: 0 !important
+
+}
+    
 
 tr:hover:not(:first-child) {
     box-shadow: 13px 13px 20px #939496, -13px -13px 20px #b4b4b4;

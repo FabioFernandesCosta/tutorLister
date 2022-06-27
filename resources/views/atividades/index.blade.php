@@ -92,7 +92,7 @@
                             <td><a
                                     href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->atividade_id }}</a>
                             </td>
-                            <td><a
+                            <td class="descr"><a 
                                     href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->descricao }}</a>
                             </td>
                             <td><a

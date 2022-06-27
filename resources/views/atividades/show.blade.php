@@ -43,10 +43,15 @@
                 <button class="miniBtn">Voltar</button>
             </a>
             <a href={{ url('atividades/' . $atv[0]->atividade_id .'/edit') }}>
-                <button class="miniBtn">Editar</button>
+                @if ($atv[0]->status == 'Arquivado')
+                    <button class="miniBtn" disabled>Editar</button>
+                @else
+                    <button class="miniBtn">Editar</button>
+                @endif
             </a>
-
+            
         </div>
+        
         <div class="atvDetalhes" style="margin-top: 0">
             <form class="p-3 mt-3 atvForm">
                 <div>
@@ -134,7 +139,7 @@
                         <div>
                             <span>Status</span>
                             <div class="form-field" id="ch"> <span></span>
-                                <input type="text" name="status" id="status" readonly value={{$atv[0]->status}}>
+                                <input type="text" name="status" id="status" readonly value="{{$atv[0]->status}}">
                             </div>
                         </div>
                     </div>

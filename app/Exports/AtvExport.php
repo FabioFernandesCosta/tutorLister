@@ -11,10 +11,8 @@ class AtvExport implements FromCollection
     protected $fechado;
     protected $arquivado;
 
-    function __construct($filter, $fechado, $arquivado) {
+    function __construct($filter) {
         $this->filter = $filter;
-        $this->fechado = $fechado;
-        $this->arquivado = $arquivado;
         
     }
     /**

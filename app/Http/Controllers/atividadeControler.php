@@ -314,6 +314,8 @@ class atividadeControler extends Controller
                         $atv->save();
                         //procura pelos usuarios no banco e se existirem cria a relação com a atividade
                         $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
+                        $ind = 0;
+                        //corrigir bug apenas ultimo usuario salvo
                         foreach ($invUs as &$key) {
                             $usuario = '';
                             $usuario = DB::table("usuario")
@@ -333,11 +335,13 @@ class atividadeControler extends Controller
                                 $us_atv->atividade_id = $atv->atividade_id;
                                 
                                 
+                                
+                                $us_atv->save();
                             }else{
                                 dd($usuario[0]->nome, $key);
                                 dd("error, 111");
                             }
-                            $us_atv->save();
+                            $ind += 1;
                         }
 
                         #falta parte de atualizar requisitante e exibir dados antigos ao entrar na pagina

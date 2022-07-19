@@ -143,7 +143,8 @@ class atividadeControler extends Controller
         
         // process the login
         if ($validator->fails()) {
-            return Redirect::to('atividades/create')
+            return back()
+                ->withInput()
                 ->withErrors($validator);
         } else {
             DB::transaction(function () {
@@ -298,11 +299,11 @@ class atividadeControler extends Controller
                 );
                 $validator = Validator::make(Request::all(), $rules, $mensagens);
                 
-                // process the login
+
                 if ($validator->fails()) {
                     return Redirect::to('atividades/'.$id.'/edit')
-                        ->withErrors($validator)
-                        ->withInput(Request::except('password'));
+                        ->withInput()
+                        ->withErrors($validator);
                 } else {
                     DB::transaction(function () use ($id){
                         $atv = atividade::findOrFail($id);

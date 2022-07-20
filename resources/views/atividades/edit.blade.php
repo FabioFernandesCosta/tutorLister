@@ -53,7 +53,7 @@
 
                 Descrição
                 {{ Html::ul($errors->get('descricao'), ['class' => 'ulError']) }}
-                <div class="form-field desc"> <span></span>
+                <div class="form-field formDesc"> <span></span>
                 @if(old('descricao') !== null)
                     <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc">{{ old('descricao') }} </textarea>
                 @else

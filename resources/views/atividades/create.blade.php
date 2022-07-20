@@ -53,7 +53,7 @@
 
                 Descrição
                 {{ Html::ul($errors->get('descricao'), ['class' => 'ulError']) }}
-                <div class="form-field desc"> <span></span>
+                <div class="form-field formDesc"> <span></span>
                     <textarea name="descricao" required="required" id="descricao" cols="30" rows="10" class="desc">{{ old('descricao') }}</textarea>
                 </div>
             </div>

@@ -11,7 +11,6 @@
         body {
             font-family: 'Nunito', sans-serif;
         }
-
     </style>
 </head>
 
@@ -41,7 +40,7 @@
         <div class="AtvBtns">
             <form class="filterForm" autocomplete="off" method="GET">
                 <div class="">
-                    
+
 
                     <label for="filter" class="" style="font-weight: bold">Filtro</label>
                     <input type="text" class="miniImp" id="filter" name="filter"
@@ -59,7 +58,7 @@
             <form method="POST" action="{{ route('atividade.export') }}">
                 @csrf
                 <input hidden value="{{ $filter }}" name="filter" type="text">
-                
+
 
                 <button class="miniBtn" type="submit">Exportar</button>
 
@@ -69,62 +68,52 @@
 
 
         {{-- tabela com as informações --}}
-        <div id="atvTable">
+        <div id="atvGrid"
+            style="grid-template-columns: 3.5rem repeat({{ 9 }} {{-- quantidade de colunas --}} , minmax(200px, 1fr));">
             @if (count($atv) > 0)
-                <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Descrição</th>
-                        <th>Usuarios envolvidos</th>
-                        <th>Requisitante</th>
-                        <th>Data de realização</th>
-                        <th>Hora de realização</th>
-                        <th>Data do Registro</th>
-                        <th>Hora do Registro</th>
-                        <th>Carga Horária da Atividade</th>
-                        <th>Status</th>
-                    </tr>
-                    {{-- parte com as infos, seguir exemplo do link do web.php --}}
-
-
-                    @foreach ($atv as $key => $value)
-                        <tr>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->atividade_id }}</a>
-                            </td>
-                            <td class="descr"><a 
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->descricao }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->nome }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->requisitante }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->data_atividade }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->hora_atividade }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->data_registro }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->hora_registro }}</a>
-                            </td>
-                            <td><a
-                                    href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->carga }}</a>
-                            </td>
-                            <td>
-                                <a href="{{ URL::to('atividades/' . $value->atividade_id) }}">{{ $value->status }}</a>
-                            </td>
-
-                        </tr>
-                    @endforeach
-
-                </table>
-            @else
+                <div> <b> ID </b> </div>
+                <div> <b> Descrição </b> </div>
+                <div> <b> Usuarios envolvidos </b> </div>
+                <div> <b> Requisitante </b> </div>
+                <div> <b> Data de realização </b> </div>
+                <div> <b> Hora de realização </b> </div>
+                <div> <b> Data do Registro </b> </div>
+                <div> <b> Hora do Registro </b> </div>
+                <div> <b> Carga Horária da Atividade </b> </div>
+                <div> <b> Status </b> </div>
+                @foreach ($atv as $key => $value)
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->atividade_id }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';" class="desc">
+                        {{ $value->descricao }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->nome }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->requisitante }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->data_atividade }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->hora_atividade }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->data_registro }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->hora_registro }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->carga }}
+                    </div>
+                    <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
+                        {{ $value->status }}
+                    </div>
+                @endforeach
+                @else
                 <div id="indexNotFound">
                     <p>
 

@@ -248,14 +248,9 @@ th {
 
 .descr>a{
     display: block;
-    width: 20rem;
+    width: 200px;
     white-space: nowrap;
-    overflow-x: scroll;
-}
-
-.descr>a::-webkit-scrollbar {
-    height: 0 !important
-
+    overflow: scroll;
 }
     
 
@@ -279,6 +274,16 @@ tr:nth-child(even) {
     
 }
 
+#atvGrid {
+    display: grid;
+    grid-gap: 1rem;
+    margin-top: 1rem;
+    overflow-x: scroll;
+}
+#atvGrid>div:hover{
+    cursor: pointer;
+}
+
 .atvDetalhes {
     margin-top: 2rem;
     border: #b8b8b8 2px solid;
@@ -297,6 +302,18 @@ tr:nth-child(even) {
 }
 
 .desc {
+    
+    display: block;
+    width: 200px;
+    white-space: nowrap;
+    overflow: scroll;
+}
+.desc::-webkit-scrollbar {
+    height: 0 !important
+
+}
+
+.formDesc{
     height: 100%;
 }
 

@@ -57,7 +57,7 @@
                 <div>
 
                     Descrição
-                    <div class="form-field desc"> <span></span>
+                    <div class="form-field formDesc"> <span></span>
                         <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc" readonly>{{$atv[0]->descricao}}</textarea>
                     </div>
                 </div>

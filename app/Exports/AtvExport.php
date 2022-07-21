@@ -11,6 +11,13 @@ class AtvExport implements FromCollection
     protected $fechado;
     protected $arquivado;
 
+    function array_contains($str, array $arr){
+        foreach($arr as $a){
+            if(stripos($str, $a) !== false) return true;
+        }
+        return false;
+    }
+
     function __construct($filter) {
         $this->filter = $filter;
         
@@ -22,6 +29,24 @@ class AtvExport implements FromCollection
     {
         $filter = Request::get('filter');
         
+        #lida com filtragem avançada
+        $filter1 = explode(' ', $filter);
+        $filterUsuario = null;
+        $filterStatus = null;
+        $filterRequisitante = null;
+        foreach($filter1 as $f){
+
+            if($this->array_contains($f, ['status:', 'usuario:', 'requisitante:'])){
+                $f = explode(':', $f);
+                if($f[0] == 'status'){
+                    $filterStatus = $f[1];
+                }elseif($f[0] == 'usuario'){
+                    $filterUsuario = $f[1];
+                }elseif($f[0] == 'requisitante'){
+                    $filterRequisitante = $f[1];
+                }
+            }
+        }
 
         $atv = DB::table('atividade')
         ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
@@ -40,10 +65,21 @@ class AtvExport implements FromCollection
                 DB::raw('group_concat(DISTINCT usuario.nome) as nome'))
         ;
         
-        if(strtolower($filter) != 'arquivado' and empty($filter)){
-            $atv = $atv->where('atividade.status', '<>', 'Arquivado');
-        }else if (strtolower($filter) == 'arquivado'){
-            $atv = $atv->where('atividade.status', '=', 'Arquivado');
+        if($filterStatus != null){
+            $atv = $atv->where('atividade.status', $filterStatus);
+        }else{
+            if(strtolower($filter) != 'arquivado' and empty($filter)){
+                $atv = $atv->where('atividade.status', '<>', 'Arquivado');
+            }else if (strtolower($filter) == 'arquivado'){
+                $atv = $atv->where('atividade.status', '=', 'Arquivado');
+            }
+        }
+
+        if($filterUsuario != null){
+            $atv = $atv->where('usuario.nome', 'like' , '%'.$filterUsuario.'%');
+        }
+        if($filterRequisitante != null){
+            $atv = $atv->where('requisitante.nome', 'like' , '%'.$filterRequisitante.'%');
         }
 
         if (!empty($filter) and strtolower($filter) != 'arquivado') {

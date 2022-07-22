@@ -63,6 +63,8 @@ class atividadeControler extends Controller
         $filterUsuario = null;
         $filterStatus = null;
         $filterRequisitante = null;
+        
+
         foreach($filter1 as $f){
 
             if($this->array_contains($f, ['status:', 'usuario:', 'requisitante:'])){
@@ -73,10 +75,13 @@ class atividadeControler extends Controller
                     $filterUsuario = $f[1];
                 }elseif($f[0] == 'requisitante'){
                     $filterRequisitante = $f[1];
+                }elseif($f[0] == 'data'){
+                    $filterDataA = $f[1];
+                }elseif($f[0] == 'hora'){
+                    $filterHoraA = $f[1];
                 }
             }
         }
-            
         
 
         $atv = DB::table('atividade')
@@ -85,11 +90,11 @@ class atividadeControler extends Controller
         ->join('atividade_requisitante', 'atividade.atividade_id', 'atividade_requisitante.atividade_id')
         ->join('requisitante', 'atividade_requisitante.requisitante_id', 'requisitante.requisitante_id')
         ->select("atividade.atividade_id", 
-                "atividade.data_atividade", 
-                "atividade.data_registro", 
-                "atividade.hora_atividade", 
-                "atividade.hora_registro", 
-                "atividade.carga", 
+                DB::raw("DATE_FORMAT(atividade.data_atividade, '%d/%m/%Y') as data_atividade"),
+                DB::raw("DATE_FORMAT(atividade.data_registro, '%d/%m/%Y') as data_registro"),
+                DB::raw("TIME_FORMAT(atividade.hora_atividade, '%H:%i') as hora_atividade"),
+                DB::raw("TIME_FORMAT(atividade.hora_registro, '%H:%i') as hora_registro"),
+                DB::raw("TIME_FORMAT(atividade.carga, '%H:%i') as carga"),
                 "atividade.descricao",
                 "atividade.status",
                 DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
@@ -106,12 +111,14 @@ class atividadeControler extends Controller
             }
         }
 
+        #dd(date('Y-m-d', strtotime(ltrim($filterDataA, '>'))).')');
         if($filterUsuario != null){
             $atv = $atv->where('usuario.nome', 'like' , '%'.$filterUsuario.'%');
         }
         if($filterRequisitante != null){
             $atv = $atv->where('requisitante.nome', 'like' , '%'.$filterRequisitante.'%');
         }
+        
 
         if (!empty($filter) and strtolower($filter) != 'arquivado') {
             $atv = $atv->orWhere('atividade.atividade_id', '=', $filter)

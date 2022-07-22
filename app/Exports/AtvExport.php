@@ -52,18 +52,18 @@ class AtvExport implements FromCollection
                 }
             }
         }
-
+        
         $atv = DB::table('atividade')
         ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
         ->join('usuario','usuario_atividade.usuario_id', '=', 'usuario.usuario_id')
         ->join('atividade_requisitante', 'atividade.atividade_id', 'atividade_requisitante.atividade_id')
         ->join('requisitante', 'atividade_requisitante.requisitante_id', 'requisitante.requisitante_id')
         ->select("atividade.atividade_id", 
-                "atividade.data_atividade", 
-                "atividade.data_registro", 
-                "atividade.hora_atividade", 
-                "atividade.hora_registro", 
-                "atividade.carga", 
+                DB::raw("DATE_FORMAT(atividade.data_atividade, '%d/%m/%Y') as data_atividade"),
+                DB::raw("DATE_FORMAT(atividade.data_registro, '%d/%m/%Y') as data_registro"),
+                DB::raw("TIME_FORMAT(atividade.hora_atividade, '%H:%i') as hora_atividade"),
+                DB::raw("TIME_FORMAT(atividade.hora_registro, '%H:%i') as hora_registro"),
+                DB::raw("TIME_FORMAT(atividade.carga, '%H:%i') as carga"),
                 "atividade.descricao",
                 "atividade.status",
                 DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),

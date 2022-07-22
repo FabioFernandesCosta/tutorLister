@@ -31,6 +31,11 @@ class AtvExport implements FromCollection
         
         #lida com filtragem avançada
         $filter1 = explode(' ', $filter);
+
+        foreach($filter1 as $key=>$f){
+            $filter1[$key] = str_replace('_', ' ', $f);
+        }
+
         $filterUsuario = null;
         $filterStatus = null;
         $filterRequisitante = null;

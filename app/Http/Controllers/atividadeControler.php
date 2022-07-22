@@ -55,6 +55,11 @@ class atividadeControler extends Controller
 
         #lida com filtragem avançada
         $filter1 = explode(' ', $filter);
+        
+        #transforma underline em espaço
+        foreach($filter1 as $key=>$f){
+            $filter1[$key] = str_replace('_', ' ', $f);
+        }
         $filterUsuario = null;
         $filterStatus = null;
         $filterRequisitante = null;

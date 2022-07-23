@@ -101,11 +101,11 @@ html {
     margin-bottom: 2px;
 }
 
-.miniBtn a{
+.miniBtn a {
     color: #fff;
 }
 
-.btn:hover{
+.btn:hover {
     background-color: #cc6d00
 }
 
@@ -153,6 +153,7 @@ select {
 .mainHead:hover {
     width: 14rem;
 }
+
 .mainHead span {
     display: inline;
     color: white;
@@ -168,18 +169,19 @@ select {
     left: 1.5rem;
 }
 
-.mainHead img{
+.mainHead img {
     margin-left: 0;
     transition: margin 300ms;
     width: 24px;
     height: 24px;
 
 }
-.mainHead:hover img{
+
+.mainHead:hover img {
     margin-left: 9rem;
 }
 
-#menuIcon{
+#menuIcon {
     width: 32px;
     height: 32px;
     margin-bottom: 2.5rem;
@@ -241,18 +243,18 @@ td,
 th {
     border: 1px solid #cfcfcf;
     padding: 10px;
-   
+
 }
 
 
 
-.descr>a{
+.descr>a {
     display: block;
     width: 200px;
     white-space: nowrap;
     overflow: scroll;
 }
-    
+
 
 tr:hover:not(:first-child) {
     box-shadow: 13px 13px 20px #939496, -13px -13px 20px #b4b4b4;
@@ -271,7 +273,7 @@ tr:nth-child(even) {
 #atvTable {
     height: 40rem;
     width: 94vw;
-    
+
 }
 
 #atvGrid {
@@ -280,7 +282,8 @@ tr:nth-child(even) {
     margin-top: 1rem;
     overflow-x: scroll;
 }
-#atvGrid>div:hover{
+
+#atvGrid>div:hover {
     cursor: pointer;
 }
 
@@ -302,18 +305,18 @@ tr:nth-child(even) {
 }
 
 .desc {
-    
+
     display: block;
     width: 200px;
     white-space: nowrap;
     overflow: scroll;
 }
+
 .desc::-webkit-scrollbar {
     height: 0 !important
-
 }
 
-.formDesc{
+.formDesc {
     height: 100%;
 }
 
@@ -394,39 +397,40 @@ td>a {
     touch-action: none;
 }
 
-.filterForm{
+.filterForm {
     margin-top: 1.55rem;
     margin-bottom: 6px;
     display: flex;
     justify-content: left;
     gap: 5px;
 }
-#filter{
+
+#filter {
     width: 14rem;
 }
 
-.ontopMenu{
+.ontopMenu {
     display: flex;
     width: 100vw;
 }
 
-svg.w-5{
+svg.w-5 {
     visibility: hidden;
     width: 0;
 }
 
-#indexNotFound{
+#indexNotFound {
     margin-top: 30ex;
     text-align: center;
     width: 100%;
 }
 
-#indexNotFound>p{
+#indexNotFound>p {
     font-size: 1.6rem;
     font-weight: bold;
 }
 
-.miniImp{
+.miniImp {
     padding: 5px;
     background: #edf2ff;
     border: solid 1px rgb(185, 185, 185);
@@ -435,7 +439,7 @@ svg.w-5{
     color: #666;
 }
 
-.atvFormBtn{
+.atvFormBtn {
     display: grid;
     grid-template-columns: 24% 18%;
     column-gap: 4%;
@@ -446,12 +450,113 @@ svg.w-5{
     border: 2px solid #e74c3c;
 }
 
-.ulError{
+.ulError {
     color: red;
     font-size: 0.8rem;
     list-style-type: none;
 }
 
-#paginacao{
+#paginacao {
     border-top: solid 1px #41414123;
+}
+
+
+#indexCConfig {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
+    padding: 1rem;
+    width: 25rem;
+    height: 28rem;
+    background-color: #f0f0f0;
+    color: rgb(0, 0, 0);
+    border: solid 1px #555555;
+    border-radius: 10px;
+    
+}
+
+#indexCConfig>* {
+    
+    background-color: #f0f0f0;
+    margin: auto;
+    margin-top: 1.5rem;
+    width: 95%;
+    height: 80%;
+}
+
+#indexCConfig>span{
+    font-size: 2.2rem;
+    font-weight: bold;
+
+}
+
+/*toggle*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #f46303;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #f46303;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(12px);
+  -ms-transform: translateX(12px);
+  transform: translateX(12px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.switchContainer{
+    font-size: 1.35rem;
+    margin-top: 0.5rem;
+
 }

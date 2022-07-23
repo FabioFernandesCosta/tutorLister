@@ -25,6 +25,14 @@
     function sortTable() {
 
     }
+
+    function hideIndexCConfig() {
+        document.getElementById("indexCConfig").style.display = "none";
+    }
+
+    function showIndexCConfig() {
+        document.getElementById("indexCConfig").style.display = "block";
+    }
 </script>
 
 
@@ -63,6 +71,10 @@
                 <button class="miniBtn" type="submit">Exportar</button>
 
             </form>
+
+            <button style="width: 1.5rem; margin-top:25px; margin-right:25px" type="button" class="miniBtn" onclick="showIndexCConfig()">
+                <img style="margin-top: 2px" src="{{url('/image/cog.png')}}" width="16" height="16" />
+            </button>
         </div>
 
 
@@ -73,13 +85,13 @@
             @if (count($atv) > 0)
                 <div> <b> ID </b> </div>
                 <div> <b> Descrição </b> </div>
-                <div> <b> Usuarios envolvidos </b> </div>
+                <div> <b> Usuários envolvidos </b> </div>
                 <div> <b> Requisitante </b> </div>
                 <div> <b> Data de realização </b> </div>
                 <div> <b> Hora de realização </b> </div>
-                <div> <b> Data do Registro </b> </div>
-                <div> <b> Hora do Registro </b> </div>
-                <div> <b> Carga Horária da Atividade </b> </div>
+                <div> <b> Data do registro </b> </div>
+                <div> <b> Hora do registro </b> </div>
+                <div> <b> Carga horária da atividade </b> </div>
                 <div> <b> Status </b> </div>
                 @foreach ($atv as $key => $value)
                     <div onclick="location.href='{{ URL::to('atividades/' . $value->atividade_id) }}';">
@@ -113,7 +125,7 @@
                         {{ $value->status }}
                     </div>
                 @endforeach
-                @else
+            @else
                 <div id="indexNotFound">
                     <p>
 
@@ -129,6 +141,86 @@
 
 
 
+        <div id="indexCConfig">
+            <span>colunas</span>
+            <div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Descrição
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Usuários envolvidos
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Requisitante
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Data de realização
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Hora de realização
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Data de registro
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Hora de registro
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Carga horária da atividade
+                </div>
+                <div class="switchContainer">
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    Status
+                </div>
+
+                <button class="miniBtn" onclick="hideIndexCConfig()">OK</button>
+
+            </div>
+        </div>
 
 
 </body>

@@ -462,6 +462,7 @@ svg.w-5 {
 
 
 #indexCConfig {
+    display: none;
     position: absolute;
     left: 0;
     right: 0;
@@ -526,7 +527,7 @@ svg.w-5 {
     height: 20px;
     width: 20px;
     left: 4px;
-    bottom: 4px;
+    bottom: 3px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;

@@ -51,6 +51,8 @@ class atividadeControler extends Controller
     public function index(Request $request)
     {
 
+        $colunas = Request::get('colunas');
+        #dd($colunas);
         $filter = Request::get('filter');
 
         #lida com filtragem avançada
@@ -141,7 +143,7 @@ class atividadeControler extends Controller
 
         // load the view and pass the data
         return View::make('atividades.index')
-            ->with(['atv'=> $atv2, 'filter' => $filter]);
+            ->with(['atv'=> $atv2, 'filter' => $filter, 'colunas' => $colunas]);
 
 
     }

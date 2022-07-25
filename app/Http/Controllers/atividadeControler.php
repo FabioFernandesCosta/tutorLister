@@ -138,7 +138,7 @@ class atividadeControler extends Controller
         ->orderBy('atividade.atividade_id', 'DESC');
 
         $atv2 = $atv->paginate(15);
-        $atv2->appends(['filter' => $filter])->links();
+        $atv2->appends(['colunas'=>$colunas ,'filter' => $filter])->links();
         
 
         // load the view and pass the data

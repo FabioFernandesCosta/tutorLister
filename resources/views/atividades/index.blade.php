@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Atividades - TutorLister</title>
-    
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- CSS only -->
     <style>
@@ -58,11 +58,10 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['descricao']))
-                                        <input type="checkbox" name="colunas[descricao]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[descricao]">
-                                    @endif
+
+                                    <input type="checkbox"
+                                        name="colunas[descricao]"@if (isset($colunas['descricao'])) checked @endif>
+
                                     <span class="slider round"></span>
                                 </label>
                                 Descrição
@@ -70,11 +69,9 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['usuario']))
-                                        <input type="checkbox" name="colunas[usuario]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[usuario]">
-                                    @endif
+
+                                    <input type="checkbox"
+                                        name="colunas[usuario]"@if (isset($colunas['usuario'])) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
                                 Usuários envolvidos
@@ -82,11 +79,9 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['requisitante']))
-                                        <input type="checkbox" name="colunas[requisitante]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[requisitante]">
-                                    @endif
+                                    <input type="checkbox"
+                                        name="colunas[requisitante]"@if (isset($colunas['requisitante'])) checked @endif>
+
                                     <span class="slider round"></span>
                                 </label>
                                 Requisitante
@@ -94,11 +89,11 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['drealizacao']))
-                                        <input type="checkbox" name="colunas[drealizacao]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[drealizacao]">
-                                    @endif
+                                    <input type="checkbox"
+                                        name="colunas[drealizacao]"@if (isset($colunas['drealizacao'])) checked @endif>
+
+
+
                                     <span class="slider round"></span>
                                 </label>
                                 Data de realização
@@ -106,11 +101,9 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['hrealizacao']))
-                                        <input type="checkbox" name="colunas[hrealizacao]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[hrealizacao]">
-                                    @endif
+                                    <input type="checkbox"
+                                        name="colunas[hrealizacao]"@if (isset($colunas['hrealizacao'])) checked @endif>
+
                                     <span class="slider round"></span>
                                 </label>
                                 Hora de realização
@@ -118,11 +111,9 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['dregistro']))
-                                        <input type="checkbox" name="colunas[dregistro]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[dregistro]">
-                                    @endif
+                                    <input type="checkbox"
+                                        name="colunas[dregistro]"@if (isset($colunas['dregistro'])) checked @endif>
+
                                     <span class="slider round"></span>
                                 </label>
                                 Data de registro
@@ -130,11 +121,9 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['hregistro']))
-                                        <input type="checkbox" name="colunas[hregistro]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[hregistro]">
-                                    @endif
+                                    <input type="checkbox"
+                                        name="colunas[hregistro]"@if (isset($colunas['hregistro'])) checked @endif>
+
                                     <span class="slider round"></span>
                                 </label>
                                 Hora de registro
@@ -142,11 +131,9 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['ch']))
-                                        <input type="checkbox" name="colunas[ch]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[ch]">
-                                    @endif
+                                    <input type="checkbox"
+                                        name="colunas[ch]"@if (isset($colunas['ch'])) checked @endif>
+
                                     <span class="slider round"></span>
                                 </label>
                                 Carga horária da atividade
@@ -154,11 +141,9 @@
                             <div class="switchContainer">
 
                                 <label class="switch">
-                                    @if (isset($colunas['status']))
-                                        <input type="checkbox" name="colunas[status]" checked>
-                                    @else
-                                        <input type="checkbox" name="colunas[status]">
-                                    @endif
+                                    <input type="checkbox"
+                                        name="colunas[status]"@if (isset($colunas['status'])) checked @endif>
+
                                     <span class="slider round"></span>
                                 </label>
                                 Status

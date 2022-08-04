@@ -17,11 +17,7 @@
 </head>
 
 {{-- clicar-carregar --}}
-<script>
-    function getClicked(id) {
-        console.log(id)
-    }
-</script>
+
 
 
 @include('sidemenu')
@@ -37,6 +33,7 @@
 
 
         {{-- detalhes do selecionado --}}
+        
         <div class="AtvBtns">
 
             <a href={{ url('atividades') }}>
@@ -52,7 +49,9 @@
             
         </div>
         
+        
         <div class="atvDetalhes" style="margin-top: 0">
+            <h3 class="itemTittle">Detalhes</h3>
             <form class="p-3 mt-3 atvForm">
                 <div>
 
@@ -146,6 +145,7 @@
                 </div>
             </form>
         </div>
+        @include('history')
     </div>
 
 </body>

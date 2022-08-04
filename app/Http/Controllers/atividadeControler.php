@@ -368,6 +368,9 @@ class atividadeControler extends Controller
                         $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
                         $ind = 0;
                         //corrigir bug apenas ultimo usuario salvo
+                        DB::table("usuario_atividade")
+                        ->where("atividade_id", "=", $atv->atividade_id)
+                        ->delete();
                         foreach ($invUs as &$key) {
                             $usuario = '';
                             $usuario = DB::table("usuario")
@@ -375,9 +378,6 @@ class atividadeControler extends Controller
                             ->where("nome", "=", $key)
                             ->get();
                             
-                            DB::table("usuario_atividade")
-                            ->where("atividade_id", "=", $atv->atividade_id)
-                            ->delete();
                             
                             //dd($atv->atividade_id, $usuario[0]->usuario_id);
                             if (strtolower($usuario[0]->nome)== strtolower($key)) {

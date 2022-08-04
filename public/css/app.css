@@ -1,4 +1,5 @@
 /* cor de fundo */
+
 html {
     background-color: rgb(216, 216, 216);
 }
@@ -188,6 +189,8 @@ select {
     margin-top: 1rem;
 }
 
+
+
 .mainHead a {
     text-decoration: none;
     margin-left: 1.5rem;
@@ -206,6 +209,7 @@ select {
 .menu li:last-child {
     position: absolute;
     bottom: 20px;
+
 }
 
 /* posição do body com relação ao header */
@@ -560,4 +564,10 @@ input:checked + .slider:before {
     font-size: 1.35rem;
     margin-top: 0.5rem;
 
+}
+
+
+
+.histContainer{
+    margin-bottom: 0;
 }

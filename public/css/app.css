@@ -237,7 +237,7 @@ header:hover~.wrapAll {
     font-weight: bolder;
 }
 
-/* Tabelas */
+/* Tabelas 
 table {
     border-collapse: collapse;
     width: 96%;
@@ -250,7 +250,7 @@ th {
 
 }
 
-
+*/
 
 .descr>a {
     display: block;
@@ -259,7 +259,7 @@ th {
     overflow: scroll;
 }
 
-
+/*
 tr:hover:not(:first-child) {
     box-shadow: 13px 13px 20px #939496, -13px -13px 20px #b4b4b4;
     border: 2px solid rgba(0, 0, 0, 0.25);
@@ -273,7 +273,7 @@ tr:nth-child(odd) {
 tr:nth-child(even) {
     background-color: #e9e9e9;
 }
-
+*/
 #atvTable {
     height: 40rem;
     width: 94vw;
@@ -290,6 +290,8 @@ tr:nth-child(even) {
 #atvGrid>div:hover {
     cursor: pointer;
 }
+
+
 
 .atvDetalhes {
     margin-top: 2rem;
@@ -337,13 +339,7 @@ tr:nth-child(even) {
 }
 
 /*botões Atv*/
-.AtvBtns {
-    margin-top: 1.5rem;
-    margin-bottom: 6px;
-    display: flex;
-    justify-content: right;
-    gap: 5px;
-}
+
 
 td>a {
     color: black;
@@ -410,7 +406,7 @@ td>a {
 }
 
 #filter {
-    width: 14rem;
+    width: 10rem;
 }
 
 .ontopMenu {
@@ -467,7 +463,7 @@ svg.w-5 {
 
 #indexCConfig {
     display: none;
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
@@ -475,7 +471,7 @@ svg.w-5 {
     margin: auto;
 
     padding: 1rem;
-    width: 25rem;
+    width: 20rem;
     height: 28rem;
     background-color: #f0f0f0;
     color: rgb(0, 0, 0);
@@ -561,7 +557,7 @@ input:checked + .slider:before {
 }
 
 .switchContainer{
-    font-size: 1.35rem;
+    font-size: 1.15rem;
     margin-top: 0.5rem;
 
 }
@@ -570,4 +566,111 @@ input:checked + .slider:before {
 
 .histContainer{
     margin-bottom: 0;
+}
+
+.AtvBtns{
+    display: block;
+    border: solid 1px #55555577;
+    border-radius: 10px;
+    padding: 0.5rem;
+    width: 20rem;
+    height: 8rem;
+    position: relative;
+    margin-left: auto; 
+
+    
+}
+.HideOnColapse{
+    display: none;
+}
+
+@media only screen and (min-width: 600px){
+    .AtvBtns{
+        width: 20rem;
+        height: 8rem;
+        margin-right: 15vw;
+        
+    }
+
+    
+}
+
+@media only screen and (min-width: 768px) {
+    /*colapsible AtvBtns*/
+    .AtvBtns {
+        margin-top: 1.5rem;
+        margin-bottom: 6px;
+        display: flex !important;
+        justify-content: right;
+        gap: 5px;
+        width: auto;
+        height: auto;
+        border: none;
+        margin-right: auto;
+    }
+    #filter{
+        width: 10rem;
+    }
+    
+    #xbutton{
+        display: none;
+    }
+
+    .switchAtvBtns{
+        display: none;
+    }
+
+    #indexCConfig{
+        width: 25rem;
+        height: 28rem;
+    }
+
+    .switchContainer{
+        font-size: 1.35rem;
+    }
+
+    .HideOnColapse{
+        display: inline;
+    }
+
+    
+    
+}
+
+@media screen and (max-width: 600px) {
+    .AtvBtns{
+        display: block;
+        border: solid 1px #55555577;
+        border-radius: 10px;
+        padding: 0.5rem;
+        width: 17rem;
+        height: 8rem;
+        position: relative;
+        margin-left: auto; 
+        margin-right: 15vw;
+        
+    }
+
+    
+    #filter{
+        width: 10rem;
+    }
+    
+    #xbutton{
+        display: none;
+    }
+    .HideOnColapse{
+        display: none;
+    }
+}
+    
+.switchAtvBtnsContainer{
+    text-align: right;
+    margin-right: 15vw;
+    
+
+}
+
+.dataTables_length{
+    margin-top: 10px;
 }

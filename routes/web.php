@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
+
 /*
 
 Route::get('/eventos', function () {
@@ -34,15 +35,17 @@ Route::get('/eventos', function () {
 
 
 
-
-Route::resource('requisitante', RequisitanteController::class);
+//Route::resource('requisitante', RequisitanteController::class);
 
 Route::get('consultar', [atividadeControler::class, 'consultar']);
+Route::get('/getdata', [atividadeControler::class, 'getdata']);
+
 
 Route::controller(atividadeControler::class)->group(function(){
     Route::resource('atividades', atividadeControler::class);
     Route::post('atv-export/', 'export')->name('atividade.export');
-    Route::get('atividades/index-filtering', 'atividadeControler@indexFiltering');
+    //Route::get('atividades/index-filtering', 'atividadeControler@indexFiltering');
+    
 });
 
 

@@ -36,10 +36,10 @@
         
         <div class="AtvBtns">
 
-            <a href={{ url('atividades') }}>
+            <a style="text-decoration: none;" href={{ url('atividades') }}>
                 <button class="miniBtn">Voltar</button>
             </a>
-            <a href={{ url('atividades/' . $atv[0]->atividade_id .'/edit') }}>
+            <a style="text-decoration: none;" href={{ url('atividades/' . $atv[0]->atividade_id .'/edit') }}>
                 @if ($atv[0]->status == 'Arquivado')
                     <button class="miniBtn" disabled>Editar</button>
                 @else

@@ -111,6 +111,17 @@ return new class extends Migration
             $table->foreign('usuario_id') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
         });
         */
+
+        Schema::create('historico', function (Blueprint $table){
+            $table->id('historico_id');
+            $table->string('campo_modificado');
+            $table->string('acao');
+            $table->bigInteger('atiividade_id') -> unsigned();
+            $table->bigInteger('usuario_id') -> unsigned();
+            $table->foreign('atiividade_id') -> references('atividade_id') -> on('atividade') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->foreign('usuario_id') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->time('hora_modificacao');
+        });
         
     }
 
@@ -121,12 +132,16 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuarios');
-        Schema::dropIfExists('atividade');
-        Schema::dropIfExists('usuarioXAtividade');
-        Schema::dropIfExists('requisitante');
-        Schema::dropIfExists('atividadeXRequisitante');
-        Schema::dropIfExists('curso');
-        Schema::dropIfExists('usuarioXCurso');
+        Schema::disableForeignKeyConstraints();
+        Schema::drop('usuario_atividade');
+        Schema::drop('atividade_requisitante');
+        Schema::drop('usuario_curso');
+        Schema::drop('atividade');
+        Schema::drop('requisitante');
+        Schema::drop('curso');
+        Schema::drop('horario');
+        Schema::drop('historico');
+        Schema::drop('usuario');
+        Schema::enableForeignKeyConstraints();
     }
 };

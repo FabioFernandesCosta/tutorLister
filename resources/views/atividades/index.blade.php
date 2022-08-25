@@ -13,6 +13,9 @@
         body {
             font-family: 'Nunito', sans-serif;
         }
+
+        /* outline button */
+        
     </style>
 
 
@@ -20,31 +23,7 @@
 
 {{-- clicar-carregar --}}
 {{-- https://htmldom.dev/sort-a-table-by-clicking-its-headers/ - sort form --}}
-<script>
-    function getClicked(id) {
-        console.log(id)
-    }
 
-
-
-
-    function switchShowAtvBtns() {
-        var btns = document.getElementById("AtvBtns");
-        if (btns.style.display === "none") {
-            btns.style.display = "";
-        } else {
-            btns.style.display = "none";
-        }
-    }
-
-    function hideIndexCConfig() {
-        document.getElementById("indexCConfig").style.display = "none";
-    }
-
-    function showIndexCConfig() {
-        document.getElementById("indexCConfig").style.display = "block";
-    }
-</script>
 
 
 
@@ -57,150 +36,18 @@
         </span>
         {{-- botoões --}}
 
-        <div id="colapsibleContainer">
-            <div class="switchAtvBtnsContainer">
-                <button type="button" class="switchAtvBtns miniBtn" onclick="switchShowAtvBtns()">Menu ▼</button>
-            </div>
-
-
-            <div class="AtvBtns" id="AtvBtns">
-                <form class="filterForm" autocomplete="off" method="GET">
-                    <div class="">
-
-                        <div id="indexCConfig">
-                            <span>colunas</span>
-                            <div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-
-                                        <input type="checkbox"
-                                            name="colunas[descricao]"@if (isset($colunas['descricao'])) checked @endif>
-
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Descrição
-                                </div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-
-                                        <input type="checkbox"
-                                            name="colunas[usuario]"@if (isset($colunas['usuario'])) checked @endif>
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Usuários envolvidos
-                                </div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                            name="colunas[requisitante]"@if (isset($colunas['requisitante'])) checked @endif>
-
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Requisitante
-                                </div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                            name="colunas[drealizacao]"@if (isset($colunas['drealizacao'])) checked @endif>
 
 
 
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Data de realização
-                                </div>
-                                <div class="switchContainer">
+        <br>
+        <div class="btn-right">
 
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                            name="colunas[hrealizacao]"@if (isset($colunas['hrealizacao'])) checked @endif>
-
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Hora de realização
-                                </div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                            name="colunas[dregistro]"@if (isset($colunas['dregistro'])) checked @endif>
-
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Data de registro
-                                </div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                            name="colunas[hregistro]"@if (isset($colunas['hregistro'])) checked @endif>
-
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Hora de registro
-                                </div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                            name="colunas[ch]"@if (isset($colunas['ch'])) checked @endif>
-
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Carga horária da atividade
-                                </div>
-                                <div class="switchContainer">
-
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                            name="colunas[status]"@if (isset($colunas['status'])) checked @endif>
-
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Status
-                                </div>
-
-                                <button class="miniBtn" onclick="hideIndexCConfig()" type="submit">OK</button>
-
-                            </div>
-                        </div>
-                        <label for="filter" class="HideOnColapse" style="font-weight: bold">Filtro</label>
-                        <input type="text" class="miniImp" id="filter" name="filter"
-                            placeholder="id, usuario, requisitante, descrição..." style="height: 25px">
-                    </div>
-                    <button type="submit" class="miniBtn" style="margin-top: 0">Filtrar</button>
-                    <a href="{{ url('atividades') }}">
-                        <button id="xbutton" style="width: 1.5rem; margin-top:0; margin-right:25px" type="button"
-                            class="miniBtn">X</button>
-                    </a>
-                </form>
-                <div style="display: flex; gap:5px">
-
-                    <a href={{ url('atividades/create') }}>
-                        <button class="miniBtn">Novo</button>
-                    </a>
-                    <form method="POST" action="{{ route('atividade.export') }}">
-                        @csrf
-                        <input hidden value="{{ $filter }}" name="filter" type="text">
-
-
-                        <button class="miniBtn" type="submit">Exportar</button>
-
-                    </form>
-
-                    <button style="width: 1.5rem; margin-top:25px; margin-right:25px" type="button" class="miniBtn"
-                        onclick="showIndexCConfig()">
-                        <img style="margin-top: 2px" src="{{ url('/image/cog.png') }}" width="16"
-                            height="16" />
-                    </button>
-                </div>
-            </div>
-
+            <a href={{ url('atividades/create') }}>
+                <button class="dt-button outline-btn">Novo</button>
+            </a>
         </div>
+
+
 
 
         {{-- tabela com as informações --}}
@@ -210,8 +57,7 @@
         <div class="tableContainer">
             {{-- jquery datatables table --}}
 
-            <link rel="stylesheet" type="text/css"
-                href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
             <link rel="stylesheet" type="text/css"
                 href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
             <link rel="stylesheet" type="text/css"
@@ -231,15 +77,16 @@
             </script>
             <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js">
             </script>
-            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js">
-            </script>
+
             <script type="text/javascript" charset="utf8"
                 src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
             <script type="text/javascript" charset="utf8"
                 src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js">
+            </script>
 
-                
-            
+
+            <div id="toggleBtn"></div>
 
 
 
@@ -263,9 +110,6 @@
 
 
         <script defer>
-            
-
-
             $(document).ready(function() {
 
                 var table = $('#JqueryAtvTable').DataTable({
@@ -282,8 +126,9 @@
                     ],
                     scrollX: true,
                     dom: 'Bfrtlip',
+                    
                     buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
+                        'colvis', 'csv', 'excel', 'pdf', 'print' //'columnsToggle'
                     ],
 
 
@@ -302,6 +147,7 @@
                         },
                         {
                             "data": "descricao",
+                            name: "descricao"
                         },
                         {
                             "data": "nome",
@@ -334,6 +180,9 @@
                 $('#min, #max').on('change', function() {
                     table.draw();
                 });
+
+                
+
             });
         </script>
         {{-- <div id="paginacao">
@@ -350,15 +199,7 @@
 
 
 </body>
-<script>
-    let filter = (window.location.href).split('=')[1];
-    if (filter = 'undefined') {
-        filter = '';
-    }
-    document.getElementById("filter").value = filter;
 
-    switchShowAtvBtns();
-</script>
 
 </html>
 {{-- google auth to login --}}

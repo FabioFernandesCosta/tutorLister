@@ -56,12 +56,13 @@ class atividadeControler extends Controller
                     DB::raw("TIME_FORMAT(atividade.hora_atividade, '%H:%i') as hora_atividade"),
                     DB::raw("TIME_FORMAT(atividade.hora_registro, '%H:%i') as hora_registro"),
                     DB::raw("TIME_FORMAT(atividade.carga, '%H:%i') as carga"),
-                    "atividade.descricao",
+                    DB::raw("SUBSTR(atividade.descricao, 1, 64) as descricao"),
                     "atividade.status",
                     DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
                     DB::raw('group_concat(DISTINCT usuario.nome) as nome'))->groupBy('atividade.atividade_id')
             
         )->toJson());
+        
         
     }
 
@@ -74,7 +75,7 @@ class atividadeControler extends Controller
 
     public function index(Request $request)
     {
-
+        /*
         $colunas = Request::get('colunas');
         #dd($colunas);
         $filter = Request::get('filter');
@@ -169,9 +170,8 @@ class atividadeControler extends Controller
         
 
         // load the view and pass the data
-        
-        return View::make('atividades.index')
-            ->with(['atv'=> $atv2, 'filter' => $filter, 'colunas' => $colunas]);
+       */ 
+        return View::make('atividades.index');
 
 
     }

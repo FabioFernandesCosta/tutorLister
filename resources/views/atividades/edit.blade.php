@@ -4,6 +4,7 @@
 <head>
     <title>Atividade ID-{{ $atv->atividade_id }} - TutorLister</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
     <style>
         body {
             font-family: 'Nunito', sans-serif;
@@ -24,7 +25,8 @@
             console.log(document.getElementById("userContainer").children.length > 1);
             if (document.getElementById("userContainer").children.length > 1) {
                 document.getElementById("userContainer").lastChild.remove;
-                document.getElementById("userContainer").removeChild(document.getElementById("userContainer").lastElementChild)
+                document.getElementById("userContainer").removeChild(document.getElementById("userContainer")
+                    .lastElementChild)
             }
         }
     </script>
@@ -49,60 +51,65 @@
 
 
             {{-- https://stackoverflow.com/questions/35332784/how-to-call-a-controller-function-inside-a-view-in-laravel-5 --}}
-            <div>
-
-                Descrição
-                {{ Html::ul($errors->get('descricao'), ['class' => 'ulError']) }}
-                <div class="form-field formDesc"> <span></span>
-                @if(old('descricao') !== null)
-                    <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc">{{ old('descricao') }} </textarea>
-                @else
-                    <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc">{{ $atv->descricao }} </textarea>
-                @endif
-                </div>
-            </div>
+            
 
             <div>
-                <div style="display: flex;">
+                <div id="repart2">
+                    <div>
 
-                    Usuarios envolvidos <button type="button" onclick="addField()" class="miniBtn"
-                        style="margin-top: 0; margin-left:5px; height:20px">add</button><button type="button"
-                        onclick="rmvField()" class="miniBtn" style="margin-top: 0;height:20px">rmv</button>
-
-                </div>
-                {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
-                <div id="userContainer">
-                    @if (null !== old('InvolvedUsers'))
-                        @foreach (old('InvolvedUsers') as $user)
-                            <div class="form-field" id="involv">
-                                    <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
+                        <div style="display: flex;">
+        
+                            Usuarios envolvidos
+                              
+                            <a href=""> +</a>
+                             
+                            <a href="">-</a>
+                            {{-- <button type="button" onclick="addField()" class="miniBtn"
+                                style="margin-top: 0; margin-left:5px; height:20px">add</button><button type="button"
+                                onclick="rmvField()" class="miniBtn" style="margin-top: 0;height:20px">rmv</button> --}}
+        
+                        </div>
+                        {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
+                        <div id="userContainer">
+                            @if (null !== old('InvolvedUsers'))
+                                @foreach (old('InvolvedUsers') as $user)
+                                    <div class="form-field" id="involv">
+                                        <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
                                             list="users" value="{{ $user }}">
                                         @include('autocomplete', ['campo' => '.usuario'])
-                            </div>
-                        @endforeach
-                    @else
-                        @foreach ($atv->usuarios as $key => $value)
-                            <div class="form-field" id="involv">
-                                <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
-                                    list="users" value='{{ $value->nome }}'>
-                                @include('autocomplete', ['campo' => '.usuario'])
-                            </div>
-                        @endforeach
+                                    </div>
+                                @endforeach
+                            @else
+                                @foreach ($atv->usuarios as $key => $value)
+                                    <div class="form-field" id="involv">
+                                        <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
+                                            list="users" value='{{ $value->nome }}'>
+                                        @include('autocomplete', ['campo' => '.usuario'])
+                                    </div>
+                                @endforeach
+        
+                            @endif
+                        </div>
+                    </div>
+                    <div>
 
-                    @endif
+                        <span>Requisitante</span>
+        
+                        {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }}
+                        <div class="form-field" id="req"> <span></span>
+                            @if (old('Requisitante') !== null)
+                                <input type="text" name="Requisitante" id="Requisitante" value="{{ old('Requisitante') }}"
+                                    list="users">
+                            @else
+                                <input type="text" name="Requisitante" id="Requisitante" list="reqs"
+                                    value={{ $atv->requisitante->nome }}>
+                            @endif
+                            @include('autocomplete', ['campo' => '#Requisitante'])
+                        </div>
+                    </div>
+
                 </div>
 
-                <span>Requisitante</span>
-
-                {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }}
-                <div class="form-field" id="req"> <span></span>
-                    @if(old('Requisitante') !== null)
-                        <input type="text" name="Requisitante" id="Requisitante" value="{{ old('Requisitante') }}" list="users">
-                    @else
-                        <input type="text" name="Requisitante" id="Requisitante" list="reqs" value={{ $atv->requisitante->nome }}>
-                    @endif
-                    @include('autocomplete', ['campo' => '#Requisitante'])
-                </div>
 
 
 
@@ -113,10 +120,10 @@
                     <div>
                         {{ Html::ul($errors->get('DoneData'), ['class' => 'ulError']) }}
                         <div class="form-field dth"> <span></span>
-                            @if(old('DoneData') !== null)
+                            @if (old('DoneData') !== null)
                                 <input type="date" name="DoneData" id="DoneData" value="{{ old('DoneData') }}">
                             @else
-                            <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }}>
+                                <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }}>
                             @endif
                         </div>
                     </div>
@@ -124,10 +131,10 @@
                     <div>
                         {{ Html::ul($errors->get('DoneHour'), ['class' => 'ulError']) }}
                         <div class="form-field dth"> <span></span>
-                            @if(old('DoneHour') !== null)
+                            @if (old('DoneHour') !== null)
                                 <input type="time" name="DoneHour" id="DoneHour" value="{{ old('DoneHour') }}">
                             @else
-                            <input type="time" name="DoneHour" id="DoneHour" value={{ $atv->hora_atividade }}>
+                                <input type="time" name="DoneHour" id="DoneHour" value={{ $atv->hora_atividade }}>
                             @endif
                         </div>
                     </div>
@@ -135,18 +142,18 @@
                     <div>
                         {{ Html::ul($errors->get('CargaHoraria'), ['class' => 'ulError']) }}
                         <div class="form-field" id="ch"> <span></span>
-                            @if(old('CargaHoraria') !== null)
-                                
-                                <input type="time" name="CargaHoraria" id="CargaHoraria" value="{{ old('CargaHoraria') }}">
+                            @if (old('CargaHoraria') !== null)
+                                <input type="time" name="CargaHoraria" id="CargaHoraria"
+                                    value="{{ old('CargaHoraria') }}">
                             @else
-                            <input type="time" name="CargaHoraria" id="CargaHoraria" value={{ $atv->carga }}>
+                                <input type="time" name="CargaHoraria" id="CargaHoraria" value={{ $atv->carga }}>
                             @endif
                         </div>
                     </div>
                     <div>
                         <span>Status</span>
                         <div class="form-field" id="ch"> <span></span>
-                                
+
                             <select name="status" id="status">
                                 @if ($atv->status == 'Aberto')
                                     <option value="Aberto" selected>Aberto</option>
@@ -167,13 +174,33 @@
                     </div>
                 </div>
             </div>
+            <div>
+
+                Descrição
+                {{ Html::ul($errors->get('descricao'), ['class' => 'ulError']) }}
+                <div class="form-field formDesc"> <span></span>
+                    @if (old('descricao') !== null)
+                        <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc">{{ old('descricao') }} </textarea>
+                    @else
+                        <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc">{{ $atv->descricao }} </textarea>
+                    @endif
+                </div>
+            </div>
 
             <div class="atvFormBtn">
 
-                {{ Form::submit('Editar atividade', ['class' => 'btn mt-3', 'style' => 'width: 12rem; margin-top: 45px']) }}
-                <a href="{{ url('atividades/' . $atv->atividade_id) }}">
-                    <button type="button" class="btn" style="margin-top: 45px; width:8rem">Cancelar</button>
-                </a>
+                <div>
+
+                    <a onclick="return confirm('Cancelar edição?')" href="{{ url('atividades/' . $atv->atividade_id) }}">
+                        <button type="button" class="btn dt-button outline-btn"
+                            style="margin-top: 45px;">Cancelar</button>
+                    </a>
+                </div>
+                <div class="btn-right">
+
+                    {{ Form::submit('Editar', ['class' => 'btn mt-3 dt-button', 'style' => 'margin-top: 45px',  'onclick'=>"return confirm('Confirmar edição?');"]) }}
+
+                </div>
             </div>
             {{ Form::close() }}
         </div>

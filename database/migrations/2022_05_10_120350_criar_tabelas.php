@@ -116,11 +116,13 @@ return new class extends Migration
             $table->id('historico_id');
             $table->string('campo_modificado');
             $table->string('acao');
-            $table->bigInteger('atiividade_id') -> unsigned();
+            $table->bigInteger('atividade_id') -> unsigned();
             $table->bigInteger('usuario_id') -> unsigned();
-            $table->foreign('atiividade_id') -> references('atividade_id') -> on('atividade') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->foreign('atividade_id') -> references('atividade_id') -> on('atividade') -> onUpdate('cascade') -> onDelete('cascade');
             $table->foreign('usuario_id') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
-            $table->time('hora_modificacao');
+            $table->date('data_modificacao');
+            $table->string('valor_anterior');
+            $table->string('novo_valor');
         });
         
     }

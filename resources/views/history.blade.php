@@ -17,23 +17,106 @@
 </head>
 <script>
     function clicarCarregar() {
-        var x = document.getElementById("hist");
-        if (x.style.display === "none") {
-            x.style.display = "block";
+        var x = document.getElementById("JqueryAtvHistTable");
+        var y = document.getElementById("histClick");
+        var z = document.getElementById("histContainer");
+        var a = document.getElementById("tbr").offsetHeight;
+        
+        if (x.style.visibility === "hidden") {
+            z.style.transition = "height 0.25s linear";
+            x.style.transition = "visibility 0.25s 0.25s, opacity 0.25s 0.25s linear";
+            x.style.visibility = "visible";
+            x.style.opacity = "1";
+            y.innerHTML = "Historico ▲";
+            size = (document.getElementById("JqueryAtvHistTable").rows.length*a) + 2.3*a;
+            z.style.height = size + "px";
+
         } else {
-            x.style.display = "none";
+            z.style.transition = "height 0.25s 0.25s linear";
+            x.style.transition = "visibility 0.25s, opacity 0.25s linear";
+            x.style.visibility = "hidden";
+            x.style.opacity = "0";
+            y.innerHTML = "Historico ▼";
+            z.style.height = "5.5rem";
         }
     }
 </script>
 
-<div class="atvDetalhes histContainer">
-    <h3 onclick="clicarCarregar()" class="itemTittle">Historico</h3>
-    <div id="hist">
-        test <br>
-        test2
+<div id="histContainer" class="atvDetalhes histContainer">
+    <h3 onclick="clicarCarregar()" id="histClick" class="itemTittle">Historico ▼</h3>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+            <link rel="stylesheet" type="text/css"
+                href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+            <link rel="stylesheet" type="text/css"
+                href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.dataTables.css">
+            <link rel="stylesheet" type="text/css"
+                href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+
+            <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+            
+
+            
+            
+    <div>
+        
     </div>
+    <table id="JqueryAtvHistTable" class="display nowrap dataTable " style="width:100%">
+        <thead>
+            <tr id="tbr">
+                <th>ID</th>
+                <th>Autor</th>
+                <th>Ação</th>
+                <th>Campo modificado</th>
+                <th>Valor anterior</th>
+                <th>Novo valor</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+    </table>
 </div>
 
-
-
+<script>
+    var atvId =  '<?php echo $atv[0]->atividade_id; ?>' + '/historico' ;
+    $(document).ready(function() {
+        $('#JqueryAtvHistTable').DataTable({
+            searching: false, paging: false, info: false,
+            "processing": true,
+            "serverSide": true,
+            scrollX: true,
+            "ajax": atvId,
+            "columns": [
+                {
+                    "data": "historico_id"
+                },
+                {
+                    "data": "nome",
+                }
+                ,
+                {
+                    "data": "acao",
+                },
+                {
+                    "data": "campo_modificado",
+                },
+                {
+                    "data": "valor_anterior",
+                },
+                {
+                    "data": "novo_valor",
+                },
+                {
+                    "data": "data_modificacao",
+                }
+            ]
+        });
+    });
+</script>
+<script defer>
+    var z = document.getElementById("histContainer");
+    var a = document.getElementById("tbr").offsetHeight;
+    size = (document.getElementById("JqueryAtvHistTable").rows.length*a) + 3*a;
+    z.style.height = size + "px";
+</script>
 </html>

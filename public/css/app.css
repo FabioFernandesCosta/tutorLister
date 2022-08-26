@@ -140,12 +140,21 @@ select {
 }
 
 /* sidemenu */
+.headNav{
+    height: 98%;
+}
+
+.menu{
+    height: 100%;
+}
+
+
 
 .mainHead {
     position: fixed;
-    bottom: 0;
+    top: 0;
     width: 4.5rem;
-    height: 100%;
+    height: 100vh;
     z-index: 1;
     background: #f46303;
     transition: width 300ms;
@@ -209,8 +218,7 @@ select {
 
 .menu li:last-child {
     position: absolute;
-    bottom: 20px;
-
+    bottom: 10px;
 }
 
 /* posição do body com relação ao header */
@@ -559,7 +567,8 @@ input:checked + .slider:before {
 
 
 .histContainer{
-    margin-bottom: 0;
+    margin-bottom: 10px;
+    transition : height 0.25s 0.25s linear;
 }
 
 
@@ -691,5 +700,9 @@ input:checked + .slider:before {
     width: 100%;
 }
 .form-field-littlePlus{
+    
+}
+
+#JqueryAtvHistTable{
     
 }

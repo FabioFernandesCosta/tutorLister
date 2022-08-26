@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\atividadeControler;
+use App\Http\Controllers\historicoController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -48,7 +49,8 @@ Route::controller(atividadeControler::class)->group(function(){
     
 });
 
-
+//historico
+Route::get('atividades/{id}/historico', [historicoController::class, 'show']);
 
 
 /*

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Atividade ID-{{$atv[0]->atividade_id}} - TutorLister</title>
-    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
@@ -33,60 +33,62 @@
 
 
         {{-- detalhes do selecionado --}}
-        
         <div class="AtvBtns">
 
             <a style="text-decoration: none;" href={{ url('atividades') }}>
-                <button class="miniBtn">Voltar</button>
+                <button class="dt-button">Voltar</button>
             </a>
             <a style="text-decoration: none;" href={{ url('atividades/' . $atv[0]->atividade_id .'/edit') }}>
                 @if ($atv[0]->status == 'Arquivado')
-                    <button class="miniBtn" disabled>Editar</button>
+                    <button class="dt-button" disabled>Editar</button>
                 @else
-                    <button class="miniBtn">Editar</button>
+                    <button class="dt-button">Editar</button>
                 @endif
             </a>
             
         </div>
         
         
+        
         <div class="atvDetalhes" style="margin-top: 0">
             <h3 class="itemTittle">Detalhes</h3>
             <form class="p-3 mt-3 atvForm">
-                <div>
-
-                    Descrição
-                    <div class="form-field formDesc"> <span></span>
-                        <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc" readonly>{{$atv[0]->descricao}}</textarea>
-                    </div>
-                </div>
+                
 
                 <div>
-                    <div style="display: flex;">
-                        
-                        Usuarios envolvidos 
-                    </div>
+                    <div id="repart2">
+                        <div>
 
-                    @foreach ($atv[0]->nome as $key => $value)
-                    
-                    <div id="userContainer">
-
-                        <div class="form-field" id="involv"> <span></span>
+                            <div style="display: flex;">
+                                
+                                Usuarios envolvidos 
+                            </div>
+        
+                            @foreach ($atv[0]->nome as $key => $value)
                             
-                            <input type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value='{{$value}}'>
-                            <datalist id="users">
-                                <option value="(puxar de acordo com usuarios existentes no banco)"></option>
-                            </datalist>
+                            <div id="userContainer">
+        
+                                <div class="form-field" id="involv"> <span></span>
+                                    
+                                    <input type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value='{{$value}}'>
+                                    <datalist id="users">
+                                        <option value="(puxar de acordo com usuarios existentes no banco)"></option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
-                    </div>
-                    @endforeach
-                    <span>Requisitante</span>
-                    <div class="form-field" id="req"> <span></span>
-                        
-                        <input type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value={{$atv[0]->requisitante->nome}}>
-                        <datalist id="reqs">
-                            <option value="(puxar de acordo com dados existentes no banco)"></option>
-                        </datalist>
+                        <div>
+
+                            <span>Requisitante</span>
+                            <div class="form-field" id="req"> <span></span>
+                                
+                                <input type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value={{$atv[0]->requisitante->nome}}>
+                                <datalist id="reqs">
+                                    <option value="(puxar de acordo com dados existentes no banco)"></option>
+                                </datalist>
+                            </div>
+                        </div>
                     </div>
                     <div id="repart2">
                         <span>Organização do requisitante</span>
@@ -141,6 +143,13 @@
                                 <input type="text" name="status" id="status" readonly value="{{$atv[0]->status}}">
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div>
+
+                    Descrição
+                    <div class="form-field formDesc"> <span></span>
+                        <textarea name="descricao" id="descricao" cols="30" rows="10" class="desc" readonly>{{$atv[0]->descricao}}</textarea>
                     </div>
                 </div>
             </form>

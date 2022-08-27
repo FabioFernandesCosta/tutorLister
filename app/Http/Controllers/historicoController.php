@@ -4,19 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\historico;
 
 class historicoController extends Controller
 {
     //
-    public function store(Request $request){
+    public function store(array $array){
+
         $historico = new historico();
-        $historico->campo_modificado = Request::get('campo_modificado');
-        $historico->acao = Request::get('acao');
-        $historico->atividade_id = Request::get('atividade_id');
-        $historico->usuario_id = Request::get('usuario_id');
-        $historico->hora_modificacao = date("Y-m-d");
-        $historico->valor_anterior = Request::get('valor_anterior');
-        $historico->novo_valor = Request::get('novo_valor');
+        $historico->campo_modificado = $array[0];
+        $historico->acao = $array[1];
+        $historico->atividade_id = $array[2];
+        $historico->usuario_id = $array[3];
+        $historico->data_modificacao = date("Y-m-d");
+        $historico->valor_anterior = $array[4];
+        $historico->novo_valor = $array[5];
         $historico->save();
     }
 

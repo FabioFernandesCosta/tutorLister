@@ -144,7 +144,7 @@
                         <div class="form-field form-field-littlePlus" id="ch"> <span></span>
                             <select name="status" required='required' id="status">
                                 <option value="Aberto">Aberto</option>
-                                <option value="Em andamento">Em andanmento</option>
+                                <option value="Em andamento">Em andamento</option>
                             </select>
                         </div>
                     </div>
@@ -161,11 +161,11 @@
 
             <div class="atvFormBtn">
                 <a href="{{ url('atividades') }}">
-                    <button type="button" class="btn dt-button" style="margin-top: 45px;">Cancelar</button>
+                    <button type="button" class="btn dt-button" onclick="return confirm('Cancelar')" style="margin-top: 45px;">Cancelar</button>
                 </a>
                 <div class="btn-right">
 
-                    {{ Form::submit('Registrar', ['class' => 'btn mt-3 dt-button', 'style' =>  'margin-top: 45px']) }}
+                    {{ Form::submit('Registrar', ['class' => 'btn mt-3 dt-button', 'style' =>  'margin-top: 45px', 'onclick'=>"return confirm('Confirmar?');"]) }}
                 </div>
             </div>
 

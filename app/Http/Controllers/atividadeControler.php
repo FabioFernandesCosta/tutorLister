@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\atividade;
 use App\Models\usuario_atividade;
 use App\Models\usuario;
+
 use App\Models\atividade_requisitante;
 use App\Models\requisitante;
 use Session;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AtvExport;
 use Datatables;
-
+use App\Http\Controllers\historicoController;
 
 
 
@@ -274,6 +275,10 @@ class atividadeControler extends Controller
                     dd("error, 111");
                 }
                 $atv_req->save();
+
+                $historico_controller = new historicoController;
+                $historico_controller->store(["", "criar atividade", $atividade->atividade_id, 5, NULL, NULL]);
+
                 // redirect
                 Session::flash('message', 'Atividade registrada com successo!');
                 $sucesso = true;
@@ -388,6 +393,42 @@ class atividadeControler extends Controller
                 } else {
                     DB::transaction(function () use ($id){
                         $atv = atividade::findOrFail($id);
+
+
+                        $changedFields = array(array(), array(), array());
+                        if ($atv->data_atividade != Request::get('DoneData')) {
+                            array_push($changedFields[0], 'Data da atividade');
+                            array_push($changedFields[1], Request::get('DoneData'));
+                            array_push($changedFields[2], $atv->data_atividade);
+                            
+                        }
+
+                        if ($atv->hora_atividade != Request::get('DoneHour')) {
+                            array_push($changedFields[0], 'Hora da atividade');
+                            array_push($changedFields[1], Request::get('DoneHour'));
+                            array_push($changedFields[2], $atv->hora_atividade);
+                        }
+
+                        if ($atv->carga != Request::get('CargaHoraria')) {
+                            array_push($changedFields[0], 'Carga Horária');
+                            array_push($changedFields[1], Request::get('CargaHoraria'));
+                            array_push($changedFields[2], $atv->carga);
+
+                        }
+
+                        if ($atv->descricao != Request::get('descricao')) {
+                            array_push($changedFields[0], 'Descrição');
+                            array_push($changedFields[1], Request::get('descricao'));
+                            array_push($changedFields[2], 
+                            $atv->descricao);
+                        }
+
+                        if ($atv->status != Request::get('status')) {
+                            array_push($changedFields[0], 'Status');
+                            array_push($changedFields[1], Request::get('status'));
+                            array_push($changedFields[2], $atv->status);
+                        }
+
                         $atv->data_atividade = Request::get('DoneData');
                         $atv->hora_atividade = Request::get('DoneHour');
                         $atv->carga = Request::get('CargaHoraria');
@@ -397,7 +438,7 @@ class atividadeControler extends Controller
                         //procura pelos usuarios no banco e se existirem cria a relação com a atividade
                         $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
                         $ind = 0;
-                        //corrigir bug apenas ultimo usuario salvo
+                        
                         DB::table("usuario_atividade")
                         ->where("atividade_id", "=", $atv->atividade_id)
                         ->delete();
@@ -426,12 +467,19 @@ class atividadeControler extends Controller
                             $ind += 1;
                         }
 
-                        #falta parte de atualizar requisitante e exibir dados antigos ao entrar na pagina
+                        
                         $req = Request::get('Requisitante');
                         $requisitante = DB::table("requisitante") 
                         ->select("requisitante_id","nome")
                         ->where("nome", "=", $req)
                         ->first();
+
+                        if ($requisitante->nome != $req) {
+                            array_push($changedFields[0], 'requisitante');
+                            array_push($changedFields[1], $req);
+                            array_push($changedFields[2], $requisitante->nome);
+                        }
+
                         if (strtolower($requisitante->nome) == strtolower($req)) {
                             $atv_req = atividade_requisitante::where("atividade_id", "=", $atv->atividade_id)
                             ->first();
@@ -443,6 +491,10 @@ class atividadeControler extends Controller
                         }
 
                         $atv_req->save();
+
+                        $historico_controller = new historicoController;
+                        $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1])]);
+
                         // redirect
                         Session::flash('message', 'Atividade registrada com successo!');
                     });

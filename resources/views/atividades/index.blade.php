@@ -90,7 +90,7 @@
 
 
 
-            <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%">
+            <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -125,6 +125,7 @@
                         [10, 25, 50, "All"]
                     ],
                     scrollX: true,
+                    
                     dom: 'Bfrtlip',
                     
                     buttons: [

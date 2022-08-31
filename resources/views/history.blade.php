@@ -45,7 +45,7 @@
     }
 </script>
 
-<div id="histContainer" class="atvDetalhes histContainer">
+<div id="histContainer" style="margin-top: 0.8rem" class="atvDetalhes histContainer">
     <h3 onclick="clicarCarregar()" id="histClick" class="itemTittle" style="cursor:pointer">Historico ▼</h3>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">

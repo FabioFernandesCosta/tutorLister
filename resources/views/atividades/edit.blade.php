@@ -198,7 +198,7 @@
                 </div>
                 <div class="btn-right">
 
-                    {{ Form::submit('Editar', ['class' => 'btn mt-3 dt-button', 'style' => 'margin-top: 45px',  'onclick'=>"return confirm('Confirmar edição?');"]) }}
+                    {{ Form::submit('Salvar', ['class' => 'btn mt-3 dt-button', 'style' => 'margin-top: 45px',  'onclick'=>"return confirm('Confirmar edição?');"]) }}
 
                 </div>
             </div>

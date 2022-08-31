@@ -26,6 +26,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
+Route::get('/atividades/import', function () {
+    return view('atividades.import');
+});
+
 /*
 
 Route::get('/eventos', function () {

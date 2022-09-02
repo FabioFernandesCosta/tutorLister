@@ -44,22 +44,25 @@
 
 
 
+            {{ Form::open(['url' => 'atividades/import/store', 'class' => 'atvForm', 'autocomplete' => 'off', 'action' => 'atividadeController@import_atv']) }}
             <table id="JqueryAtvImportTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Descrição</th>
                         <th>Usuários envolvidos</th>
                         <th>Requisitante</th>
                         <th>Data de realização</th>
                         <th>Hora de realização</th>
-                        <th>Data do registro</th>
-                        <th>Hora do registro</th>
                         <th>Carga horária da atividade</th>
                         <th>Status</th>
                     </tr>
                 </thead>
             </table>
+            {{-- form submit --}}
+
+
+
+
             <input type="file" onchange="previewFile()" accept=".csv">
             <p class="content"></p>
 
@@ -68,42 +71,45 @@
 
                     Descrição:
                 </span>
-                <select class="select" name="desc" id=""></select>
+                <select class="select" name="descricao" id=""></select>
                 <span>
 
                     Usuários envolvidos:
                 </span>
-                <select class="select" name="us" id=""></select>
+                <select class="select" name="usuarios_envolvidos" id=""></select>
                 <span>
                     Requisitante:
                 </span>
 
-                <select class="select" name="req" id=""></select>
+                <select class="select" name="requisitante"></select>
                 <span>
                     Data de realização:
                 </span>
-                <select class="select" name="drea" id=""></select>
+                <select class="select" name="data_realizacao"></select>
                 <span>
                     Hora de realização:
                 </span>
-                <select class="select" name="hrea" id=""></select>
-                <span>
-                    Data do registro:
-                </span>
-                <select class="select" name="deg" id=""></select>
-                <span>
-                    Hora do registro:
-                </span>
-                <select class="select" name="hreg" id=""></select>
+                <select class="select" name="hora_realizacao"></select>
                 <span>
                     Carga horária da atividade:
                 </span>
-                <select class="select" name="ch" id=""></select>
+                <select class="select" name="carga_horaria"></select>
                 <span>
                     Status:
                 </span>
-                <select class="select" name="st" id=""></select>
+                <select class="select" name="status"></select>
+
             </div>
+
+
+
+            <div class="">
+                <button id="mapButton" type="button" class="dt-button outline-btn">Carregar na tabela</button>
+                {{ Form::submit('Registrar', ['class' => ' mt-3 dt-button', 'style' => 'margin-top: 45px', 'onclick' => "return confirm('Confirmar?');"]) }}
+            </div>
+
+
+            {{ Form::close() }}
 
 
 
@@ -112,11 +118,17 @@
             <script defer>
                 var table = $('#JqueryAtvImportTable').DataTable({
 
+                    //render all cells with inputs
+                    "columnDefs": [{
+                        "targets": "_all",
+                        "createdCell": function(td, cellData, rowData, row, col) {
+                            $(td).html('<input type="text" name=" ' + col + '[]" value="' + cellData + '" />');
+                        }
+                    }],
+                    scrollX: true,
+                    paging: false,
+
                     "columns": [{
-                            data: 'ID',
-                            name: 'id'
-                        },
-                        {
                             data: 'descricao',
                             name: 'descricao'
                         },
@@ -137,14 +149,6 @@
                             name: 'hora_realizacao'
                         },
                         {
-                            data: 'data_registro',
-                            name: 'data_registro'
-                        },
-                        {
-                            data: 'hora_registro',
-                            name: 'hora_registro'
-                        },
-                        {
                             data: 'carga_horaria',
                             name: 'carga_horaria'
                         },
@@ -160,12 +164,12 @@
                     const [file] = document.querySelector('input[type=file]').files;
                     const reader = new FileReader();
                     var fileCsv;
+                    var select = $('.select');
 
                     reader.addEventListener("load", () => {
                         // this will then display the file
                         fileCsv = $.csv.toObjects(reader.result);
 
-                        var select = $('.select');
                         select
                             .append($("<option></option>")
                                 .attr("value", "")
@@ -181,7 +185,42 @@
 
                         });
 
-                        console.log();
+                        //map datatable based on selects values when button is clicked
+                        $('#mapButton').click(function() {
+                            var descricao = $('select[name="descricao"]').val();
+                            var usuarios_envolvidos = $('select[name="usuarios_envolvidos"]').val();
+                            var requisitante = $('select[name="requisitante"]').val();
+                            var data_realizacao = $('select[name="data_realizacao"]').val();
+                            var hora_realizacao = $('select[name="hora_realizacao"]').val();
+                            var carga_horaria = $('select[name="carga_horaria"]').val();
+                            var status = $('select[name="status"]').val();
+
+                            var data = fileCsv.map(function(item) {
+                                return {
+                                    descricao: item[descricao],
+                                    usuarios_envolvidos: item[usuarios_envolvidos],
+                                    requisitante: item[requisitante],
+                                    data_realizacao: item[data_realizacao],
+                                    hora_realizacao: item[hora_realizacao],
+                                    carga_horaria: item[carga_horaria],
+                                    status: item[status]
+                                }
+                            });
+                            //if any item in the array is null or undefined, set it to am empty string
+                            data = data.map(function(item) {
+                                for (var key in item) {
+                                    if (item[key] == null) {
+                                        item[key] = "";
+                                    }
+                                }
+                                return item;
+                            });
+
+                            table.clear().draw();
+                            table.rows.add(data).draw();
+                        });
+
+
                         //table.rows.add(fileCsv).draw();
                     }, false);
 
@@ -189,11 +228,6 @@
                         reader.readAsText(file);
                     }
                 }
-
-                $("#populateTable").click(function() {
-                    console.log((typeof(($("#csvImport").val()))));
-                    table.rows.add($.csv.toObjects($("#csvImport").val())).draw();
-                });
             </script>
         </div>
     </div>

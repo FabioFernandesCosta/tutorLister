@@ -140,6 +140,14 @@ select {
     color: #666;
 }
 
+table input{
+    background-color: #00000000;
+    border: none;
+    margin: none;
+
+    padding: 2px;
+}
+
 /* sidemenu */
 .headNav{
     height: 98%;

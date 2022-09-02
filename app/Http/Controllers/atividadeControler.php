@@ -18,7 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AtvExport;
 use Datatables;
 use App\Http\Controllers\historicoController;
-
+use DateTime;
 
 
 
@@ -518,4 +518,85 @@ class atividadeControler extends Controller
     public function export(Request $request){
         return Excel::download(new AtvExport(Request::get('filter')), 'atividades.csv');
     }
+
+
+    public function import_atv(Request $request){
+        //save into database the arrays (0 to 6) that comes from Request
+        $data = Request::all();
+        
+        
+        //transpoe $data
+        
+        $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
+        
+        //trata cada elemento de $data como uma atividade para salvar no banco
+        DB::transaction(function () use($data) {
+            foreach ($data as &$key) {
+                //cria atividade
+                //format key 3 from dd/mm/yyyy to yyyy-mm-dd
+                $formated_date = str_replace('/', '-', $key[3]);
+                //change formated_date from dd-mm-yyyy to yyyy-mm-dd
+                $formated_date = date('Y-m-d', strtotime($formated_date));
+
+                //format key 4 from string to date("h:i:s")
+                $formated_hour = date("H:i:s", strtotime($key[4]));
+
+                $atv = new atividade;
+                $atv->descricao = $key[0];
+                $atv->data_atividade = $formated_date;
+                $atv->hora_atividade = $formated_hour;
+                $atv->data_registro = date("Y-m-d");
+                $atv->hora_registro = date("h:i:s");
+                $atv->carga = $key[5];
+                $atv->status = $key[6];
+                $atv->save();
+
+                //procura pelos usuarios no banco e se existirem cria a relação com a atividade
+                $invUs = explode(",", $key[1]); //pega lista de nomes dos usuario envolvidos
+                $ind = 0;
+                foreach ($invUs as &$keyy) {
+                    $usuario = '';
+                    $usuario = DB::table("usuario")
+                    ->select("usuario_id", "nome")
+                    ->where("nome", "=", $keyy)
+                    ->get();
+
+                    if (strtolower($usuario[0]->nome)== strtolower($keyy)) {
+                        $us_atv = new usuario_atividade;
+                        $us_atv->usuario_id = $usuario[0]->usuario_id;
+                        $us_atv->atividade_id = $atv->atividade_id;
+                        $us_atv->save();
+                    }else{
+                        dd($usuario[0]->nome, $keyy);
+                        dd("error, 111");
+                    }
+                    $ind += 1;
+                }
+                $req = $key[2];
+                $requisitante = DB::table("requisitante") 
+                ->select("requisitante_id","nome")
+                ->where("nome", "=", $req)
+                ->first();
+
+                //dd($req);
+                if (strtolower($requisitante->nome) == strtolower($req)) {
+                    $atv_req = new atividade_requisitante;
+                    $atv_req->requisitante_id = $requisitante->requisitante_id;
+                    $atv_req->atividade_id = $atv->atividade_id;
+                }else{
+                    dd("error, 111");
+                }
+                $atv_req->save();
+                
+                //registra como "atividade importada" no historico
+                $historico_controller = new historicoController;
+                $historico_controller->store(["", "Atividade importada", $atv->atividade_id, 5, NULL, NULL]);
+
+            }
+        });
+        return Redirect::to('atividades');
+    }
+
+    
+    
 }

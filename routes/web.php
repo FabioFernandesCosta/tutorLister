@@ -50,6 +50,7 @@ Route::controller(atividadeControler::class)->group(function(){
     Route::resource('atividades', atividadeControler::class);
     Route::post('atv-export/', 'export')->name('atividade.export');
     //Route::get('atividades/index-filtering', 'atividadeControler@indexFiltering');
+    Route::post('/atividades/import/store', 'import_atv')->name('atividade.import_atv');
     
 });
 

@@ -42,8 +42,10 @@
         <br>
         <div class="btn-right">
 
+            <a href="{{ url('atividades/import') }}" style="text-decoration: none" >
+                <button class="dt-button">Importar</button>
             <a href={{ url('atividades/create') }}>
-                <button class="dt-button outline-btn">Novo</button>
+                <button class="dt-button">Novo</button>
             </a>
         </div>
 

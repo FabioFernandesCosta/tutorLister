@@ -45,26 +45,10 @@
 
 
             {{ Form::open(['url' => 'atividades/import/store', 'class' => 'atvForm', 'autocomplete' => 'off', 'action' => 'atividadeController@import_atv']) }}
-            <table id="JqueryAtvImportTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Usuários envolvidos</th>
-                        <th>Requisitante</th>
-                        <th>Data de realização</th>
-                        <th>Hora de realização</th>
-                        <th>Carga horária da atividade</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-            </table>
-            {{-- form submit --}}
+
+            <input type="file" class="fileInput" onchange="previewFile()" accept=".csv">
 
 
-
-
-            <input type="file" onchange="previewFile()" accept=".csv">
-            <p class="content"></p>
 
             <div class="column_relation">
                 <span>
@@ -100,29 +84,107 @@
                 <select class="select" name="status"></select>
 
             </div>
+            <button id="mapButton" type="button" class="dt-button outline-btn" style="margin-top: 10px">Carregar na tabela</button>
 
 
 
-            <div class="">
-                <button id="mapButton" type="button" class="dt-button outline-btn">Carregar na tabela</button>
-                {{ Form::submit('Registrar', ['class' => ' mt-3 dt-button', 'style' => 'margin-top: 45px', 'onclick' => "return confirm('Confirmar?');"]) }}
+
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li class="ulError">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <table id="JqueryAtvImportTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Usuários envolvidos</th>
+                        <th>Requisitante</th>
+                        <th>Data de realização</th>
+                        <th>Hora de realização</th>
+                        <th>Carga horária da atividade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+            </table>
+            {{-- form submit --}}
+
+            <div class="atvFormBtn">
+
+                <a style="margin: auto; margin-left: 0" href={{ url('atividades/') }}>
+                    <button class="dt-button">Cancelar</button>
+                </a>
+                <div class="btn-right">
+                    {{ Form::submit('Salvar', ['class' => ' mt-3 dt-button', 'onclick' => "return confirm('Confirmar?');"]) }}
+                </div>
             </div>
+            
+
 
 
             {{ Form::close() }}
 
 
 
-
+            @php
+                //dd(old('0'));
+                $data = [
+                    '0' => old('0'),
+                    '1' => old('1'),
+                    '2' => old('2'),
+                    '3' => old('3'),
+                    '4' => old('4'),
+                    '5' => old('5'),
+                    '6' => old('6'),
+                ];
+                if ($data[0] != null) {
+                    $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
+                    //dd($data);
+                }
+                
+            @endphp
 
             <script defer>
+                if ("{{ count($data) !== 0 }}") {
+                    var data = (@json($data));
+                    //console.log(data);
+                    if (data[0] != null) {
+
+                        var data = data.map(function(item) {
+                            return {
+                                descricao: item[0],
+                                usuarios_envolvidos: item[1],
+                                requisitante: item[2],
+                                data_realizacao: item[3],
+                                hora_realizacao: item[4],
+                                carga_horaria: item[5],
+                                status: item[6]
+                            }
+                        });
+                    } else {
+                        var data = [];
+                    }
+
+                }
                 var table = $('#JqueryAtvImportTable').DataTable({
 
-                    //render all cells with inputs
+                    //if data[0] is not null, then it will be used to fill the table
+                    "data": data,
+
+
                     "columnDefs": [{
                         "targets": "_all",
                         "createdCell": function(td, cellData, rowData, row, col) {
-                            $(td).html('<input type="text" name=" ' + col + '[]" value="' + cellData + '" />');
+
+                            if (data[0] == null) {
+                                $(td).html('<input type="text" name="' + col + '[]" value="' + cellData +
+                                    '" />');
+                            }
                         }
                     }],
                     scrollX: true,
@@ -159,6 +221,14 @@
                     ],
                 });
 
+                function load_old() {
+                    if (data) {
+                        //console.log(data);
+                        table.clear().draw();
+                        table.rows.add(data).draw();
+                    }
+                }
+
                 function previewFile() {
                     const content = document.querySelector('.content');
                     const [file] = document.querySelector('input[type=file]').files;
@@ -167,6 +237,7 @@
                     var select = $('.select');
 
                     reader.addEventListener("load", () => {
+                        select.empty();
                         // this will then display the file
                         fileCsv = $.csv.toObjects(reader.result);
 
@@ -227,6 +298,10 @@
                     if (file) {
                         reader.readAsText(file);
                     }
+                }
+                if (data[0] != null) {
+
+                    load_old();
                 }
             </script>
         </div>

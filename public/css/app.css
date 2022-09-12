@@ -729,3 +729,7 @@ input:checked + .slider:before {
     display: grid;
     grid-template-columns: 15rem 10rem;
 }
+
+.fileInput{
+    margin-top: 2rem;
+}

@@ -204,7 +204,7 @@ class atividadeControler extends Controller
         
         $rules = array(
             'InvolvedUsers' => 'required|exists:usuario,nome',
-            'DoneData' => 'required',
+            'DoneData' => 'required|before:tomorrow',
             'DoneHour' => 'required',
             'CargaHoraria' => 'required',
             'descricao' => 'required',
@@ -212,7 +212,7 @@ class atividadeControler extends Controller
             
         );
         $mensagens = array(
-            'Requisitante.exists' => 'O valor no campo Requsitante é invalido',
+            'Requisitante.exists' => 'O valor no campo Requisitante é invalido',
             'InvolvedUsers.exists' => 'O valor no campo Usuarios envolvidos é invalido',
             'DoneData.required' => 'O campo Data da atividade é obrigatorio',
             'Donehour.required' => 'O campo Hora da atividade é obrigatorio',
@@ -521,82 +521,131 @@ class atividadeControler extends Controller
 
 
     public function import_atv(Request $request){
+
         //save into database the arrays (0 to 6) that comes from Request
         $data = Request::all();
         
         
         //transpoe $data
-        
+        //dd($data);
         $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
+
         
-        //trata cada elemento de $data como uma atividade para salvar no banco
-        DB::transaction(function () use($data) {
-            foreach ($data as &$key) {
-                //cria atividade
-                //format key 3 from dd/mm/yyyy to yyyy-mm-dd
-                $formated_date = str_replace('/', '-', $key[3]);
-                //change formated_date from dd-mm-yyyy to yyyy-mm-dd
-                $formated_date = date('Y-m-d', strtotime($formated_date));
+        foreach ($data as &$key){
+            //format key 3 from dd/mm/yyyy to yyyy-mm-dd
+            if ($key[3] == null or str_contains($key[3], '/')) {
+                $key[3] = str_replace('/', '-', $key[3]);
+                $key[3] = date("Y-m-d", strtotime($key[3]));
+            }else{
+                $key[3] = 'nad';
+            }
+            //change formated_date from dd-mm-yyyy to yyyy-mm-dd
 
-                //format key 4 from string to date("h:i:s")
-                $formated_hour = date("H:i:s", strtotime($key[4]));
+            if ($key[4] == null or str_contains($key[4], ':')) {
+                $key[4] = date("H:i:s", strtotime($key[4]));
+            }else{
+                $key[4] = 'nad';
+            }
 
-                $atv = new atividade;
-                $atv->descricao = $key[0];
-                $atv->data_atividade = $formated_date;
-                $atv->hora_atividade = $formated_hour;
-                $atv->data_registro = date("Y-m-d");
-                $atv->hora_registro = date("h:i:s");
-                $atv->carga = $key[5];
-                $atv->status = $key[6];
-                $atv->save();
+            if ($key[5] == null or str_contains($key[5], ':')) {
+                $key[5] = date("H:i:s", strtotime($key[5]));
+                //dd($key[5]);
+            }
+        }
+        
+        //laravel validator rules if $formated_date is a valid date in the format yyyy-mm-dd
+        $rules = array(
+            '*.0' => 'required|string|max:255',
+            '*.1' => 'required|string|max:255',
+            //string or null
+            '*.2' => 'nullable|string|max:255',
+            '*.3' => 'nullable|date_format:Y-m-d|before:today|after:2010-01-01',
+            '*.4' => 'nullable|date_format:H:i:s|before:today|after:2010-01-01',
+            '*.5' => 'nullable|string|date_format:H:i:s',
+            '*.6' => 'nullable|string',
+        );
 
-                //procura pelos usuarios no banco e se existirem cria a relação com a atividade
-                $invUs = explode(",", $key[1]); //pega lista de nomes dos usuario envolvidos
-                $ind = 0;
-                foreach ($invUs as &$keyy) {
-                    $usuario = '';
-                    $usuario = DB::table("usuario")
-                    ->select("usuario_id", "nome")
-                    ->where("nome", "=", $keyy)
-                    ->get();
+        //laravel validator messages
+        $messages = array(
+            '*.0.required' => 'O campo "Descrição" é obrigatório.',
+            '*.1.required' => 'O campo "Usuarios envolvidos" é obrigatório.',
+            '*.3.date_format' => 'O campo "Data" na linha :attribute deve estar no formato "dd/mm/aaaa"',
+            '*.4.date_format' => 'O campo "Hora" na linha :attribute deve estar no formato "hh:mm"',
+            '*.5.date_format' => 'O campo "carga" na linha :attribute deve estar no formato "hh:mm:ss"',
+        );
 
-                    if (strtolower($usuario[0]->nome)== strtolower($keyy)) {
-                        $us_atv = new usuario_atividade;
-                        $us_atv->usuario_id = $usuario[0]->usuario_id;
-                        $us_atv->atividade_id = $atv->atividade_id;
-                        $us_atv->save();
+
+
+        $validator = Validator::make($data, $rules, $messages);
+        //dd($validator->errors(), $data);
+        //if validator fails, redirect to the same page with the errors
+        if ($validator->fails()) {
+            return Redirect::to('atividades/import')
+            ->withErrors($validator)
+            ->withInput();
+        }else{
+
+            //trata cada elemento de $data como uma atividade para salvar no banco
+            DB::transaction(function () use($data) {
+                foreach ($data as &$key) {
+                    //cria atividade
+
+                    
+
+                    $atv = new atividade;
+                    $atv->descricao = $key[0];
+                    $atv->data_atividade = $key[3];
+                    $atv->hora_atividade = $key[4];
+                    $atv->data_registro = date("Y-m-d");
+                    $atv->hora_registro = date("h:i:s");
+                    $atv->carga = $key[5];
+                    $atv->status = $key[6];
+                    $atv->save();
+
+                    //procura pelos usuarios no banco e se existirem cria a relação com a atividade
+                    $invUs = explode(",", $key[1]); //pega lista de nomes dos usuario envolvidos
+                    $ind = 0;
+                    foreach ($invUs as &$keyy) {
+                        $usuario = '';
+                        $usuario = DB::table("usuario")
+                        ->select("usuario_id", "nome")
+                        ->where("nome", "=", $keyy)
+                        ->get();
+
+                        if (strtolower($usuario[0]->nome)== strtolower($keyy)) {
+                            $us_atv = new usuario_atividade;
+                            $us_atv->usuario_id = $usuario[0]->usuario_id;
+                            $us_atv->atividade_id = $atv->atividade_id;
+                            $us_atv->save();
+                        }else{
+                            dd($usuario[0]->nome, $keyy);
+                            dd("error, 111");
+                        }
+                        $ind += 1;
+                    }
+                    $req = $key[2];
+                    $requisitante = DB::table("requisitante") 
+                    ->select("requisitante_id","nome")
+                    ->where("nome", "=", $req)
+                    ->first();
+
+                    //dd($req);
+                    if (strtolower($requisitante->nome) == strtolower($req)) {
+                        $atv_req = new atividade_requisitante;
+                        $atv_req->requisitante_id = $requisitante->requisitante_id;
+                        $atv_req->atividade_id = $atv->atividade_id;
                     }else{
-                        dd($usuario[0]->nome, $keyy);
                         dd("error, 111");
                     }
-                    $ind += 1;
-                }
-                $req = $key[2];
-                $requisitante = DB::table("requisitante") 
-                ->select("requisitante_id","nome")
-                ->where("nome", "=", $req)
-                ->first();
+                    $atv_req->save();
+                    
+                    //registra como "atividade importada" no historico
+                    $historico_controller = new historicoController;
+                    $historico_controller->store(["", "Atividade importada", $atv->atividade_id, 5, NULL, NULL]);
 
-                //dd($req);
-                if (strtolower($requisitante->nome) == strtolower($req)) {
-                    $atv_req = new atividade_requisitante;
-                    $atv_req->requisitante_id = $requisitante->requisitante_id;
-                    $atv_req->atividade_id = $atv->atividade_id;
-                }else{
-                    dd("error, 111");
                 }
-                $atv_req->save();
-                
-                //registra como "atividade importada" no historico
-                $historico_controller = new historicoController;
-                $historico_controller->store(["", "Atividade importada", $atv->atividade_id, 5, NULL, NULL]);
-
-            }
-        });
-        return Redirect::to('atividades');
+            });
+            return Redirect::to('atividades');
+        }
     }
-
-    
-    
 }

@@ -71,21 +71,28 @@
                         </div>
                         {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
                         <div id="userContainer">
+                            
                             @if (null !== old('InvolvedUsers'))
                                 @foreach (old('InvolvedUsers') as $user)
+                                <div style="display: grid; grid-template-columns: 95% auto">
                                     <div class="form-field" id="involv">
                                         <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
                                             list="users" value="{{ $user }}">
                                         @include('autocomplete', ['campo' => '.usuario'])
                                     </div>
+                                    <a href="javascript:void(0)" class="add_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
+                                </div>
                                 @endforeach
                             @else
                                 @foreach ($atv->usuarios as $key => $value)
+                                <div style="display: grid; grid-template-columns: 95% auto">
                                     <div class="form-field" id="involv">
                                         <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
                                             list="users" value='{{ $value->nome }}'>
                                         @include('autocomplete', ['campo' => '.usuario'])
                                     </div>
+                                    <a href="javascript:void(0)" class="add_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
+                                </div>
                                 @endforeach
         
                             @endif
@@ -210,6 +217,45 @@
 
     </div>
 </body>
+<script>
+        
 
+    $(document).ready(function() {
+        var maxfields = 10;
+        var wrapper = $("#userContainer");
+        var add_button = $(".add_button");
+
+        var x = 1;
+        var userInput = `<input type="text" class="usuario" required='required' name="InvolvedUsers[0]" id="usuario" list="users">`;
+        
+        $(add_button).click(function() {
+            typeaheadInit();
+            if (x < maxfields) {
+                x++;
+                var involvHTML = `<div style="display: grid; grid-template-columns: 95% auto"><div class="form-field form-field-little" id="involv`+ x + `"> </div> <a href="javascript:void(0)" class="rmv_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/menos.png')}}" /></a> </div>`;
+                //$(wrapper).append(involvHTML);
+                $(involvHTML).appendTo(wrapper);
+                $(userInput).appendTo("#involv"+x).typeahead({
+                    source: function(query, process) {
+                        return $.get('/consultar', {
+                            term: ".usuario_" + query
+                        }, function(data) {
+                            return process(data);
+                        });
+                    }
+                });
+            }
+        });
+
+
+        $(wrapper).on("click", ".rmv_button", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+        })
+
+
+    });
+</script>
 </html>>
 {{-- https://stackoverflow.com/questions/44517785/php-laravel-html-forms-array-of-values --}}

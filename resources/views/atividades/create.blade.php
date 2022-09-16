@@ -13,25 +13,7 @@
 
 
 
-    <script>
-        function addField() {
-
-            let htmlUserInput =
-                '<div class="form-field" id="involv"><input type="text" name="InvolvedUsers[]" class="usuario" list="users"></div>';
-            let doc = new DOMParser().parseFromString(htmlUserInput, "text/html");
-            document.getElementById("userContainer").appendChild(doc.firstChild.lastChild.firstChild);
-            typeaheadInit();
-
-
-        }
-
-        function rmvField() {
-            if (document.getElementById("userContainer").children.length > 1) {
-                document.getElementById("userContainer").lastChild.remove;
-                document.getElementById("userContainer").removeChild(document.getElementById("userContainer").lastElementChild)
-            }
-        }
-    </script>
+    
 
 </head>
 @include('sidemenu')
@@ -61,30 +43,38 @@
                         <div style="display: flex;">
                             Usuarios envolvidos
                              
-                            <a href=""> +</a>
+                            <a id="add" href=""> +</a>
                               
-                            <a href="">-</a>
+                            <a id="rmv" href="">-</a>
+                            
                             {{--
-                                
+
                                 <button type="button" onclick="addField()" class="miniBtn" style="margin-top: 0; margin-left:5px; height:20px">+</button>
                                 
                                 <button type="button" onclick="rmvField()" class="miniBtn" style="margin-top: 0;height:20px">-</button>
                                 --}}
                         </div>
                         <div id="userContainer">
-        
+                            
                             @if (null !== old('InvolvedUsers'))
                                 @foreach (old('InvolvedUsers') as $user)
-                                    <div class="form-field form-field-little" id="involv">
-                                        <input type="text" class="usuario" required='required' name="InvolvedUsers[0]"
-                                            value="{{ $user }}" id="usuario" list="users">
+                                    <div style="display: grid; grid-template-columns: 95% auto">
+                                    
+                                        <div class="form-field form-field-little" id="involv">
+                                            <input type="text" class="usuario" required='required' name="InvolvedUsers[0]"
+                                                value="{{ $user }}" id="usuario" list="users">
+                                        </div>
+                                        <a href="javascript:void(0)" class="add_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
                                     </div>
                                 @endforeach
                             @else
+                            <div style="display: grid; grid-template-columns: 95% auto">
                                 <div class="form-field form-field-little" id="involv">
                                     <input type="text" class="usuario" required='required' name="InvolvedUsers[0]"
                                         value="{{ old('InvolvedUsers.0') }}" id="usuario" list="users">
-                                </div>
+                                    </div>
+                                    <a href="javascript:void(0)" class="add_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
+                            </div>
                             @endif
         
                         </div>
@@ -176,10 +166,53 @@
 
 
     </div>
+    <a href=""></a>
 
 </body>
 @include('autocomplete', ['campo' => '.usuario'])
 @include('autocomplete', ['campo' => '#Requisitante'])
+
+
+<script>
+        
+
+    $(document).ready(function() {
+        var maxfields = 10;
+        var wrapper = $("#userContainer");
+        var add_button = $(".add_button");
+
+        var x = 1;
+        var userInput = `<input type="text" class="usuario" required='required' name="InvolvedUsers[0]" id="usuario" list="users">`;
+        
+        $(add_button).click(function() {
+            typeaheadInit();
+            if (x < maxfields) {
+                x++;
+                var involvHTML = `<div style="display: grid; grid-template-columns: 95% auto"><div class="form-field form-field-little" id="involv`+ x + `"> </div> <a href="javascript:void(0)" class="rmv_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/menos.png')}}" /></a> </div>`;
+                //$(wrapper).append(involvHTML);
+                $(involvHTML).appendTo(wrapper);
+                $(userInput).appendTo("#involv"+x).typeahead({
+                    source: function(query, process) {
+                        return $.get('/consultar', {
+                            term: ".usuario_" + query
+                        }, function(data) {
+                            return process(data);
+                        });
+                    }
+                });
+            }
+        });
+
+
+        $(wrapper).on("click", ".rmv_button", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+        })
+
+
+    });
+</script>
 
 </html>
 

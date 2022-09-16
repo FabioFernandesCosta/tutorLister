@@ -172,8 +172,16 @@
                             name: "descricao"
                         },
                         {
-                            "data": "nome",
-                            name: 'usuario.nome'
+                            "data": "nomeUs",
+                            name: "usuario.nome"
+
+
+                            
+
+
+
+
+                            
                         },
                         {
                             "data": "requisitante",

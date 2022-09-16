@@ -59,8 +59,10 @@ class atividadeControler extends Controller
                     DB::raw("TIME_FORMAT(atividade.carga, '%H:%i') as carga"),
                     DB::raw("SUBSTR(atividade.descricao, 1, 64) as descricao"),
                     "atividade.status",
-                    DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
-                    DB::raw('group_concat(DISTINCT usuario.nome) as nome'))->groupBy('atividade.atividade_id')
+                    DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'))
+                    //DB::raw('group_concat( usuario.nome) as nomeUs'))
+                    ->groupBy('atividade.atividade_id')
+                    ->addSelect(DB::raw("group_concat( usuario.nome) as nomeUs"))
             
         )->toJson());
         

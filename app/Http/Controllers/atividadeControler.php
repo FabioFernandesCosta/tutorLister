@@ -44,8 +44,18 @@ class atividadeControler extends Controller
     }
 
     public function getData(Request $request){
+        // if (Request::get("min") != null) {
+
+        //     //dd(date('d/m/YYYY', strtotime(Request::get("min"))));
+        //     dd((Request::get("min")));
+        //     dd(Request::get("max"));
+        // }
+
+        
+
+
         //dd(datatables(DB::table('atividade'))->toJson());
-        return (datatables(
+        $data = ((
             DB::table('atividade')
             ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
             ->join('usuario','usuario_atividade.usuario_id', '=', 'usuario.usuario_id')
@@ -64,7 +74,53 @@ class atividadeControler extends Controller
                     ->groupBy('atividade.atividade_id')
                     ->addSelect(DB::raw("group_concat( usuario.nome) as nomeUs"))
             
-        )->toJson());
+        ));
+        // dd($data->first(), Request::get("min"));
+        //dd(gettype(Request::get("min")), Request::get("min"));
+        $min = strtotime(Request::get("min"));
+        $max = strtotime(Request::get("max"));
+        
+        
+        //dd([$min, $max], DB::table('atividade')->select(DB::raw("data_atividade"))->first());
+        
+        //if (min not null and max null) { where data_atividade >= min}
+        if ($min != null && $max == null) {
+            //$min = date('d/m/Y', strtotime(Request::get("min")));
+            $min = date("Y-m-d", ($min) );
+            //dd($min);
+            //$data = $data->where('atividade.data_atividade', '>=', $min);
+            //$data = $data->DB::raw("where atividade.data_atividade >= $min");
+            $data = $data->whereRaw (("DATE(atividade.data_atividade) >= '".($min)."'"));
+        }
+
+        //if (min null and max not null) { where data_atividade <= max}
+        elseif ($min == null && $max != null) {
+            $max = date("Y-m-d", ($max) );
+            //$data = $data->where('atividade.data_atividade', '<=', $max);
+            $data = $data->whereRaw (("DATE(atividade.data_atividade) <= '".($max)."'"));
+        }
+
+        //if (min not null and max not null) { where data_atividade between min and max}
+        elseif ($min != null && $max != null) {
+            $min = date("Y-m-d", ($min) );
+            $max = date("Y-m-d", ($max) );
+            //data whereRaw between min and max
+            $data = $data->whereRaw (("DATE(atividade.data_atividade) between '".($min)."' and '".($max)."'"));
+        }
+
+
+        // $data->filter(function ($query) {
+        //     if (Request::get("min") != null) {
+        //         dd(Request::get("min"), $data->where('atividade_id', '=', 1)->get());
+        //         dd(Request::get("min"), $query->where('atividade_id', '=', 1)->get());
+        //         $query->where('atividade.data_atividade', '>=', Request::get("min"));
+        //     }
+        //     if (Request::get("max") != null) {
+        //         $query->where('atividade.data_atividade', '<=', Request::get("max"));
+        //     }
+        // });
+
+        return datatables($data)->toJson();
         
         
     }

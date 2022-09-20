@@ -15,7 +15,6 @@
         }
 
         /* outline button */
-        
     </style>
 
 
@@ -39,15 +38,8 @@
 
 
 
-        <br>
-        <div class="btn-right">
 
-            <a href="{{ url('atividades/import') }}" style="text-decoration: none" >
-                <button class="dt-button">Importar</button>
-            <a href={{ url('atividades/create') }}>
-                <button class="dt-button">Novo</button>
-            </a>
-        </div>
+
 
 
 
@@ -86,12 +78,40 @@
                 src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
             <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js">
             </script>
+            <script type="text/javascript" charset="utf8"
+                src="//cdn.datatables.net/plug-ins/1.12.1/filtering/row-based/range_dates.js"></script>
+            {{-- <script data-require="jqueryui@*" data-semver="1.10.0"
+                src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script> --}}
 
 
-            <div id="toggleBtn"></div>
 
 
 
+            <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
+                <tbody>
+                    <tr>
+                        <td>Data minima:</td>
+                        <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="min"
+                                name="min"></td>
+                        <td>Data maxima:</td>
+                        <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="max"
+                                name="max"></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="indexButtons" style="display: grid; grid-template-columns: 50% 50%; margin-top: 3.5rem">
+
+                <div class="btn-right">
+
+                    <a href="{{ url('atividades/import') }}" style="text-decoration: none">
+                        <button class="dt-button">Importar</button>
+                        <a href={{ url('atividades/create') }}>
+                            <button class="dt-button">Novo</button>
+                        </a>
+                </div>
+            </div>
             <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
                 <thead>
                     <tr>
@@ -112,6 +132,14 @@
 
 
         <script defer>
+            var minDate, maxDate;
+            // Custom filtering function which will search data in column data realizaçao between two values
+
+            minDateFilter = "";
+            maxDateFilter = "";
+
+
+
             $(document).ready(function() {
 
                 var table = $('#JqueryAtvTable').DataTable({
@@ -127,9 +155,9 @@
                         [10, 25, 50, "All"]
                     ],
                     scrollX: true,
-                    
+
                     dom: 'Bfrtlip',
-                    
+
                     buttons: [
                         'colvis', 'csv', 'excel', 'pdf', 'print' //'columnsToggle'
                     ],
@@ -142,7 +170,14 @@
 
                     "processing": true,
                     "serverSide": true,
-                    "ajax": '{{ url('getdata') }}',
+                    ajax: {
+                        url: "{{ url('getdata') }}",
+                        data: function(d) {
+                            d.min = minDateFilter;
+                            d.max = maxDateFilter;
+                        }
+                    },
+                    //"ajax": '{{ url('getdata') }}',
 
                     //linguagem
                     "language": {
@@ -176,12 +211,6 @@
                             name: "usuario.nome"
 
 
-                            
-
-
-
-
-                            
                         },
                         {
                             "data": "requisitante",
@@ -205,13 +234,75 @@
                         {
                             "data": "status"
                         }
-                    ]
+                    ],
+
+
+
+
+
+
                 });
-                $('#min, #max').on('change', function() {
+
+
+                //detach buttons class dtbuttons from table and put as first child under indexButtons div
+                var indexButtons = $('#indexButtons');
+                var buttons = $('.dt-buttons').detach();
+                indexButtons.prepend(buttons);
+
+
+                //detach dateFilter table and put it side to side with JqueryAtvTable_filter
+                var dateFilter = $('#dateFilter').detach();
+                $('#JqueryAtvTable_filter').after(dateFilter);
+
+
+
+                //once #min or #max are changed, filter the table date columns with #min and #max values
+                $('#min').change(function() {
+                    minDateFilter = $("#min").val();
+                    console.log("test");
+                    table.draw();
+                });
+                $('#max').change(function() {
+                    maxDateFilter = $("#max").val();
                     table.draw();
                 });
 
-                
+
+
+
+
+
+
+
+
+                // $("#min").datepicker({
+                //     showOn: "button",
+                //     buttonImage: "images/calendar.gif",
+                //     buttonImageOnly: false,
+                //     "onSelect": function(date) {
+                //         minDateFilter = new Date(date).getTime();
+                //         table.fnDraw();
+                //     }
+                // }).keyup(function() {
+                //     minDateFilter = new Date(this.value).getTime();
+                //     table.fnDraw();
+                // });
+
+                // $("#max").datepicker({
+                //     showOn: "button",
+                //     buttonImage: "images/calendar.gif",
+                //     buttonImageOnly: false,
+                //     "onSelect": function(date) {
+                //         maxDateFilter = new Date(date).getTime();
+                //         table.fnDraw();
+                //     }
+                // }).keyup(function() {
+                //     maxDateFilter = new Date(this.value).getTime();
+                //     table.fnDraw();
+                // });
+
+
+
 
             });
         </script>

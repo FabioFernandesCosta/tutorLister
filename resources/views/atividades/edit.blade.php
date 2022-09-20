@@ -128,9 +128,9 @@
                         {{ Html::ul($errors->get('DoneData'), ['class' => 'ulError']) }}
                         <div class="form-field dth"> <span></span>
                             @if (old('DoneData') !== null)
-                                <input type="date" name="DoneData" id="DoneData" value="{{ old('DoneData') }}">
+                                <input type="date" name="DoneData" id="DoneData" value="{{ old('DoneData') }}" max="{{ date('Y-m-d') }}">
                             @else
-                                <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }}>
+                                <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }} max="{{ date('Y-m-d') }}">
                             @endif
                         </div>
                     </div>

@@ -102,7 +102,7 @@
                     <div>
                         {{ Html::ul($errors->get('DoneData'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-littlePlus dth"> <span></span>
-                            <input type="date" required='required' name="DoneData" value="{{ old('DoneData') }}"
+                            <input type="date" required='required' name="DoneData" value="{{ old('DoneData') }}" max="{{ date('Y-m-d') }}"
                                 id="DoneData">
                         </div>
                     </div>

@@ -28,8 +28,8 @@
     <div class="wrapAll">
         
         <h1 >
-            Aluno
             {{-- id aluno --}}
+            Aluno ID-{{$aluno->usuario_id}}
         </h1>
 
 
@@ -42,7 +42,7 @@
             {{-- @php
                 dd($aluno->usuario_id);
             @endphp --}}
-            <a style="text-decoration: none;" href={{ url('alulo/' . $aluno->usuario_id .'/edit') }}>
+            <a style="text-decoration: none;" href={{ url('alunos/' . $aluno->usuario_id .'/edit') }}>
                 <button class="dt-button">Editar</button>
             </a>
             

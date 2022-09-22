@@ -71,7 +71,8 @@ class alunosController extends Controller
             'nome' => 'required',
             'email' => 'required|email',
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
-            'curso' => 'required',
+            //check if curso with name exists in the database
+            'curso' => 'required|exists:curso,nome',
             'ativo' => 'required|in:0,1',
             'acesso' => 'required|in:0,1',
         );
@@ -81,6 +82,7 @@ class alunosController extends Controller
             'email.email' => 'O campo email deve ser um email válido',
             'telefone.regex' => 'O campo telefone deve ser no formato (xx xxxxxxxxx)',
             'curso.required' => 'O campo curso é obrigatório',
+            'curso.exists' => 'O curso informado não existe nos registros',
             'ativo.required' => 'O campo ativo é obrigatório',
             'ativo.in' => 'O campo ativo deve ser sim ou não',
             'acesso.required' => 'O campo acesso é obrigatório',
@@ -122,7 +124,7 @@ class alunosController extends Controller
                 //dd($loctoRed);
                 return Redirect::to('alunos/' . $usuario->usuario_id);
             });
-            return Redirect::to('alunos/' . $usuario->usuario_id);
+            return Redirect::to('alunos/');
         }
 
     }
@@ -155,6 +157,14 @@ class alunosController extends Controller
     public function edit($id)
     {
         //
+        $usuario = usuario::find($id);
+        $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
+        $curso = curso::find($usuario_curso->curso_id);
+        $usuario->curso = $curso->nome;
+        $usuario->horario = $usuario_curso->horario;
+        $usuario->ativo = $usuario->ativo == 1 ? 'Sim' : 'Não';
+        $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
+        return (View::make('alunos.edit')->with('aluno', $usuario));
     }
 
     /**
@@ -167,6 +177,115 @@ class alunosController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $rules = array( 
+            'nome' => 'required',
+            'email' => 'required|email',
+            'telefone' => 'regex:/^\d{2}\s\d{9}$/',
+            //check if curso with name exists in the database
+            'curso' => 'required|exists:curso,nome',
+            'ativo' => 'required|in:0,1',
+            'acesso' => 'required|in:0,1',
+        );
+        $messages = [
+            'nome.required' => 'O campo nome é obrigatório',
+            'email.required' => 'O campo email é obrigatório',
+            'email.email' => 'O campo email deve ser um email válido',
+            'telefone.regex' => 'O campo telefone deve ser no formato (xx xxxxxxxxx)',
+            'curso.required' => 'O campo curso é obrigatório',
+            'curso.exists' => 'O curso informado não existe nos registros',
+            'ativo.required' => 'O campo ativo é obrigatório',
+            'ativo.in' => 'O campo ativo deve ser sim ou não',
+            'acesso.required' => 'O campo acesso é obrigatório',
+            'acesso.in' => 'O campo acesso deve ser sim ou não',
+        ];
+        $validator = Validator::make(Request::all(), $rules, $messages);
+        
+        if ($validator->fails()) {
+            return Redirect::to('alunos/' . $id . '/edit')
+            ->withErrors($validator)
+            ->withInput(Request::all());
+        } else {
+            
+            
+
+
+            DB::transaction(function () use ($id) {
+                //get a deep copy of usuario and usuario_curso before update
+
+                
+                
+
+                //update usuario
+                $usuario = usuario::find($id);
+
+                $changedFields = array(array(), array(), array());
+                if($usuario->nome != Request::get('nome')){
+                    array_push($changedFields[0], 'Nome');
+                    array_push($changedFields[1], Request::get('nome'));
+                    array_push($changedFields[2], $usuario->nome);
+                }
+                if($usuario->email != Request::get('email')){
+                    array_push($changedFields[0], 'Email');
+                    array_push($changedFields[1], Request::get('email'));
+                    array_push($changedFields[2], $usuario->email);
+                }
+                if($usuario->telefone != Request::get('telefone')){
+                    array_push($changedFields[0], 'Telefone');
+                    array_push($changedFields[1], Request::get('telefone'));
+                    array_push($changedFields[2], $usuario->telefone);
+                }
+                if($usuario->ativo != Request::get('ativo')){
+                    array_push($changedFields[0], 'Ativo');
+                    array_push($changedFields[1], Request::get('ativo'));
+                    array_push($changedFields[2], $usuario->ativo);
+                }
+                if($usuario->nivel_de_acesso != Request::get('acesso')){
+                    array_push($changedFields[0], 'Nível de acesso');
+                    array_push($changedFields[1], Request::get('acesso'));
+                    array_push($changedFields[2], $usuario->nivel_de_acesso);
+                }
+
+                $usuario->email = Request::get('email');
+                $usuario->nome = Request::get('nome');
+                $usuario->telefone = Request::get('telefone');
+                $usuario->ativo = Request::get('ativo');
+                $usuario->nivel_de_acesso = Request::get('acesso');
+                $usuario->save();
+                $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
+                
+                if($usuario_curso->horario != Request::get('horario')){
+                    array_push($changedFields[0], 'Horário');
+                    array_push($changedFields[1], Request::get('horario'));
+                    array_push($changedFields[2], $usuario_curso->horario);
+                }
+                
+
+                //find curso_id based on curso name (request curso)
+                $curso = curso::where('nome', Request::get('curso'))->first();
+                if($usuario_curso->curso_id != $curso->curso_id){
+                    //dd($usuario_curso->curso_id, $curso->curso_id);
+                    array_push($changedFields[0], 'Curso');
+                    array_push($changedFields[1], $curso->nome);
+                    array_push($changedFields[2], curso::find($usuario_curso->curso_id)->nome);
+                }
+
+                $usuario_curso->curso_id = $curso->curso_id;
+                $usuario_curso->horario = Request::get('horario');
+                $usuario_curso->save();
+
+                
+                //dd($changedFields);
+                $historico_controller = new historicoController;
+                // $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1])]);
+                $historico_controller->store([implode(", ", $changedFields[0]), "editar", $usuario->usuario_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
+                
+                //Session::flash('message', 'Aluno cadastrado com sucesso!');
+                //dd("test");
+                //dd($loctoRed);
+                return Redirect::to('alunos/' . $usuario->usuario_id);
+            });
+            return Redirect::to('alunos/');
+        }
     }
 
     /**

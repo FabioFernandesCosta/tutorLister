@@ -76,9 +76,9 @@
                             <span>Horario</span>
                             <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                 <select name="horario" required='required' id="horario">
-                                    <option value="Vespertino">Vespertino</option>
-                                    <option value="Matutino">Matutino</option>
-                                    <option value="Noturno">Noturno</option>
+                                    <option value="Manhã">Manhã</option>
+                                    <option value="Tarde">Tarde</option>
+                                    <option value="Noite">Noite</option>
                                 </select>
                             </div>
                         </div>

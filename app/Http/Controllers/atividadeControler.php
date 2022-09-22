@@ -456,7 +456,7 @@ class atividadeControler extends Controller
                         $atv_req->save();
 
                         $historico_controller = new historicoController;
-                        $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1])]);
+                        $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
 
                         // redirect
                         Session::flash('message', 'Atividade registrada com successo!');

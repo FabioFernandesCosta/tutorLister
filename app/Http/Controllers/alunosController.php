@@ -111,6 +111,7 @@ class alunosController extends Controller
                 //find curso_id based on curso name (request curso)
                 $curso = curso::where('nome', Request::get('curso'))->first();
                 $usuario_curso->curso_id = $curso->curso_id;
+                $usuario_curso->horario = Request::get('horario');
                 $usuario_curso->save();
                 
                 $historico_controller = new historicoController;
@@ -121,7 +122,7 @@ class alunosController extends Controller
                 //dd($loctoRed);
                 return Redirect::to('alunos/' . $usuario->usuario_id);
             });
-            return Redirect::to('alunos/');
+            return Redirect::to('alunos/' . $usuario->usuario_id);
         }
 
     }

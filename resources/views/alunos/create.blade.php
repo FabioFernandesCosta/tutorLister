@@ -64,7 +64,7 @@
                                 </select>
                             </div>
                         </div>
-
+                        
                         <span>Curso</span>
                         {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}
                         <div class="form-field form-field-little" id="req"> <span></span>
@@ -72,6 +72,16 @@
                         </div>
                         @include('autocomplete', ['campo' => '#curso'])
                         
+                        <div>
+                            <span>Horario</span>
+                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
+                                <select name="horario" required='required' id="horario">
+                                    <option value="Vespertino">Vespertino</option>
+                                    <option value="Matutino">Matutino</option>
+                                    <option value="Noturno">Noturno</option>
+                                </select>
+                            </div>
+                        </div>
                         
                         
 

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Atividades - TutorLister</title>
+    <title>Alunos - TutorLister</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- CSS only -->
@@ -31,7 +31,7 @@
 <body class="antialiased" id="eventBody">
     <div class="wrapAll">
         <span id="pageTitle">
-            Atividades
+            Alunos
         </span>
 
 
@@ -69,7 +69,7 @@
                 src="//cdn.datatables.net/plug-ins/1.12.1/filtering/row-based/range_dates.js"></script>
 
 
-            <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
+            {{-- <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
                 <tbody>
                     <tr>
                         <td>Data minima:</td>
@@ -82,14 +82,14 @@
                     <tr>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
             <div id="indexButtons" style="display: grid; grid-template-columns: 50% 50%; margin-top: 3.5rem">
 
                 <div class="btn-right">
 
-                    <a href="{{ url('atividades/import') }}" style="text-decoration: none">
+                    <a href="{{ url('usuarios/import') }}" style="text-decoration: none">
                         <button class="dt-button">Importar</button>
-                        <a href={{ url('atividades/create') }}>
+                        <a href={{ url('alunos/create') }}>
                             <button class="dt-button">Novo</button>
                         </a>
                 </div>
@@ -97,16 +97,13 @@
             <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
                 <thead>
                     <tr>
+                        {{-- list of returned columns = ['usuario_id', 'nome', 'email', 'telefone', 'ativo', 'nome_curso'] --}}
                         <th>ID</th>
-                        <th>Descrição</th>
-                        <th>Usuários envolvidos</th>
-                        <th>Requisitante</th>
-                        <th>Data de realização</th>
-                        <th>Hora de realização</th>
-                        <th>Data do registro</th>
-                        <th>Hora do registro</th>
-                        <th>Carga horária da atividade</th>
-                        <th>Status</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Ativo</th>
+                        <th>Curso</th>
                     </tr>
                 </thead>
             </table>
@@ -114,17 +111,13 @@
 
 
         <script defer>
-            var minDate, maxDate;
-
-            minDateFilter = "";
-            maxDateFilter = "";
-
+            
             $(document).ready(function() {
 
                 var table = $('#JqueryAtvTable').DataTable({
                     columnDefs: [{
-                        orderable: false,
-                        targets: [2, 3]
+                        // orderable: false,
+                        // targets: [2, 3]
                     }],
 
                     //max characters per column
@@ -143,18 +136,18 @@
 
 
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).attr('onclick', 'location.href="{{ URL::to('atividades') }}/' + data
-                            .atividade_id + '";');
+                        $(row).attr('onclick', 'location.href="{{ URL::to('alunos') }}/' + data
+                            .usuario_id + '";');
                     },
 
                     "processing": true,
                     "serverSide": true,
                     ajax: {
-                        url: "{{ url('atividades/getdata') }}",
-                        data: function(d) {
-                            d.min = minDateFilter;
-                            d.max = maxDateFilter;
-                        }
+                        url: "{{ url('alunos/getdata') }}",
+                        // data: function(d) {
+                        //     d.min = minDateFilter;
+                        //     d.max = maxDateFilter;
+                        // }
                     },
 
                     //linguagem
@@ -176,39 +169,24 @@
                             colvis: 'Mostrar/Ocultar colunas'
                         }
                     },
-
+                    
                     "columns": [{
-                            "data": "atividade_id"
+                            "data": "usuario_id"
                         },
                         {
-                            "data": "descricao",
-                            name: "descricao"
+                            "data": "usNome",
                         },
                         {
-                            "data": "nomeUs",
-                            name: "usuario.nome"
+                            "data": "email"
                         },
                         {
-                            "data": "requisitante",
-                            name: 'requisitante.nome'
+                            "data": "telefone"
                         },
                         {
-                            "data": "data_atividade"
+                            "data": "ativo"
                         },
                         {
-                            "data": "hora_atividade"
-                        },
-                        {
-                            "data": "data_registro"
-                        },
-                        {
-                            "data": "hora_registro"
-                        },
-                        {
-                            "data": "carga"
-                        },
-                        {
-                            "data": "status"
+                            "data": "crNome",
                         }
                     ],
                 });
@@ -218,24 +196,6 @@
                 var indexButtons = $('#indexButtons');
                 var buttons = $('.dt-buttons').detach();
                 indexButtons.prepend(buttons);
-
-
-                //detach dateFilter table and put it side to side with JqueryAtvTable_filter
-                var dateFilter = $('#dateFilter').detach();
-                $('#JqueryAtvTable_filter').after(dateFilter);
-
-
-
-                //once #min or #max are changed, filter the table date columns with #min and #max values
-                $('#min').change(function() {
-                    minDateFilter = $("#min").val();
-                    console.log("test");
-                    table.draw();
-                });
-                $('#max').change(function() {
-                    maxDateFilter = $("#max").val();
-                    table.draw();
-                });
 
             });
         </script>

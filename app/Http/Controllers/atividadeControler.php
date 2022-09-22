@@ -134,102 +134,7 @@ class atividadeControler extends Controller
 
     public function index(Request $request)
     {
-        /*
-        $colunas = Request::get('colunas');
-        #dd($colunas);
-        $filter = Request::get('filter');
-
-        #lida com filtragem avançada
-        $filter1 = explode(' ', $filter);
         
-        #transforma underline em espaço
-        foreach($filter1 as $key=>$f){
-            $filter1[$key] = str_replace('_', ' ', $f);
-        }
-        $filterUsuario = null;
-        $filterStatus = null;
-        $filterRequisitante = null;
-        
-
-        foreach($filter1 as $f){
-
-            if($this->array_contains($f, ['status:', 'usuario:', 'requisitante:'])){
-                $f = explode(':', $f);
-                if($f[0] == 'status'){
-                    $filterStatus = $f[1];
-                }elseif($f[0] == 'usuario'){
-                    $filterUsuario = $f[1];
-                }elseif($f[0] == 'requisitante'){
-                    $filterRequisitante = $f[1];
-                }elseif($f[0] == 'data'){
-                    $filterDataA = $f[1];
-                }elseif($f[0] == 'hora'){
-                    $filterHoraA = $f[1];
-                }
-            }
-        }
-        
-
-        $atv = DB::table('atividade')
-        ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
-        ->join('usuario','usuario_atividade.usuario_id', '=', 'usuario.usuario_id')
-        ->join('atividade_requisitante', 'atividade.atividade_id', 'atividade_requisitante.atividade_id')
-        ->join('requisitante', 'atividade_requisitante.requisitante_id', 'requisitante.requisitante_id')
-        ->select("atividade.atividade_id", 
-                DB::raw("DATE_FORMAT(atividade.data_atividade, '%d/%m/%Y') as data_atividade"),
-                DB::raw("DATE_FORMAT(atividade.data_registro, '%d/%m/%Y') as data_registro"),
-                DB::raw("TIME_FORMAT(atividade.hora_atividade, '%H:%i') as hora_atividade"),
-                DB::raw("TIME_FORMAT(atividade.hora_registro, '%H:%i') as hora_registro"),
-                DB::raw("TIME_FORMAT(atividade.carga, '%H:%i') as carga"),
-                "atividade.descricao",
-                "atividade.status",
-                DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'),
-                DB::raw('group_concat(DISTINCT usuario.nome) as nome'))
-        ;
-        
-        if($filterStatus != null){
-            $atv = $atv->where('atividade.status', $filterStatus);
-        }else{
-            if(strtolower($filter) != 'arquivado' and empty($filter)){
-                $atv = $atv->where('atividade.status', '<>', 'Arquivado');
-            }else if (strtolower($filter) == 'arquivado'){
-                $atv = $atv->where('atividade.status', '=', 'Arquivado');
-            }
-        }
-
-        #dd(date('Y-m-d', strtotime(ltrim($filterDataA, '>'))).')');
-        if($filterUsuario != null){
-            $atv = $atv->where('usuario.nome', 'like' , '%'.$filterUsuario.'%');
-        }
-        if($filterRequisitante != null){
-            $atv = $atv->where('requisitante.nome', 'like' , '%'.$filterRequisitante.'%');
-        }
-        
-
-        if (!empty($filter) and strtolower($filter) != 'arquivado') {
-            $atv = $atv->orWhere('atividade.atividade_id', '=', $filter)
-           ->orWhere('atividade.descricao', 'like', '%'.$filter.'%')
-           ->orWhere('usuario.nome', 'like', '%'.$filter.'%')
-           ->orWhere('requisitante.nome', 'like', '%'.$filter.'%')
-           ->orWhere('atividade.status', 'like', $filter);
-
-        }
-        
-
-        
-        $atv->groupBy('atividade.atividade_id')
-        ->orderBy('atividade.status', 'asc')
-        ->orderBy('atividade.atividade_id', 'DESC');
-
-        $atv2 = $atv->paginate(15);
-        //return View::make('atividades.index')->with(['atv'=>Datatables::of($atv)->make(true), 'filter' => $filter, 'colunas' => $colunas]);
-        //return Datatables::of($atv)->make(true);
-
-        //return datatables(DB::table('atividade'))->toJson();
-        
-
-        // load the view and pass the data
-       */ 
         return View::make('atividades.index');
 
 
@@ -335,7 +240,7 @@ class atividadeControler extends Controller
                 $atv_req->save();
 
                 $historico_controller = new historicoController;
-                $historico_controller->store(["", "criar atividade", $atividade->atividade_id, 5, NULL, NULL]);
+                $historico_controller->store(["", "criar atividade", $atividade->atividade_id, 5, NULL, NULL, 0]);
 
                 // redirect
                 Session::flash('message', 'Atividade registrada com successo!');
@@ -699,7 +604,7 @@ class atividadeControler extends Controller
                     
                     //registra como "atividade importada" no historico
                     $historico_controller = new historicoController;
-                    $historico_controller->store(["", "Atividade importada", $atv->atividade_id, 5, NULL, NULL]);
+                    $historico_controller->store(["", "Atividade importada", $atv->atividade_id, 5, NULL, NULL, 0]);
 
                 }
             });

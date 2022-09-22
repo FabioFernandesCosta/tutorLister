@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\atividadeControler;
 use App\Http\Controllers\historicoController;
+use App\Http\Controllers\alunosController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,14 +37,20 @@ Route::get('/eventos', function () {
     return view('eventos');
 });
 */
-
+//alunos
+Route::get('alunos/getdata', [alunosController::class, 'getdata']);
+Route::controller(alunosController::class)->group(function(){
+    Route::resource('alunos', alunosController::class);
+    
+    Route::post('/alunos/getdata', 'getdata')->name('alunos.getData');
+});
 
 
 
 //Route::resource('requisitante', RequisitanteController::class);
 
 Route::get('consultar', [atividadeControler::class, 'consultar']);
-Route::get('/getdata', [atividadeControler::class, 'getdata']);
+Route::get('atividades/getdata', [atividadeControler::class, 'getdata']);
 
 
 Route::controller(atividadeControler::class)->group(function(){
@@ -51,12 +58,15 @@ Route::controller(atividadeControler::class)->group(function(){
     Route::post('atv-export/', 'export')->name('atividade.export');
     //Route::get('atividades/index-filtering', 'atividadeControler@indexFiltering');
     Route::post('/atividades/import/store', 'import_atv')->name('atividade.import_atv');
-    Route::post('getdata/', 'getdata')->name('atividade.getdata');
+    Route::post('atividades/getdata/', 'getdata')->name('atividade.getdata');
     
 });
 
 //historico
 Route::get('atividades/{id}/historico', [historicoController::class, 'show']);
+//historicoUser
+Route::get('alunos/{id}/historicoUser', [historicoController::class, 'showUser']);
+
 
 
 /*

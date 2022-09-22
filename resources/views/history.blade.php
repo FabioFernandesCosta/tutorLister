@@ -16,6 +16,7 @@
 </head>
 <script>
     var scr = false;
+
     function clicarCarregar() {
         var x = document.getElementById("JqueryAtvHistTableCont");
         var y = document.getElementById("histClick");
@@ -87,8 +88,17 @@
 </div>
 
 <script>
-    var atvId = '<?php echo $atv[0]->atividade_id; ?>' + '/historico';
+    let atvId;
+
+    if (window.location.href.indexOf("atividades") > -1) {
+        atvId = '<?php try{echo $atv[0]->atividade_id;}catch(Exception $e){} ?>' + '/historico';
+    }
+    else if(window.location.href.indexOf("alunos") > -1) {
+        atvId = '<?php try{echo $aluno->usuario_id;}catch(Exception $e){} ?>' + '/historicoUser';
+    }
+    console.log(atvId);
     $(document).ready(function() {
+        console.log(atvId);
         $('#JqueryAtvHistTable').DataTable({
             "ordering": false,
             searching: false,

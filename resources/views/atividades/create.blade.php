@@ -39,22 +39,9 @@
                 {{-- Inputs --}}
                 {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
                 <div id="repart2">
-                    <div>
-                        <div style="display: flex;">
-                            Usuarios envolvidos
-                             
-                            <a id="add" href=""> +</a>
-                              
-                            <a id="rmv" href="">-</a>
-                            
-                            {{--
-
-                                <button type="button" onclick="addField()" class="miniBtn" style="margin-top: 0; margin-left:5px; height:20px">+</button>
-                                
-                                <button type="button" onclick="rmvField()" class="miniBtn" style="margin-top: 0;height:20px">-</button>
-                                --}}
-                        </div>
+                        
                         <div id="userContainer">
+                            Usuarios envolvidos
                             
                             @if (null !== old('InvolvedUsers'))
                                 @foreach (old('InvolvedUsers') as $user)
@@ -78,7 +65,6 @@
                             @endif
         
                         </div>
-                    </div>
     
                     <div>
                         <span>Requisitante</span>

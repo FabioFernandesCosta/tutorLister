@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('usuario', function (Blueprint $table) {
             $table->id('usuario_id');
             $table->string('nome');
-            $table->string('senha');
             $table->string('organizacao');
-            $table->integer('telefone');
+            $table->string('telefone');
             $table->boolean('ativo');
             $table->integer('nivel_de_acesso');
             $table->string('email')->unique();
@@ -90,7 +89,7 @@ return new class extends Migration
 
         Schema::create('curso', function (Blueprint $table) {
             $table->id('curso_id');
-            $table->string('nome_curso');
+            $table->string('nome');
             $table->string('area_curso');
         });
 
@@ -98,6 +97,7 @@ return new class extends Migration
         Schema::create('usuario_curso', function (Blueprint $table) {
             $table->bigInteger('curso_id') -> unsigned();
             $table->bigInteger('usuario_id') -> unsigned();
+            $table->string('horario');
         });
 
         Schema::table('usuario_curso', function($table){
@@ -125,6 +125,18 @@ return new class extends Migration
             $table->string('novo_valor');
         });
         
+        Schema::create('historicoUser', function (Blueprint $table){
+            $table->id('historico_id');
+            $table->string('campo_modificado');
+            $table->string('acao');
+            $table->bigInteger('usuario_id') -> unsigned();
+            $table->foreign('usuario_id') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->bigInteger('editor') -> unsigned();
+            $table->foreign('editor') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->date('data_modificacao');
+            $table->string('valor_anterior')->nullable();
+            $table->string('novo_valor')->nullable();
+        });
     }
 
     /**

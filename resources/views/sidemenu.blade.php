@@ -38,8 +38,9 @@
             <span>Dashboard</span></a>
         </li>
         <li>
-          <a href="">
-            <span>m3</span></a>
+          <a href={{ url('alunos') }}>
+            <img src="{{url('/image/user.png')}}" />
+            <span>Alunos</span></a>
         </li>
         <li>
           <a href="">

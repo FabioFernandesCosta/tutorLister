@@ -14,8 +14,12 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
-            return route('login');
+        //if not authenticated with google redirect to login page
+        if ( ! $this->auth->user() ){
+            return redirect('/');
         }
+        return null;
+        
+
     }
 }

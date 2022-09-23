@@ -1,3 +1,5 @@
+{{-- use auth --}}
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -48,11 +50,39 @@
         </li>
         <li>
           <a href="">
-            <img src="{{url('/image/user.png')}}" />
-            <span>user</span></a>
+            
+
+            {{-- img src null --}}
+            <img id="userAvatar" style="border-radius: 50%;" src="{{url('/image/user.png')}}" />
+
+
+
+
+
+
+            <span id="userName" >user</span></a>
         </li>
       </ul>
     </nav>
 </header>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script>
+  //ajax to retrieve data from route userLoggedData
+  $(document).ready(function(){
+    $.ajax({
+      url: "{{ url('userLoggedData') }}",
+      type: "GET",
+      dataType: "json",
+      success: function(data){
+        //retrieve column avatar and user name from route userLoggedData
+        $('#userAvatar').attr('src', data.avatar);
+        //retrieve first name from string data.name
+        $('#userName').text(data.name.substr(0, data.name.indexOf(' ')));
+      }
+    });
+  });
+
+  
+</script>
 
 </html>

@@ -21,6 +21,11 @@ return new class extends Migration
             $table->boolean('ativo');
             $table->integer('nivel_de_acesso');
             $table->string('email')->unique();
+            //provider_id
+            $table->string('provider_id')->nullable();
+            //avatar
+            $table->string('avatar')->nullable();
+
             $table->rememberToken();
         });
 

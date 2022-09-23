@@ -13,31 +13,23 @@
         body {
             font-family: 'Nunito', sans-serif;
         }
-
     </style>
 </head>
 
 <body class="antialiased">
     <div class="wrapper">
         <div class="text-center mt-4 name"> Tutor Lister</div>
-        <form class="p-3 mt-3">
-            <div class="form-field align-items-center"> <span class="far fa-user"></span> <input type="text"
-                    name="userName" id="userName" placeholder="Username">
-            </div>
-            <div class="form-field align-items-center"> <span class="fas fa-key"></span> <input type="password"
-                    name="password" id="pwd" placeholder="Password">
-            </div>
-            <div class="cSelect align-items-center"> <span class=""></span> <select id="org" name="orgList">
-                    <option selected disabled>Escolha a organização</option>
-                    <option value=1>Aluno tutor</option>
-                    <option value=2>NPI</option>
-                </select>
-            </div>
 
-        </form>
-        <button class="btn mt-3" onclick="location.href='{{ url('dashboard') }}'">Login</button>
-        <div class="text-center fs-6"> <a href="#">Esqueceu a senha?</a>
-        </div>
+        <button class="btn mt-3"
+            style="background-color: white; color: black; border-radius: 5px; font-size: 1.3em; display:grid; grid-template-columns: 20% 75%; gap: 5%; height: 3.5rem; border-color: #555"
+            onclick="location.href='{{ url('/auth/redirect') }}'"> 
+            <img style="margin-left: 20px; margin-top: 0.55rem;" src="{{ url('/image/google.png') }}" alt="">
+            <div style="margin-right: 20px; margin-top: 0.55em;">Login com google</div>
+        </button>
+        {{-- button above, but style blue --}}
+
+
+    </div>
 </body>
 
 </html>

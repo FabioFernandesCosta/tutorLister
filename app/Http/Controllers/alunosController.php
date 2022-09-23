@@ -298,4 +298,78 @@ class alunosController extends Controller
     {
         //
     }
+
+
+    public function import_alunos(Request $request){
+
+        //save into database the arrays (0 to 6) that comes from Request
+        $data = Request::all();
+        
+        
+        //transpoe $data
+        //dd($data);
+        //[nome, curso, horario, email, telefone]
+        $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4]);
+
+        
+        //laravel validator rules if $formated_date is a valid date in the format yyyy-mm-dd
+        $rules = array(
+            '*.0' => 'required|string|max:255',
+            '*.1' => 'required|string|max:255|exists:curso,nome',
+            '*.2' => 'nullable|string|max:255|in:Manhã,Tarde,Noite',
+            '*.3' => 'required|email|max:255',
+            '*.4' => 'nullable|regex:/^\d{2}\s\d{9}$/',
+        );
+
+        //laravel validator messages
+        $messages = array(
+            'required' => 'O campo :attribute é obrigatório.',
+            'string' => 'O campo :attribute deve ser uma string.',
+            'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
+            'email' => 'O campo :attribute deve ser um email válido.',
+            'in' => 'O campo :attribute deve ser um dos seguintes valores: :values',
+            'regex' => 'O campo :attribute deve ser um número de telefone válido.',
+            'exists' => 'O campo :attribute deve ser um nome de curso valido',
+        );
+
+
+
+        $validator = Validator::make($data, $rules, $messages);
+        //dd($validator->errors(), $data);
+        //if validator fails, redirect to the same page with the errors
+        if ($validator->fails()) {
+            return Redirect::to('atividades/import')
+            ->withErrors($validator)
+            ->withInput();
+        }else{
+
+            //trata cada elemento de $data como uma atividade para salvar no banco
+            DB::transaction(function () use($data) {
+                foreach ($data as &$key) {
+                    //cria aluno
+                    $usuario = new usuario;
+                    $usuario->email = $key[3];
+                    $usuario->nome = $key[0];
+                    $usuario->telefone = $key[4];
+                    $usuario->ativo = 1;
+                    $usuario->nivel_de_acesso = 0;
+                    $usuario->save();
+
+
+                    //cria usuario_curso
+                    $usuario_curso = new usuario_curso;
+                    $usuario_curso->usuario_id = $usuario->usuario_id; 
+                    $usuario_curso->curso_id = curso::where('nome', $key[1])->first()->curso_id;
+                    $usuario_curso->horario = $key[2];
+                    $usuario_curso->save();
+
+                    //cria historico
+                    $historico_controller = new historicoController;
+                    $historico_controller->store(["", "Aluno importado", $usuario->usuario_id, 5, NULL, NULL, 1]);
+                    
+                }
+            });
+            return Redirect::to('alunos');
+        }
+    }
 }

@@ -87,7 +87,7 @@
 
                 <div class="btn-right">
 
-                    <a href="{{ url('usuarios/import') }}" style="text-decoration: none">
+                    <a href="{{ url('alunos/import') }}" style="text-decoration: none">
                         <button class="dt-button">Importar</button>
                         <a href={{ url('alunos/create') }}>
                             <button class="dt-button">Novo</button>
@@ -115,6 +115,7 @@
             $(document).ready(function() {
 
                 var table = $('#JqueryAtvTable').DataTable({
+                    order: [[0, 'desc']],
                     columnDefs: [{
                         // orderable: false,
                         // targets: [2, 3]

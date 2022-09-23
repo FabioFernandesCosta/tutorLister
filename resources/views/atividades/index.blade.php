@@ -122,6 +122,7 @@
             $(document).ready(function() {
 
                 var table = $('#JqueryAtvTable').DataTable({
+                    order: [[0, 'desc']],
                     columnDefs: [{
                         orderable: false,
                         targets: [2, 3]

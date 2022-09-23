@@ -31,6 +31,10 @@ Route::get('/atividades/import', function () {
     return view('atividades.import');
 });
 
+Route::get('/alunos/import', function () {
+    return view('alunos.import');
+});
+
 /*
 
 Route::get('/eventos', function () {
@@ -41,7 +45,7 @@ Route::get('/eventos', function () {
 Route::get('alunos/getdata', [alunosController::class, 'getdata']);
 Route::controller(alunosController::class)->group(function(){
     Route::resource('alunos', alunosController::class);
-    
+    Route::post('/alunos/import/store', 'import_alunos')->name('alunos.import_alunos');
     Route::post('/alunos/getdata', 'getdata')->name('alunos.getData');
 });
 

@@ -16,7 +16,7 @@ class Authenticate extends Middleware
     {
         //if not authenticated with google redirect to login page
         if ( ! $this->auth->user() ){
-            return redirect('/');
+            return route('login');
         }
         return null;
         

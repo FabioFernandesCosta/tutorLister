@@ -18,10 +18,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-
 Route::get('/', function () {
     return view('login');
-});
+})->name('login');
 
 
 
@@ -60,6 +59,12 @@ Route::get('login/google/callback', function () {
 });
         
 Route::group( ['middleware' => 'auth' ], function() {
+
+    //logout
+    Route::get('/logout', function () {
+        Auth::logout();
+        return redirect('/');
+    })->name('logout');
 
     Route::get('/dashboard', function () {
         return view('dashboard');

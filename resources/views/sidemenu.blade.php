@@ -49,23 +49,27 @@
             <span>m4</span></a>
         </li>
         <li>
-          <a href="">
+          <a id="usuarioContainer" href="javascript:void(0);">
             
-
             {{-- img src null --}}
             <img id="userAvatar" style="border-radius: 50%;" src="{{url('/image/user.png')}}" />
+            <span id="userName" >usuario</span></a>
 
-
-
-
-
-
-            <span id="userName" >user</span></a>
-        </li>
-      </ul>
-    </nav>
+          </li>
+        </ul>
+      </nav>
+      <div id="menuHide">
+        <div style="margin: auto" id="fullName">usuario</div>
+        <div>
+          <button style="margin-top: 10px;" id="logoutBtn" class="dt-button">Logout</button>
+        </div>
+      </div>
+    {{-- hide/show menu with name and logout button --}}
+    
 </header>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<link rel="stylesheet" type="text/css"
+                href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
 <script>
   //ajax to retrieve data from route userLoggedData
   $(document).ready(function(){
@@ -78,8 +82,57 @@
         $('#userAvatar').attr('src', data.avatar);
         //retrieve first name from string data.name
         $('#userName').text(data.name.substr(0, data.name.indexOf(' ')));
+
+        //retrieve full name from string data.name
+        $('#fullName').text(data.name);
       }
     });
+    // transition: visibility 0.25s, opacity 0.25s linear, left 0.25s linear;
+    $('#menuHide').css('transition', 'visibility 0.25s, opacity 0.25s linear, left 0.25s linear');
+
+
+    $('.mainHead').hover(function(){
+          $('#menuHide').css('left', '14rem');
+        }, function(){
+          $('#menuHide').css('left', '4.5rem');
+        });
+    //when usuarioContainer is clicked, show menuHide or hide menuHide
+    $('#usuarioContainer').click(function(){
+      
+      if($('#menuHide').css('visibility') == 'hidden'){
+        //position menuHide as absolute to the right of usuarioContainer
+
+        $('#menuHide').css('visibility', 'visible');
+        $('#menuHide').css('opacity', '1');
+      }else{
+        $('#menuHide').css('visibility', 'hidden');
+        $('#menuHide').css('opacity', '0');
+      }
+    });
+
+    //click anywere outside of menuHide or usuarioContainer to hide menuHide or both of those are not hovered
+    $(document).click(function(event){
+      if(!$(event.target).closest('#usuarioContainer').length && !$(event.target).closest('#menuHide').length){
+        $('#menuHide').css('visibility', 'hidden');
+        $('#menuHide').css('opacity', '0');
+      }
+    });
+
+    //when mainhead not hovered, hide menuHide
+    $('.mainHead').mouseleave(function(){
+      $('#menuHide').css('visibility', 'hidden');
+      $('#menuHide').css('opacity', '0');
+    });
+
+    //when logoutBtn is clicked, redirect to logout route
+    $('#logoutBtn').click(function(){
+      window.location.href = "{{ url('logout') }}";
+    });
+
+
+
+
+
   });
 
   

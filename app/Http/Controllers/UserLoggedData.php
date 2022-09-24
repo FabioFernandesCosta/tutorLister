@@ -23,6 +23,7 @@ class UserLoggedData extends Controller
         return response()->json([
             'avatar' => $user->avatar,
             'name' => $user->nome,
+            'id' => $user->usuario_id,
         ]);
 
     }

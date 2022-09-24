@@ -63,6 +63,11 @@
         <div>
           <button style="margin-top: 10px;" id="logoutBtn" class="dt-button">Logout</button>
         </div>
+        <div>
+          <a href="" style="margin: auto; margin-top: 10px" id="editUser">
+            <button style="; margin: auto; font-size: 1rem;" class="dt-button" >Editar dados</button>
+          </a>
+        </div>
       </div>
     {{-- hide/show menu with name and logout button --}}
     
@@ -72,6 +77,7 @@
                 href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
 <script>
   //ajax to retrieve data from route userLoggedData
+  var id;
   $(document).ready(function(){
     $.ajax({
       url: "{{ url('userLoggedData') }}",
@@ -85,6 +91,8 @@
 
         //retrieve full name from string data.name
         $('#fullName').text(data.name);
+        //retrieve id from data.id and put as href in editUser
+        $('#editUser').attr('href', "{{ url('alunos') }}"+"/"+data.id+"/edit");
       }
     });
     // transition: visibility 0.25s, opacity 0.25s linear, left 0.25s linear;

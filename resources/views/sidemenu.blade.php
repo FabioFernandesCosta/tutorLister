@@ -30,14 +30,14 @@
           </a>
         </li>
         <li>
-          <a href={{ url('atividades') }}>
-            <img src="{{url('/image/notes.png')}}" />
-            <span>Atividade</span></a>
-        </li>
-        <li>
           <a href={{ url('dashboard') }}>
             <img src="{{url('/image/activity.png')}}" />
             <span>Dashboard</span></a>
+        </li>
+        <li>
+          <a href={{ url('atividades') }}>
+            <img src="{{url('/image/notes.png')}}" />
+            <span>Atividade</span></a>
         </li>
         <li>
           <a href={{ url('alunos') }}>
@@ -60,13 +60,13 @@
       </nav>
       <div id="menuHide">
         <div style="margin: auto" id="fullName">usuario</div>
-        <div>
-          <button style="margin-top: 10px;" id="logoutBtn" class="dt-button">Logout</button>
+        <div style="margin-top: 10px">
+          <a href="" style="margin: auto;" id="editUser">
+            <button style="; margin: auto; font-size: 0.9rem;" class="dt-button" >Editar seus dados</button>
+          </a>
         </div>
         <div>
-          <a href="" style="margin: auto; margin-top: 10px" id="editUser">
-            <button style="; margin: auto; font-size: 1rem;" class="dt-button" >Editar dados</button>
-          </a>
+          <button style="margin-top: 10px;" id="logoutBtn" class="dt-button">Logout</button>
         </div>
       </div>
     {{-- hide/show menu with name and logout button --}}

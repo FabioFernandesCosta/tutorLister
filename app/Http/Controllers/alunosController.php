@@ -103,7 +103,7 @@ class alunosController extends Controller
                 //convert telefone into and int
                 $usuario->email = Request::get('email');
                 $usuario->nome = Request::get('nome');
-                $usuario->telefone = str_replace(' ', '', Request::get('telefone'));
+                $usuario->telefone = Request::get('telefone');
                 $usuario->ativo = Request::get('ativo');
                 $usuario->nivel_de_acesso = Request::get('acesso');
                 $usuario->save();
@@ -207,8 +207,6 @@ class alunosController extends Controller
         } else {
             
             
-
-
             DB::transaction(function () use ($id) {
                 //get a deep copy of usuario and usuario_curso before update
 

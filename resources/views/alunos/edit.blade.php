@@ -40,7 +40,8 @@
     <div class="wrapAll">
 
 
-        <h1>Editar Aluno ID-{{ $aluno->usuario_id }}</h1>
+        <h1>Editar Aluno: {{ $aluno->nome }}</h1>
+        <h3>ID-{{$aluno->usuario_id}}</h3>
 
 
         
@@ -107,11 +108,11 @@
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- horario select default value in case of old is not null and in case it is null --}}
                                     <select name="horario" id="horario">
-                                        <option value="1" {{ (old('horario') ?? $aluno->horario) == 1 ? 'selected' : '' }}>
+                                        <option value="Manhã" {{ (old('horario') ?? $aluno->horario) == 1 ? 'selected' : '' }}>
                                             Manhã</option>
-                                        <option value="2" {{ (old('horario') ?? $aluno->horario) == 2 ? 'selected' : '' }}>
+                                        <option value="Tarde" {{ (old('horario') ?? $aluno->horario) == 2 ? 'selected' : '' }}>
                                             Tarde</option>
-                                        <option value="3" {{ (old('horario') ?? $aluno->horario) == 3 ? 'selected' : '' }}>
+                                        <option value="Noite" {{ (old('horario') ?? $aluno->horario) == 3 ? 'selected' : '' }}>
                                             Noite</option>
                                     </select>
                                 </div>

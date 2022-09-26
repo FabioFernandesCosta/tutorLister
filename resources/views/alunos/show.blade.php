@@ -27,10 +27,8 @@
     </div>
     <div class="wrapAll">
         
-        <h1 >
-            {{-- id aluno --}}
-            Aluno ID-{{$aluno->usuario_id}}
-        </h1>
+        <h1>Aluno: {{ $aluno->nome }}</h1>
+        <h3>ID-{{$aluno->usuario_id}}</h3>
 
 
         {{-- detalhes do selecionado --}}

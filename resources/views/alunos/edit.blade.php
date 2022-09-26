@@ -43,16 +43,7 @@
         <h1>Editar Aluno ID-{{ $aluno->usuario_id }}</h1>
 
 
-        {{-- list all errors --}}
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        
         <div class="atvDetalhes" style="height: auto">
 
 
@@ -66,17 +57,17 @@
                 <div>
                     {{-- botões --}}
                     {{-- Inputs --}}
-                    {{-- {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }} --}}
                     <div id="repart2">
                         <div>
                             <span>Nome</span>
-                            {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}
+                            {{ Html::ul($errors->get('nome'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 {{-- nome input value if old is not null and if is null --}}
                                 <input type="text" value="{{ old('nome') ?? $aluno->nome }}" name="nome" id="usuario">
                             </div>
                             <div>
                                 <span>Tem acesso ao sistema?</span>
+                                {{ Html::ul($errors->get('acesso'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="ac"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
                                     <select name="acesso" id="acesso">
@@ -89,6 +80,7 @@
                             </div>
                             <div>
                                 <span>Esta ativo?</span>
+                                {{ Html::ul($errors->get('ativo'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
                                     <select name="ativo" id="ativo">
@@ -102,7 +94,7 @@
                             </div>
                             
                             <span>Curso</span>
-                            {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}
+                            {{ Html::ul($errors->get('curso'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 {{-- nome input value if old is not null and if is null --}}
                                 <input type="text" value="{{ old('curso') ?? $aluno->curso }}" name="curso" id="curso">
@@ -111,6 +103,7 @@
                             
                             <div>
                                 <span>Horario</span>
+                                {{ Html::ul($errors->get('horario'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- horario select default value in case of old is not null and in case it is null --}}
                                     <select name="horario" id="horario">
@@ -129,11 +122,13 @@
                         </div>
                         <div id="userContainer">
                             Email
+                            {{ Html::ul($errors->get('email'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 {{-- email input value if old is not null and if is null --}}
                                 <input type="text" value="{{ old('email') ?? $aluno->email }}" name="email" id="email" required>
                             </div>
                             Telefone
+                            {{ Html::ul($errors->get('telefone'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 {{-- telefone input value if old is not null and if is null --}}
                                 <input type="tel" value="{{ old('telefone') ?? $aluno->telefone }}" name="telefone" id="telefone" required pattern="[0-9]{2} [0-9]{9}" placeholder="43 123456789">

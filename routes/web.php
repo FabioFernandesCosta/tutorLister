@@ -40,21 +40,18 @@ Route::get('login/google/callback', function () {
 
     if ($user) {
         if ($user->nivel_de_acesso == 1) {
-            //dd('test');
-            //save avatar
             $user->avatar = $googleUser->avatar;
             $user->save();
-            //dd($user->avatar);
-            //login
             Auth::login($user);
             return redirect('/dashboard');
+
         } else {
             return redirect('/')->with('error', 'Você não tem permissão para acessar o sistema');
         }
 
     } else {
         //return to login with error message "usuario não registrado".
-        return redirect('/') -> with('error', 'usuario não registrado');
+        return redirect('/') -> with('error', 'Email não registrado no sistema');
     }  
 });
         

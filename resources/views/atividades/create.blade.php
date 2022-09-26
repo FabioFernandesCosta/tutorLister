@@ -136,9 +136,12 @@
             </div>
 
             <div class="atvFormBtn">
-                <a href="{{ url('atividades') }}">
-                    <button type="button" class="btn dt-button" onclick="return confirm('Cancelar')" style="margin-top: 45px;">Cancelar</button>
-                </a>
+                <div>
+
+                    <a href="{{ url('atividades') }}">
+                        <button type="button" class="btn dt-button" onclick="return confirm('Cancelar')" style="margin-top: 45px;">Cancelar</button>
+                    </a>
+                </div>
                 <div class="btn-right">
 
                     {{ Form::submit('Registrar', ['class' => 'btn mt-3 dt-button', 'style' =>  'margin-top: 45px', 'onclick'=>"return confirm('Confirmar?');"]) }}

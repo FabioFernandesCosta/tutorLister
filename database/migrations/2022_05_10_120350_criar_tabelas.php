@@ -95,7 +95,7 @@ return new class extends Migration
         Schema::create('curso', function (Blueprint $table) {
             $table->id('curso_id');
             $table->string('nome');
-            $table->string('area_curso');
+            $table->string('area_curso')->nullable();
         });
 
 

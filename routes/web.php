@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\atividadeControler;
 use App\Http\Controllers\historicoController;
 use App\Http\Controllers\alunosController;
+use App\Http\Controllers\cursoController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\usuario;
 use Illuminate\Support\Facades\Auth;
@@ -116,6 +117,15 @@ Route::group( ['middleware' => 'auth' ], function() {
     Route::get('atividades/{id}/historico', [historicoController::class, 'show']);
     //historicoUser
     Route::get('alunos/{id}/historicoUser', [historicoController::class, 'showUser']);
+
+
+    Route::get('cursos/getdata', [cursoController::class, 'getdata']);
+    Route::controller(cursoController::class)->group(function(){
+        Route::resource('cursos', cursoController::class);
+        // Route::post('/cursos/import/store', 'import_cursos')->name('cursos.import_cursos');
+        Route::post('/cursos/getdata', 'getdata')->name('cursos.getData');
+    });
+
 });
 
 

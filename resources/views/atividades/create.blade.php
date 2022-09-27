@@ -156,7 +156,7 @@
 
     </div>
     <a href=""></a>
-
+    @include('footer')
 </body>
 @include('autocomplete', ['campo' => '.usuario'])
 @include('autocomplete', ['campo' => '#Requisitante'])

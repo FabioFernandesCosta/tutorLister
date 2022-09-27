@@ -21,7 +21,7 @@
 <body class="antialiased" id="eventBody">
     <div class="wrapAll">
 
-
+        
         <h1>Registrar Aluno</h1>
 
         <!-- if there are creation errors, they will show here -->
@@ -126,6 +126,7 @@
 
         </div>
     </div>
+    @include('footer')
 
 
 </body>

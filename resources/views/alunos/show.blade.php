@@ -122,6 +122,7 @@
         </div>
         @include('history')
     </div>
+    @include('footer')
 
 </body>
 

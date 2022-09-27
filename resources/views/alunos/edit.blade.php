@@ -161,11 +161,8 @@
             </div>
             {{ Form::close() }}
         </div>
-
-
-
-
     </div>
+    @include('footer')
 </body>
 <script>
         

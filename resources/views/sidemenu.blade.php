@@ -45,8 +45,9 @@
             <span>Alunos</span></a>
         </li>
         <li>
-          <a href="">
-            <span>m4</span></a>
+          <a href={{ url('cursos') }}>
+            <img src="" />
+            <span>Cursos</span></a>
         </li>
         <li>
           <a id="usuarioContainer" href="javascript:void(0);">

@@ -216,6 +216,7 @@
 
 
     </div>
+    @include('footer')
 </body>
 <script>
         

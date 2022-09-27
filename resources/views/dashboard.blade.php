@@ -19,6 +19,7 @@
 
 <body class="antialiased">
     @include('sidemenu') 
+    @include('footer')
 </body>
 
 </html>

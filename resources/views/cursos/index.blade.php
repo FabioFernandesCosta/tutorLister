@@ -92,8 +92,9 @@
                 </thead>
             </table>
         </div>
+    </div>
 
-
+        @include('footer')
         <script defer>
             
             $(document).ready(function() {

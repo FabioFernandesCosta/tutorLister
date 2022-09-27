@@ -234,9 +234,10 @@ table input{
 
 .wrapAll {
     margin-left: 7rem;
-    margin-top: 2rem;
+
     transition: margin-left 300ms;
     width: 70%;
+    padding-bottom: 6rem;
 
 }
 
@@ -253,6 +254,9 @@ header:hover~.wrapAll {
 #pageTitle {
     font-size: 3rem;
     font-weight: bolder;
+}
+#pageTitleDiv {
+    margin-top: 2rem;
 }
 
 /* Tabelas 
@@ -736,4 +740,37 @@ input:checked + .slider:before {
     border-radius: 10px;
     padding: 15px;
     border-bottom-left-radius: 0px;
+}
+
+.pageFooter{
+    text-align: center;
+}
+
+.pageFooterContainer{
+    margin: auto;
+    height: fit-content;
+    padding: 10px;
+    background-color: rgb(199, 199, 199);
+    transition: margin-left 300ms;
+    margin-left: 4.5rem;
+    margin-top: 2rem;
+    width: 96.1%;
+}
+
+header:hover~.pageFooterContainer {
+    margin-left: 14rem;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;  
+}
+
+body{
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-top: 2rem;
 }

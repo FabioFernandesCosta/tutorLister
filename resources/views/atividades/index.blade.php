@@ -111,6 +111,8 @@
                 </thead>
             </table>
         </div>
+    </div>
+    @include('footer')
 
 
         <script defer>
@@ -240,5 +242,6 @@
 
             });
         </script>
+        
 </body>
 </html>

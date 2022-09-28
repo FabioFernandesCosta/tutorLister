@@ -75,6 +75,11 @@ Route::group( ['middleware' => 'auth' ], function() {
     Route::get('/alunos/import', function () {
         return view('alunos.import');
     });
+    
+    Route::get('/cursos/import', function () {
+        return view('cursos.import');
+    });
+
             
     //route to getData from UserLoggedData controller
     Route::get('/userLoggedData', [App\Http\Controllers\UserLoggedData::class, 'getData']);
@@ -122,7 +127,7 @@ Route::group( ['middleware' => 'auth' ], function() {
     Route::get('cursos/getdata', [cursoController::class, 'getdata']);
     Route::controller(cursoController::class)->group(function(){
         Route::resource('cursos', cursoController::class);
-        // Route::post('/cursos/import/store', 'import_cursos')->name('cursos.import_cursos');
+        Route::post('/cursos/import/store', 'import_cursos')->name('cursos.import_cursos');
         Route::post('/cursos/getdata', 'getdata')->name('cursos.getData');
     });
 

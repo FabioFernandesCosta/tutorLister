@@ -73,9 +73,9 @@
 
                 <div class="btn-right">
 
-                    <a href="{{ url('alunos/import') }}" style="text-decoration: none">
+                    <a href="{{ url('cursos/import') }}" style="text-decoration: none">
                         <button class="dt-button">Importar</button>
-                        <a href={{ url('alunos/create') }}>
+                        <a href={{ url('cursos/create') }}>
                             <button class="dt-button">Novo</button>
                         </a>
                 </div>
@@ -123,7 +123,7 @@
 
                     "createdRow": function(row, data, dataIndex) {
                         $(row).attr('onclick', 'location.href="{{ URL::to('cursos') }}/' + data
-                            .usuario_id + '";');
+                            .curso_id + "/edit" + '";');
                     },
 
                     "processing": true,

@@ -29,7 +29,7 @@
         {{-- {{ Html::ul($errors->all(), ['class' => 'ulError']) }} --}}
         <div class="atvDetalhes" style="height: auto">
 
-            {{ Form::open(['url' => 'alunos', 'class' => 'atvForm', 'autocomplete' => 'off', 'action' => 'alunosController@store']) }}
+            {{ Form::open(['url' => 'cursos', 'class' => 'atvForm', 'autocomplete' => 'off', 'action' => 'cursoController@store']) }}
 
             <div>
                 {{-- botões --}}
@@ -44,65 +44,14 @@
                         <div class="form-field form-field-little" id="req"> <span></span>
                             <input type="text" value="{{ old('nome') }}" name="nome" required='required' id="usuario">
                         </div>
-                        <div>
-                            <span>Tem acesso ao sistema?</span>
-                            {{ Html::ul($errors->get('acesso'), ['class' => 'ulError']) }}
-                            <div class="form-field form-field-littlePlus" id="ac"> <span></span>
-                                <select name="acesso" required='required' id="acesso">
-                                    <option value="1">Sim</option>
-                                    <option value="0">Não</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <span>Esta ativo?</span>
-                            {{ Html::ul($errors->get('ativo'), ['class' => 'ulError']) }}
-                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
-                                <select name="ativo" required='required' id="ativo">
-                                    <option value="1">Sim</option>
-                                    <option value="0">Não</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <span>Curso</span>
-                        {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}
-                        {{-- erros --}}
-                        {{ Html::ul($errors->get('curso'), ['class' => 'ulError']) }}
-                        <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="text" value="{{ old('curso') }}" name="curso" required='required' id="curso">
-                        </div>
-                        @include('autocomplete', ['campo' => '#curso'])
-                        
-                        <div>
-                            <span>Horario</span>
-                            {{ Html::ul($errors->get('horario'), ['class' => 'ulError']) }}
-                            
-                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
-                                <select name="horario" required='required' id="horario">
-                                    <option value="Manhã" {{ old('horario') == 'Manhã' ? 'selected' : '' }}>Manhã</option>
-                                    <option value="Tarde" {{ old('horario') == 'Tarde' ? 'selected' : '' }}>Tarde</option>
-                                    <option value="Noite" {{ old('horario') == 'Noite' ? 'selected' : '' }}>Noite</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        
-                        
 
                     </div>
                     <div id="userContainer">
-                        Email
-                        {{ Html::ul($errors->get('email'), ['class' => 'ulError']) }}
+                        Area do curso
+                        {{ Html::ul($errors->get('area_curso'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="email" value="{{ old('email') }}" name="email" required='required' id="email">
+                            <input type="text" value="{{ old('area_curso') }}" name="area_curso" required='required' id="area_curso">
                         </div>
-                        Telefone
-                        {{ Html::ul($errors->get('telefone'), ['class' => 'ulError']) }}
-                        <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="tel" value="{{ old('telefone') }}" name="telefone" required='required' id="telefone" pattern="[0-9]{2} [0-9]{9}" placeholder="43 123456789">
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -111,7 +60,7 @@
             <div class="atvFormBtn">
                 <div>
 
-                    <a href="{{ url('alunos') }}">
+                    <a href="{{ url('cursos') }}">
                         <button type="button" class="btn dt-button" onclick="return confirm('Cancelar')"
                             style="margin-top: 45px;">Cancelar</button>
                     </a>
@@ -126,7 +75,7 @@
 
         </div>
     </div>
-
+    @include('footer')
 
 </body>
 

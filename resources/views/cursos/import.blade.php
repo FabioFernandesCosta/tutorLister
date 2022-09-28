@@ -25,7 +25,7 @@
     </div>
     <div class="wrapAll">
         <span id="pageTitle">
-            Importar alunos
+            Importar cursos
         </span>
 
         <div class="tableContainer">
@@ -44,7 +44,7 @@
 
 
 
-            {{ Form::open(['url' => 'alunos/import/store', 'class' => 'atvForm', 'autocomplete' => 'off', 'action' => 'alunosController@import_aluno']) }}
+            {{ Form::open(['url' => 'cursos/import/store', 'class' => 'atvForm', 'autocomplete' => 'off', 'action' => 'cursoController@import_curso']) }}
 
             <input type="file" class="fileInput" onchange="previewFile()" accept=".csv">
 
@@ -58,25 +58,9 @@
                 <select class="select" name="nome" id=""></select>
                 <span>
 
-                    Curso
+                    Area do curso:
                 </span>
                 <select class="select" name="curso"></select>
-                <span>
-                    Horario:
-                </span>
-                <select class="select" name="horario"></select>
-                <span>
-                    Email:
-                </span>
-                <select class="select" name="email" id=""></select>
-
-
-                <span>
-                    Telefone:
-                </span>
-                <select class="select" name="telefone"></select>
-                
-
             </div>
             <button id="mapButton" type="button" class="dt-button outline-btn" style="margin-top: 10px">Carregar na tabela</button>
 
@@ -97,11 +81,7 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Curso</th>
-                        <th>Horario</th>
-                        <th>Email</th>
-                        <th>Telefone</th>
-                        
+                        <th>Area do curso</th>
                     </tr>
                 </thead>
             </table>
@@ -129,12 +109,9 @@
                 $data = [
                     '0' => old('0'),
                     '1' => old('1'),
-                    '2' => old('2'),
-                    '3' => old('3'),
-                    '4' => old('4'),
                 ];
                 if ($data[0] != null) {
-                    $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4]);
+                    $data = array_map(null, $data[0], $data[1]);
                     //dd($data);
                 }
                 
@@ -148,16 +125,14 @@
 
                         var data = data.map(function(item) {
                             return {
-                                nome: item[0],
-                                curso: item[1],
-                                horario: item[2],
-                                email: item[3],
-                                telefone: item[4]
+                                'Nome': item[0],
+                                'Area do curso': item[1],
                             }
                         });
                     } else {
                         var data = [];
                     }
+                    
 
                 }
                 var table = $('#JqueryAtvImportTable').DataTable({
@@ -196,24 +171,10 @@
 
                     "columns": [{
                             data: 'nome',
-                            name: 'descricao'
                         },
                         {
-                            data: 'curso',
-                            name: 'usuarios_envolvidos'
+                            data: 'area_curso',
                         },
-                        {
-                            data: 'horario',
-                            name: 'requisitante'
-                        },
-                        {
-                            data: 'email',
-                            name: 'data_realizacao'
-                        },
-                        {
-                            data: 'telefone',
-                            name: 'hora_realizacao'
-                        }
                     ],
                 });
 
@@ -236,6 +197,7 @@
                         select.empty();
                         // this will then display the file
                         fileCsv = $.csv.toObjects(reader.result);
+                        //console.log(fileCsv);
 
                         select
                             .append($("<option></option>")
@@ -255,19 +217,15 @@
                         //map datatable based on selects values when button is clicked
                         $('#mapButton').click(function() {
                             var nome = $('select[name="nome"]').val();
-                            var curso = $('select[name="curso"]').val();
-                            var horario = $('select[name="horario"]').val();
-                            var email = $('select[name="email"]').val();
-                            var telefone = $('select[name="telefone"]').val();
+                            var area_curso = $('select[name="curso"]').val();
+                            console.log(area_curso);
+                            console.log(nome);
                             
 
                             var data = fileCsv.map(function(item) {
                                 return {
                                     nome: item[nome],
-                                    curso: item[curso],
-                                    horario: item[horario],
-                                    email: item[email],
-                                    telefone: item[telefone]
+                                    area_curso: item[area_curso],
 
                                 }
                             });

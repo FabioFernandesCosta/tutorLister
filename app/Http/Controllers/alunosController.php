@@ -336,7 +336,7 @@ class alunosController extends Controller
         //dd($validator->errors(), $data);
         //if validator fails, redirect to the same page with the errors
         if ($validator->fails()) {
-            return Redirect::to('atividades/import')
+            return Redirect::to('alunos/import')
             ->withErrors($validator)
             ->withInput();
         }else{

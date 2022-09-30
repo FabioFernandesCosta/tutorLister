@@ -5,6 +5,7 @@ use App\Http\Controllers\atividadeControler;
 use App\Http\Controllers\historicoController;
 use App\Http\Controllers\alunosController;
 use App\Http\Controllers\cursoController;
+use App\Http\Controllers\requisitanteController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\usuario;
 use Illuminate\Support\Facades\Auth;
@@ -96,21 +97,17 @@ Route::group( ['middleware' => 'auth' ], function() {
     //alunos
     Route::get('alunos/getdata', [alunosController::class, 'getdata']);
     Route::controller(alunosController::class)->group(function(){
-        Route::resource('alunos', alunosController::class);
+        Route::resource('alunos', alunosController::class)->except(['destroy']);
         Route::post('/alunos/import/store', 'import_alunos')->name('alunos.import_alunos');
         Route::post('/alunos/getdata', 'getdata')->name('alunos.getData');
     });
     
-    
-    
-    //Route::resource('requisitante', RequisitanteController::class);
-    
     Route::get('consultar', [atividadeControler::class, 'consultar']);
     Route::get('atividades/getdata', [atividadeControler::class, 'getdata']);
     
-    
+
     Route::controller(atividadeControler::class)->group(function(){
-        Route::resource('atividades', atividadeControler::class);
+        Route::resource('atividades', atividadeControler::class)->except(['destroy']);
         Route::post('atv-export/', 'export')->name('atividade.export');
         //Route::get('atividades/index-filtering', 'atividadeControler@indexFiltering');
         Route::post('/atividades/import/store', 'import_atv')->name('atividade.import_atv');
@@ -126,13 +123,24 @@ Route::group( ['middleware' => 'auth' ], function() {
 
     Route::get('cursos/getdata', [cursoController::class, 'getdata']);
     Route::controller(cursoController::class)->group(function(){
-        Route::resource('cursos', cursoController::class);
+        //route resource cursos without destroy and show
+        Route::resource('cursos', cursoController::class, ['except' => ['destroy', 'show']]);
         Route::post('/cursos/import/store', 'import_cursos')->name('cursos.import_cursos');
         Route::post('/cursos/getdata', 'getdata')->name('cursos.getData');
     });
 
+    Route::get('requisitantes/getdata', [requisitanteController::class, 'getdata']);
+    Route::get('requisitantes/consultar', [requisitanteController::class, 'consultar']);
+    Route::controller(requisitanteController::class)->group(function(){
+        Route::resource('requisitantes', requisitanteController::class, ['except' => ['destroy']]);
+        Route::post('/requisitantes/getdata', 'getdata')->name('requisitantes.getData');
+    });
+
 });
 
+Route::fallback(function () {
+    abort(404);
+});
 
 
 

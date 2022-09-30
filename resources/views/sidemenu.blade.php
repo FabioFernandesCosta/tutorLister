@@ -46,14 +46,19 @@
         </li>
         <li>
           <a href={{ url('cursos') }}>
-            <img src="" />
+            <img src="{{url('/image/curso.png')}}" />
             <span>Cursos</span></a>
+        </li>
+        <li>
+          <a href={{ url('requisitantes') }}>
+            <img src="{{url('/image/grupo.png')}}" />
+            <span>requisitantes</span></a>
         </li>
         <li>
           <a id="usuarioContainer" href="javascript:void(0);">
             
             {{-- img src null --}}
-            <img id="userAvatar" style="border-radius: 50%;" src="{{url('/image/user.png')}}" />
+            <img id="userAvatar" style="border-radius: 50%;" src="{{url('/image/user.png')}}" onerror="this.src='{{url('/image/user.png')}}'" />
             <span id="userName" >usuario</span></a>
 
           </li>

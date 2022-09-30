@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\atividade;
 use App\Models\usuario_atividade;
 use App\Models\usuario;
-
 use App\Models\atividade_requisitante;
 use App\Models\requisitante;
 use Session;
@@ -37,6 +36,7 @@ class atividadeControler extends Controller
     public function consultar(Request $request)
     {
         $search = str_replace(['.', '#'], '' , explode('_', Request::get('term')));
+        dd($search);
         $result = DB::table(strtolower($search[0]))->where('nome', 'LIKE', '%'. $search[1]. '%')->pluck('nome');
  
         return response()->json($result);
@@ -282,7 +282,8 @@ class atividadeControler extends Controller
         ->get();
         
         $atv[0]->nome = explode(",",$atv[0]->nome);
-        $atv[0]->requisitante = RequisitanteController::consultar($atv[0]->requisitante);
+        // requisitante::find($atv[0]->requisitante);
+        $atv[0]->requisitante = requisitante::find($atv[0]->requisitante);
 
         return View::make('atividades.show') ->with('atv', $atv);
     }

@@ -36,25 +36,15 @@ class atividadeControler extends Controller
     public function consultar(Request $request)
     {
         $search = str_replace(['.', '#'], '' , explode('_', Request::get('term')));
-        dd($search);
         $result = DB::table(strtolower($search[0]))->where('nome', 'LIKE', '%'. $search[1]. '%')->pluck('nome');
+        //dd(response()->json($result));
  
         return response()->json($result);
             
     }
 
     public function getData(Request $request){
-        // if (Request::get("min") != null) {
-
-        //     //dd(date('d/m/YYYY', strtotime(Request::get("min"))));
-        //     dd((Request::get("min")));
-        //     dd(Request::get("max"));
-        // }
-
         
-
-
-        //dd(datatables(DB::table('atividade'))->toJson());
         $data = ((
             DB::table('atividade')
             ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')

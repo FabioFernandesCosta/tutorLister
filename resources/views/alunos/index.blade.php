@@ -177,6 +177,7 @@
                         },
                         {
                             "data": "usNome",
+                            "name": "usuario.nome"
                         },
                         {
                             "data": "email"
@@ -189,6 +190,7 @@
                         },
                         {
                             "data": "crNome",
+                            "name": "curso.nome"
                         }
                     ],
                 });

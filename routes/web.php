@@ -6,6 +6,7 @@ use App\Http\Controllers\historicoController;
 use App\Http\Controllers\alunosController;
 use App\Http\Controllers\cursoController;
 use App\Http\Controllers\requisitanteController;
+use App\Http\Controllers\sistemaPontoController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\usuario;
 use Illuminate\Support\Facades\Auth;
@@ -135,6 +136,15 @@ Route::group( ['middleware' => 'auth' ], function() {
         Route::resource('requisitantes', requisitanteController::class, ['except' => ['destroy']]);
         Route::post('/requisitantes/getdata', 'getdata')->name('requisitantes.getData');
     });
+
+    Route::get('ponto/getdata', [sistemaPontoController::class, 'getdata']);
+    Route::controller(sistemaPontoController::class)->group(function(){
+        // Route::resource('ponto', sistemaPontoController::class, ['except' => ['destroy', 'update']]);
+        // the route above, but only with index and store
+        Route::resource('ponto', sistemaPontoController::class, ['only' => ['index', 'store']]);
+        Route::post('/ponto/getdata', 'getdata')->name('sistemaPontoController.getData');
+    });
+
 
 });
 

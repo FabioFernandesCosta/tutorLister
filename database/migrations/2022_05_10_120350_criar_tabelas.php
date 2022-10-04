@@ -89,7 +89,7 @@ return new class extends Migration
             $table->bigInteger('usuario_id') -> unsigned();
             $table->foreign('usuario_id') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
             $table->time('hora_inicio');
-            $table->time('email');
+            $table->time('hora_fim')->nullable();
         });
 
         Schema::create('curso', function (Blueprint $table) {

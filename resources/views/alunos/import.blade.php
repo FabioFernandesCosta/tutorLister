@@ -233,6 +233,9 @@
                     var select = $('.select');
 
                     reader.addEventListener("load", () => {
+                        //remove all options from select
+                        
+
                         select.empty();
                         // this will then display the file
                         fileCsv = $.csv.toObjects(reader.result);

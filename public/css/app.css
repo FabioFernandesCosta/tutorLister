@@ -774,3 +774,8 @@ body{
     overflow-x: hidden;
     padding-top: 2rem;
 }
+
+.pontoTimes{
+    border: none;
+    background-color: transparent;
+}

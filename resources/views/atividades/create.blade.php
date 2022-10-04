@@ -41,7 +41,7 @@
                 <div id="repart2">
                         
                         <div id="userContainer">
-                            Usuarios envolvidos
+                            Alunos envolvidos
                             
                             @if (null !== old('InvolvedUsers'))
                                 @foreach (old('InvolvedUsers') as $user)

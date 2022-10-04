@@ -100,7 +100,7 @@
                         {{-- list of returned columns = ['usuario_id', 'nome', 'email', 'telefone', 'ativo', 'nome_curso'] --}}
                         <th>ID</th>
                         <th>Nome</th>
-                        <th>Email</th>
+                        <th>E-mail</th>
                         <th>Telefone</th>
                         <th>Ativo</th>
                         <th>Curso</th>

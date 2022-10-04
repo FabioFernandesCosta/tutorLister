@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div>
-                                <span>Esta ativo?</span>
+                                <span>Está ativo?</span>
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     
                                     {{-- input version of the select above --}}
@@ -89,7 +89,7 @@
                                 <input readonly type="text" value="{{ $aluno->curso }}" name="curso"  id="curso">
                             </div>
 
-                            <span>Horario do curso</span>
+                            <span>Horário do curso</span>
                             {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 <input readonly type="text" value="{{ $aluno->horario }}" name="horario"  id="horario">
@@ -100,7 +100,7 @@
     
                         </div>
                         <div id="userContainer">
-                            Email
+                            E-mail
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 <input readonly type="email" value="{{ $aluno->email }}" name="email"  id="email">
                             </div>

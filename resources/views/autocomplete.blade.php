@@ -5,7 +5,6 @@
     typeaheadInit()
     function typeaheadInit() {
 
-        console.log("test");
         var route = "{{ url("consultar") }}";
         $("{{ $campo }}").typeahead({
             source: function(query, process) {

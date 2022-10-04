@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <div>
-                            <span>Esta ativo?</span>
+                            <span>Está ativo?</span>
                             {{ Html::ul($errors->get('ativo'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                 <select name="ativo" required='required' id="ativo">
@@ -75,7 +75,7 @@
                         @include('autocomplete', ['campo' => '#curso'])
                         
                         <div>
-                            <span>Horario</span>
+                            <span>Horário</span>
                             {{ Html::ul($errors->get('horario'), ['class' => 'ulError']) }}
                             
                             <div class="form-field form-field-littlePlus" id="at"> <span></span>
@@ -92,7 +92,7 @@
 
                     </div>
                     <div id="userContainer">
-                        Email
+                        E-mail
                         {{ Html::ul($errors->get('email'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-little" id="req"> <span></span>
                             <input type="email" value="{{ old('email') }}" name="email" required='required' id="email">

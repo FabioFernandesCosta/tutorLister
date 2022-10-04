@@ -53,7 +53,7 @@
             <div class="column_relation">
                 <span>
 
-                    Nome:
+                    Nome
                 </span>
                 <select class="select" name="nome" id=""></select>
                 <span>
@@ -62,17 +62,17 @@
                 </span>
                 <select class="select" name="curso"></select>
                 <span>
-                    Horario:
+                    Horário
                 </span>
                 <select class="select" name="horario"></select>
                 <span>
-                    Email:
+                    E-mail
                 </span>
                 <select class="select" name="email" id=""></select>
 
 
                 <span>
-                    Telefone:
+                    Telefone
                 </span>
                 <select class="select" name="telefone"></select>
                 
@@ -98,7 +98,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Curso</th>
-                        <th>Horario</th>
+                        <th>Horário</th>
                         <th>Email</th>
                         <th>Telefone</th>
                         

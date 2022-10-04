@@ -59,7 +59,7 @@
 
                         <div style="display: flex;">
         
-                            Usuarios envolvidos
+                            Alunos envolvidos
                               
                             <a href=""> +</a>
                              

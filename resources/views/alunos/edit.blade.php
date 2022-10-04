@@ -30,9 +30,6 @@
             }
         }
     </script>
-    @php
-        
-    @endphp
 </head>
 @include('sidemenu')
 
@@ -80,7 +77,7 @@
                                 </div>
                             </div>
                             <div>
-                                <span>Esta ativo?</span>
+                                <span>Está ativo?</span>
                                 {{ Html::ul($errors->get('ativo'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
@@ -103,7 +100,7 @@
                             @include('autocomplete', ['campo' => '#curso'])
                             
                             <div>
-                                <span>Horario</span>
+                                <span>Horário</span>
                                 {{ Html::ul($errors->get('horario'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- horario select default value in case of old is not null and in case it is null --}}
@@ -122,7 +119,7 @@
     
                         </div>
                         <div id="userContainer">
-                            Email
+                            E-mail
                             {{ Html::ul($errors->get('email'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 {{-- email input value if old is not null and if is null --}}

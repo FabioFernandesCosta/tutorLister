@@ -55,6 +55,11 @@
             <span>requisitantes</span></a>
         </li>
         <li>
+          <a href={{ url('ponto') }}>
+            <img src="{{url('/image/relogio.png')}}" />
+            <span>Ponto</span></a>
+        </li>
+        <li>
           <a id="usuarioContainer" href="javascript:void(0);">
             
             {{-- img src null --}}

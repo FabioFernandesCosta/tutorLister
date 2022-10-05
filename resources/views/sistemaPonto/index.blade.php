@@ -145,10 +145,7 @@
                 ],
 
 
-                "createdRow": function(row, data, dataIndex) {
-                    $(row).attr('onclick', 'location.href="{{ URL::to('requisitantes') }}/' + data
-                        .requisitante_id + '";');
-                },
+                
 
                 "processing": true,
                 "serverSide": true,

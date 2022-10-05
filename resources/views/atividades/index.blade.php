@@ -99,7 +99,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Descrição</th>
-                        <th>Usuários envolvidos</th>
+                        <th>Alunos envolvidos</th>
                         <th>Requisitante</th>
                         <th>Data de realização</th>
                         <th>Hora de realização</th>

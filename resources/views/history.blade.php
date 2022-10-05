@@ -139,10 +139,9 @@
     var z = document.getElementById("histContainer");
     var a = document.getElementById("tbr").offsetHeight;
 
-    console.log(x);
     x.style.visibility = "hidden";
     x.style.opacity = "0";
-    y.innerHTML = "Historico ▼";
+    y.innerHTML = "Histórico ▼";
     z.style.height = "5.5rem";
 </script>
 

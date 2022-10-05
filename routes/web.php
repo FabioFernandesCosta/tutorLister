@@ -138,11 +138,14 @@ Route::group( ['middleware' => 'auth' ], function() {
     });
 
     Route::get('ponto/getdata', [sistemaPontoController::class, 'getdata']);
+    Route::get('ponto/getdataAll', [sistemaPontoController::class, 'getdata2']);
     Route::controller(sistemaPontoController::class)->group(function(){
         // Route::resource('ponto', sistemaPontoController::class, ['except' => ['destroy', 'update']]);
         // the route above, but only with index and store
         Route::resource('ponto', sistemaPontoController::class, ['only' => ['index', 'store']]);
         Route::post('/ponto/getdata', 'getdata')->name('sistemaPontoController.getData');
+        //same as above but for getdata2
+        Route::post('/ponto/getdataAll', 'getdata2')->name('sistemaPontoController.getData2');
     });
 
 

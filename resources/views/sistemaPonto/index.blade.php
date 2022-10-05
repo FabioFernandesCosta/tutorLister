@@ -16,6 +16,7 @@
 
         /* outline button */
     </style>
+    
 
 
 </head>
@@ -91,10 +92,15 @@
                     {{ Form::close() }}
                     {{-- <button class="dt-button">test</button> --}}
                 </div>
-                <h3 style="margin-top: 3.5rem">Seus registros</h3>
                 <div id="indexButtons" style="display: grid; grid-template-columns: 50% 50%; margin-top: 1rem">
                 </div>
-                <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
+                
+            </div>
+            
+            <div id="repart2" style="grid-template-columns: 36% 56%; gap:8%; padding:3.5rem 0">
+                <h3 style="">Seus registros</h3>
+                <h3 id="histClick" class="itemTittle" style="cursor:pointer;">Registro de pontos geral</h3>
+                <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
                     <thead>
                         <tr>
                             {{-- list of returned columns = ['requisitante_id', 'nome', 'email', 'telefone', 'empresa'] --}}
@@ -104,6 +110,17 @@
                         </tr>
                     </thead>
                 </table>
+                <table id="JqueryAtvTableAll" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
+                    <thead>
+                        <tr id="tbr">
+                            <th>Nome</th>
+                            <th>Dia</th>
+                            <th>Entrada</th>
+                            <th>Saída</th>
+                        </tr>
+                    </thead>
+                </table>
+
             </div>
         </div>
     </div>
@@ -130,7 +147,7 @@
                     [1, 'desc'],
                     [2, 'desc'],
                 ],
-                
+
 
                 "lengthMenu": [
                     [10, 25, 50, -1],
@@ -145,7 +162,7 @@
                 ],
 
 
-                
+
 
                 "processing": true,
                 "serverSide": true,
@@ -185,15 +202,78 @@
                 ],
             });
 
+            // the same datatables as above but with id = JqueryAtvTableAll and all ponto data and also name
+            var tableAll = $('#JqueryAtvTableAll').DataTable({
+                //order by the first column and second column in descending order and null as first
+                order: [
+                    [1, 'desc'],
+                    [2, 'desc'],
+                    [3, 'desc'],
+                ],
 
-            //detach buttons class dtbuttons from table and put as first child under indexButtons div
-            var indexButtons = $('#indexButtons');
-            var buttons = $('.dt-buttons').detach();
-            indexButtons.prepend(buttons);
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "todos"]
+                ],
+
+                scrollX: true,
+
+                dom: 'Brftlip',
+
+                buttons: [
+                    'csv', 'excel', 'pdf', 'print' //'columnsToggle'
+                ],
+
+                "processing": true,
+                "serverSide": true,
+                ajax: {
+                    url: "{{ url('ponto/getdataAll') }}",
+                },
+
+                //linguagem
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "Nada encontrado - desculpe",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum registro disponível",
+                    "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                    "search": "Pesquisar:",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior"
+                    },
+                    //colvis button language
+                    buttons: {
+                        colvis: 'Mostrar/Ocultar colunas'
+                    }
+                },
+
+                "columns": [{
+                        "data": "nome"
+                    },
+                    {
+                        "data": "dia"
+                    },
+                    {
+                        "data": "hora_inicio",
+                    },
+                    {
+                        "data": "hora_fim"
+                    }
+                ],
+            });
+
+
+
+
+            
 
 
         });
     </script>
+    
 
 </body>
 

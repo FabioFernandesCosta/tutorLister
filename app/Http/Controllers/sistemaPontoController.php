@@ -33,6 +33,20 @@ class sistemaPontoController extends Controller
         return datatables()->of($horario)->toJson();
     }
 
+    public function getData2(){
+        //do the same as getData() but with all users and select name
+        $horario = horario::select(
+            DB::raw("DATE_FORMAT(horario.dia, '%d/%m/%Y') as dia"),
+            DB::raw("DATE_FORMAT(horario.hora_inicio, '%H:%i') as hora_inicio"),
+            DB::raw("DATE_FORMAT(horario.hora_fim, '%H:%i') as hora_fim"),
+            'usuario.nome')
+            ->join('usuario', 'usuario.usuario_id', '=', 'horario.usuario_id')->get();
+
+        return datatables()->of($horario)->toJson();
+
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -56,7 +70,7 @@ class sistemaPontoController extends Controller
         //if the newest horario in DB from the user is a null hora_fim, then edit its hora fim to the Request hora, else create a new horario
         $user = usuario::find(auth()->user()->usuario_id);
         $horario = horario::where('usuario_id', $user->usuario_id)->orderBy('horario_id', 'desc')->first();
-        if($horario->hora_fim == null){
+        if($horario->hora_fim == null and  $horario->dia == date('Y-m-d')){
             $horario->hora_fim = Request::input('hora');
             $horario->save();
         }else{

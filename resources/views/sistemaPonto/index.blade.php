@@ -99,27 +99,47 @@
             
             <div id="repart2" style="grid-template-columns: 36% 56%; gap:8%; padding:3.5rem 0">
                 <h3 style="">Seus registros</h3>
-                <h3 id="histClick" class="itemTittle" style="cursor:pointer;">Registro de pontos geral</h3>
-                <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
-                    <thead>
-                        <tr>
-                            {{-- list of returned columns = ['requisitante_id', 'nome', 'email', 'telefone', 'empresa'] --}}
-                            <th>Dia</th>
-                            <th>Entrada</th>
-                            <th>Saída</th>
-                        </tr>
-                    </thead>
-                </table>
-                <table id="JqueryAtvTableAll" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
-                    <thead>
-                        <tr id="tbr">
-                            <th>Nome</th>
-                            <th>Dia</th>
-                            <th>Entrada</th>
-                            <th>Saída</th>
-                        </tr>
-                    </thead>
-                </table>
+                <h3 id="histClick" class="itemTittle" ">Registro de pontos geral</h3>
+                <div>
+
+                    <br><br>
+                    <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
+                        <thead>
+                            <tr>
+                                {{-- list of returned columns = ['requisitante_id', 'nome', 'email', 'telefone', 'empresa'] --}}
+                                <th>Dia</th>
+                                <th>Entrada</th>
+                                <th>Saída</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div>
+                    <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
+                        <tbody>
+                            <tr>
+                                <td>Data minima:</td>
+                                <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="min"
+                                        name="min"></td>
+                                <td>Data maxima:</td>
+                                <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="max"
+                                        name="max"></td>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table id="JqueryAtvTableAll" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
+                        <thead>
+                            <tr id="tbr">
+                                <th>Nome</th>
+                                <th>Dia</th>
+                                <th>Entrada</th>
+                                <th>Saída</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
 
             </div>
         </div>
@@ -202,6 +222,10 @@
                 ],
             });
 
+            var minDate, maxDate;
+
+            minDateFilter = "";
+            maxDateFilter = "";
             // the same datatables as above but with id = JqueryAtvTableAll and all ponto data and also name
             var tableAll = $('#JqueryAtvTableAll').DataTable({
                 //order by the first column and second column in descending order and null as first
@@ -218,7 +242,7 @@
 
                 scrollX: true,
 
-                dom: 'Brftlip',
+                dom: 'Brtlip',
 
                 buttons: [
                     'csv', 'excel', 'pdf', 'print' //'columnsToggle'
@@ -228,6 +252,10 @@
                 "serverSide": true,
                 ajax: {
                     url: "{{ url('ponto/getdataAll') }}",
+                    data: function(d) {
+                            d.min = minDateFilter;
+                            d.max = maxDateFilter;
+                        }
                 },
 
                 //linguagem
@@ -266,7 +294,15 @@
             });
 
 
-
+            $('#min').change(function() {
+                    minDateFilter = $("#min").val();
+                    console.log("test");
+                    tableAll.draw();
+                });
+                $('#max').change(function() {
+                    maxDateFilter = $("#max").val();
+                    tableAll.draw();
+                });
 
             
 

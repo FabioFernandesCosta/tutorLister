@@ -33,14 +33,41 @@ class sistemaPontoController extends Controller
         return datatables()->of($horario)->toJson();
     }
 
-    public function getData2(){
+    public function getData2(Request $request){
         //do the same as getData() but with all users and select name
         $horario = horario::select(
             DB::raw("DATE_FORMAT(horario.dia, '%d/%m/%Y') as dia"),
             DB::raw("DATE_FORMAT(horario.hora_inicio, '%H:%i') as hora_inicio"),
             DB::raw("DATE_FORMAT(horario.hora_fim, '%H:%i') as hora_fim"),
             'usuario.nome')
-            ->join('usuario', 'usuario.usuario_id', '=', 'horario.usuario_id')->get();
+            ->join('usuario', 'usuario.usuario_id', '=', 'horario.usuario_id');
+
+        $min = strtotime(Request::get("min"));
+        $max = strtotime(Request::get("max"));
+
+        if ($min != null && $max == null) {
+            //$min = date('d/m/Y', strtotime(Request::get("min")));
+            $min = date("Y-m-d", ($min) );
+            //dd($min);
+            //$data = $data->where('atividade.data_atividade', '>=', $min);
+            //$data = $data->DB::raw("where atividade.data_atividade >= $min");
+           $horario =$horario->whereRaw (("DATE(horario.dia) >= '".($min)."'"));
+        }
+
+        //if (min null and max not null) { where data_atividade <= max}
+        elseif ($min == null && $max != null) {
+            $max = date("Y-m-d", ($max) );
+            //$data = $data->where('atividade.data_atividade', '<=', $max);
+           $horario =$horario->whereRaw (("DATE(horario.dia) <= '".($max)."'"));
+        }
+
+        //if (min not null and max not null) { where data_atividade between min and max}
+        elseif ($min != null && $max != null) {
+            $min = date("Y-m-d", ($min) );
+            $max = date("Y-m-d", ($max) );
+            //data whereRaw between min and max
+           $horario =$horario->whereRaw(("DATE(horario.dia) between '".($min)."' and '".($max)."'"));
+        }
 
         return datatables()->of($horario)->toJson();
 
@@ -71,12 +98,20 @@ class sistemaPontoController extends Controller
         $user = usuario::find(auth()->user()->usuario_id);
         $horario = horario::where('usuario_id', $user->usuario_id)->orderBy('horario_id', 'desc')->first();
         if($horario->hora_fim == null and  $horario->dia == date('Y-m-d')){
-            $horario->hora_fim = Request::input('hora');
+            $datetime = new \DateTime();
+            $datetime->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+            $horario->hora_fim = $datetime->format('H:i:s');
+            
             $horario->save();
         }else{
             $horario = new horario();
-            $horario->dia = Request::input('dia');
-            $horario->hora_inicio = Request::input('hora');
+            // $horario->hora_inicio = Request::input('hora');
+            //get current day from server
+            $horario->dia = date('Y-m-d');
+            //get current time from server
+            $datetime = new \DateTime();
+            $datetime->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+            $horario->hora_inicio = $datetime->format('H:i:s');
             $horario->usuario_id = $user->usuario_id;
             $horario->save();
         }

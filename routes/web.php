@@ -7,6 +7,7 @@ use App\Http\Controllers\alunosController;
 use App\Http\Controllers\cursoController;
 use App\Http\Controllers\requisitanteController;
 use App\Http\Controllers\sistemaPontoController;
+use App\Http\Controllers\DashboardController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\usuario;
 use Illuminate\Support\Facades\Auth;
@@ -66,9 +67,8 @@ Route::group( ['middleware' => 'auth' ], function() {
         return redirect('/');
     })->name('logout');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+    // Route::get('/charts', 'ChartController@index')->name('charts');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     Route::get('/atividades/import', function () {
         return view('atividades.import');

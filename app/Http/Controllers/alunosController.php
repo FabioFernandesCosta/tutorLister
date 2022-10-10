@@ -20,6 +20,7 @@ use App\Models\usuario_atividade;
 use App\Models\usuario;
 use App\Models\usuario_curso;
 use App\Models\curso;
+use Illuminate\Support\Facades\Auth;
 
 class alunosController extends Controller
 {
@@ -116,8 +117,10 @@ class alunosController extends Controller
                 $usuario_curso->horario = Request::get('horario');
                 $usuario_curso->save();
                 
+                $user = Auth::user();
+                $user_id = $user->usuario_id;
                 $historico_controller = new historicoController;
-                $historico_controller->store(["", "Usuário criado", $usuario->usuario_id, 5, NULL, NULL, 1]);
+                $historico_controller->store(["", "Usuário criado", $usuario->usuario_id, $user_id, NULL, NULL, 1]);
                 
                 //Session::flash('message', 'Aluno cadastrado com sucesso!');
                 //dd("test");
@@ -272,10 +275,11 @@ class alunosController extends Controller
                 $usuario_curso->save();
 
                 
-                //dd($changedFields);
+                $user = Auth::user();
+                $user_id = $user->usuario_id;
                 $historico_controller = new historicoController;
                 // $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1])]);
-                $historico_controller->store([implode(", ", $changedFields[0]), "editar", $usuario->usuario_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
+                $historico_controller->store([implode(", ", $changedFields[0]), "editar", $usuario->usuario_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
                 
                 //Session::flash('message', 'Aluno cadastrado com sucesso!');
                 //dd("test");
@@ -362,8 +366,11 @@ class alunosController extends Controller
                     $usuario_curso->save();
 
                     //cria historico
+                    $user = Auth::user();
+                    $user_id = $user->usuario_id;
+                    
                     $historico_controller = new historicoController;
-                    $historico_controller->store(["", "Aluno importado", $usuario->usuario_id, 5, NULL, NULL, 1]);
+                    $historico_controller->store(["", "Aluno importado", $usuario->usuario_id, user_id, NULL, NULL, 1]);
                     
                 }
             });

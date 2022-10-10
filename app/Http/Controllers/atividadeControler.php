@@ -18,6 +18,7 @@ use App\Exports\AtvExport;
 use Datatables;
 use App\Http\Controllers\historicoController;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -229,8 +230,11 @@ class atividadeControler extends Controller
                 }
                 $atv_req->save();
 
+                $user = Auth::user();
+                $user_id = $user->usuario_id;
+
                 $historico_controller = new historicoController;
-                $historico_controller->store(["", "criar atividade", $atividade->atividade_id, 5, NULL, NULL, 0]);
+                $historico_controller->store(["", "criar atividade", $atividade->atividade_id, $user_id, NULL, NULL, 0]);
 
                 // redirect
                 Session::flash('message', 'Atividade registrada com successo!');
@@ -446,8 +450,12 @@ class atividadeControler extends Controller
 
                         $atv_req->save();
 
+                        //get id of the user who made the change (the user who is logged in)
+                        $user = Auth::user();
+                        $user_id = $user->usuario_id;
+
                         $historico_controller = new historicoController;
-                        $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),0]);
+                        $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),0]);
 
                         // redirect
                         Session::flash('message', 'Atividade registrada com successo!');
@@ -593,9 +601,11 @@ class atividadeControler extends Controller
                     }
                     $atv_req->save();
                     
+                    $user = Auth::user();
+                    $user_id = $user->usuario_id;
                     //registra como "atividade importada" no historico
                     $historico_controller = new historicoController;
-                    $historico_controller->store(["", "Atividade importada", $atv->atividade_id, 5, NULL, NULL, 0]);
+                    $historico_controller->store(["", "Atividade importada", $atv->atividade_id, $user_id, NULL, NULL, 0]);
 
                 }
             });

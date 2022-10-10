@@ -12,7 +12,6 @@ class historicoController extends Controller
     //
     public function store(array $array){
 
-
         if($array['6'] == 0){
             $historico = new historico();
             $historico->atividade_id = $array[2];

@@ -37,7 +37,7 @@
         <li>
           <a href={{ url('atividades') }}>
             <img src="{{url('/image/notes.png')}}" />
-            <span>Atividade</span></a>
+            <span>Atividades</span></a>
         </li>
         <li>
           <a href={{ url('alunos') }}>

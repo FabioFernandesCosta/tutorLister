@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Models\atividade;
 use App\Models\dashboard;
+use App\Models\curso;
+use App\Models\usuario;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -22,7 +24,25 @@ class DashboardController extends Controller
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
-        //dd($atividades);
+        $atividadesAbertas = atividade::selectRaw('concat(month(data_atividade), year(data_atividade)) as mes, count(*) as total')
+            ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
+            ->where('status', 'Aberto')
+            ->groupBy('mes')
+            ->pluck('total', 'mes')->all();
+
+        $atividadesEmAndamento = atividade::selectRaw('concat(month(data_atividade), year(data_atividade)) as mes, count(*) as total')
+            ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
+            ->where('status', 'Em andamento')
+            ->groupBy('mes')
+            ->pluck('total', 'mes')->all();
+
+        $atividadesFechadas = atividade::selectRaw('concat(month(data_atividade), year(data_atividade)) as mes, count(*) as total')
+            ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
+            ->where('status', 'Fechado')
+            ->groupBy('mes')
+            ->pluck('total', 'mes')->all();
+
+
         // Generate random colours for the groups
         $backgroundColours = [];
         $borderColours = [];
@@ -70,7 +90,7 @@ class DashboardController extends Controller
             12 => 'Dezembro',
         );
 
-        //label chart with mes name
+        //label chart with mes name (atvChart)
         $chart->labels = array_map(function ($mes) use ($meses) {
             //split mes last 4 chars = year and first 2 or 1 chars = month
             $mes = substr($mes, -4) . '-' . substr($mes, 0, -4);
@@ -78,14 +98,35 @@ class DashboardController extends Controller
             return $meses[date('n', strtotime($mes))] . ' ' . date('Y', strtotime($mes));
         }, $chart->labels);
 
-        $chart->dataset = (array_values($atividades));
+        $chart->dataset = [
+            'Total' => array_values($atividades),
+            'Abertas' => array_values($atividadesAbertas),
+            'Em andamento' => array_values($atividadesEmAndamento),
+            'Fechadas' => array_values($atividadesFechadas),
+        ];
         $chart->colours = $backgroundColours;
         $chart->borderColours = $borderColours;
-        //dd($chart);
 
+
+        //alunos (usuario) grouped by curso.nome
+        $alunosCursos = usuario::selectRaw('curso.nome as curso, count(*) as total')
+            ->join('usuario_curso', 'usuario.usuario_id', '=', 'usuario_curso.usuario_id')
+            ->join('curso', 'curso.curso_id', '=', 'usuario_curso.curso_id')
+            ->groupBy('curso')
+            ->pluck('total', 'curso')->all();
+
+        // Generate random colours for the groups
+        $AlunosCursosChart = new dashboard;
+        $AlunosCursosChart->labels = (array_keys($alunosCursos));
+        $AlunosCursosChart->dataset = [
+            'Total' => array_values($alunosCursos),
+        ];
+        $AlunosCursosChart->colours = $backgroundColours;
+        $AlunosCursosChart->borderColours = $borderColours;
+        
 
         
-        return view('dashboard', compact('chart'));
+        return view('dashboard', compact('chart'), compact('AlunosCursosChart'));
     }
 
     /**

@@ -123,10 +123,34 @@ class DashboardController extends Controller
         ];
         $AlunosCursosChart->colours = $backgroundColours;
         $AlunosCursosChart->borderColours = $borderColours;
+
+
+        //10 alunos (usuario) with more atividades tables: usuario, usuario_atividade
+        $alunosAtividades = usuario::selectRaw('usuario.nome as aluno, count(*) as total')
+            ->join('usuario_atividade', 'usuario.usuario_id', '=', 'usuario_atividade.usuario_id')
+            ->groupBy('aluno')
+            ->orderBy('total', 'desc')
+            ->limit(10)
+            ->pluck('total', 'aluno')->all();
+        
+        // Generate random colours for the groups
+        $AlunosAtividadesChart = new dashboard;
+        $AlunosAtividadesChart->labels = (array_keys($alunosAtividades));
+        $AlunosAtividadesChart->dataset = [
+            'Total' => array_values($alunosAtividades),
+        ];
+        $AlunosAtividadesChart->colours = $backgroundColours;
+        $AlunosAtividadesChart->borderColours = $borderColours;
+
+        
         
 
         
-        return view('dashboard', compact('chart'), compact('AlunosCursosChart'));
+        return view('dashboard')
+        ->with('chart', $chart)
+        ->with('AlunosCursosChart', $AlunosCursosChart)
+        ->with('AlunosAtividadesChart', $AlunosAtividadesChart);
+        // , compact('chart'), compact('AlunosAtividadesChart'), compact('AlunosCursosChart'));
     }
 
     /**

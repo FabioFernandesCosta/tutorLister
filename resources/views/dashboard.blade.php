@@ -20,15 +20,20 @@
     @include('sidemenu')
     <div class="wrapAll">
         <div id="repart2">
-            <div>
+            <div class="chartContainer">
                 <canvas id="AtvChart"></canvas>
             </div>
-            <div>
+            <div class="chartContainer">
                 <canvas id="AlunosCursos"></canvas>
+            </div>
+            <div class="chartContainer">
+                <canvas id="AlunosAtividadesTop10"></canvas>
             </div>
 
 
         </div>
+        
+        
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -167,6 +172,65 @@
                     }
                 }
             });
+
+            //10 Alunos with most atividades side bar chart
+            ctz = document.getElementById('AlunosAtividadesTop10').getContext('2d');
+            var chart = new Chart(ctz, {
+                // The type of chart we want to create
+                type: 'bar',
+                // The data for our dataset
+                data: {
+                    labels: {!! json_encode($AlunosAtividadesChart->labels) !!},
+                    datasets: [{
+                        axis: 'x',
+                        label: 'Top 10 alunos com mais atividades',
+                        backgroundColor: {!! json_encode($AlunosAtividadesChart->colours) !!},
+                        borderColor: {!! json_encode($AlunosAtividadesChart->borderColours) !!},
+                        borderWidth: 1,
+                        data: {!! json_encode($AlunosAtividadesChart->dataset['Total']) !!}
+                    }]
+                },
+                options: {
+                    //make it a side bar chart
+                    indexAxis: 'x',
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    if (value % 1 === 0) {
+                                        return value;
+                                    }
+                                }
+                            },
+                            scaleLabel: {
+                                display: false
+                            }
+                        }]
+                    },
+                    legend: {
+                        labels: {
+                            // This more specific font property overrides the global property
+                            fontColor: '#122C4B',
+                            fontFamily: "'Muli', sans-serif",
+                            padding: 25,
+                            boxWidth: 25,
+                            fontSize: 14,
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 10,
+                            top: 0,
+                            bottom: 10
+                        }
+                    }
+
+                    
+                }
+            });
+
 
         </script>
 

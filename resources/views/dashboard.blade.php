@@ -29,11 +29,14 @@
             <div class="chartContainer">
                 <canvas id="AlunosAtividadesTop10"></canvas>
             </div>
+            <div class="chartContainer">
+                <canvas id="alunosTreinamento"></canvas>
+            </div>
 
 
         </div>
-        
-        
+
+
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -114,7 +117,16 @@
                             top: 0,
                             bottom: 10
                         }
-                    }
+                    },
+                    //title
+                    title: {
+                        display: true,
+                        text: 'Atividades nos últimos meses',
+                        fontSize: 20,
+                        fontColor: '#122C4B',
+                        fontFamily: "'Muli', sans-serif",
+                        padding: 25,
+                    },
 
 
                 }
@@ -129,7 +141,7 @@
                 data: {
                     labels: {!! json_encode($AlunosCursosChart->labels) !!},
                     datasets: [{
-                        label: 'Alunos por curso',
+                        label: 'Alunos ativos por curso',
                         backgroundColor: {!! json_encode($AlunosCursosChart->colours) !!},
                         borderColor: {!! json_encode($AlunosCursosChart->borderColours) !!},
                         borderWidth: 1,
@@ -169,7 +181,16 @@
                             top: 0,
                             bottom: 10
                         }
-                    }
+                    },
+                    //title
+                    title: {
+                        display: true,
+                        text: 'Alunos ativos por curso',
+                        fontSize: 20,
+                        fontColor: '#122C4B',
+                        fontFamily: "'Muli', sans-serif",
+                        padding: 25,
+                    },
                 }
             });
 
@@ -183,7 +204,7 @@
                     labels: {!! json_encode($AlunosAtividadesChart->labels) !!},
                     datasets: [{
                         axis: 'x',
-                        label: 'Top 10 alunos com mais atividades',
+                        //label: 'Top 10 alunos com mais atividades',
                         backgroundColor: {!! json_encode($AlunosAtividadesChart->colours) !!},
                         borderColor: {!! json_encode($AlunosAtividadesChart->borderColours) !!},
                         borderWidth: 1,
@@ -193,6 +214,70 @@
                 options: {
                     //make it a side bar chart
                     indexAxis: 'x',
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    if (value % 1 === 0) {
+                                        return value;
+                                    }
+                                }
+                            },
+                            scaleLabel: {
+                                display: false
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: false
+                    },
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 10,
+                            top: 0,
+                            bottom: 10
+                        }
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.yLabel;
+                            }
+                        }
+                    },
+                    //title
+                    title: {
+                        display: true,
+                        text: 'Top 10 alunos com mais atividades',
+                        fontSize: 20,
+                        fontColor: '#122C4B',
+                        fontFamily: "'Muli', sans-serif",
+                        padding: 25,
+                    },
+
+
+                }
+            });
+
+            cta = document.getElementById('alunosTreinamento').getContext('2d'); //$AlunosTreinoConcluidoChart
+            //doughnut chart
+            var chart = new Chart(cta, {
+                // The type of chart we want to create
+                type: 'doughnut',
+                // The data for our dataset
+                data: {
+                    labels: {!! json_encode($AlunosTreinoConcluidoChart->labels) !!},
+                    datasets: [{
+                        label: 'Alunos ativos por curso',
+                        backgroundColor: {!! json_encode($AlunosTreinoConcluidoChart->colours) !!},
+                        borderColor: {!! json_encode($AlunosTreinoConcluidoChart->borderColours) !!},
+                        borderWidth: 1,
+                        data: {!! json_encode($AlunosTreinoConcluidoChart->dataset['Total']) !!}
+                    }]
+                },
+                options: {
                     scales: {
                         yAxes: [{
                             ticks: {
@@ -225,13 +310,18 @@
                             top: 0,
                             bottom: 10
                         }
-                    }
-
-                    
+                    },
+                    //title
+                    title: {
+                        display: true,
+                        text: 'Alunos com treinamento concluído',
+                        fontSize: 20,
+                        fontColor: '#122C4B',
+                        fontFamily: "'Muli', sans-serif",
+                        padding: 25,
+                    },
                 }
             });
-
-
         </script>
 
 

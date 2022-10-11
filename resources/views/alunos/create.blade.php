@@ -64,6 +64,16 @@
                                 </select>
                             </div>
                         </div>
+                        <div>
+                            <span>Concluiu treinamento?</span>
+                            {{ Html::ul($errors->get('treinamento_concluido'), ['class' => 'ulError']) }}
+                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
+                                <select name="treinamento_concluido" required='required' id="treinamento_concluido">
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
+                                </select>
+                            </div>
+                        </div>
                         
                         <span>Curso</span>
                         {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}

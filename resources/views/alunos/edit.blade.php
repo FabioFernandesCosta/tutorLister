@@ -90,6 +90,20 @@
                                     
                                 </div>
                             </div>
+                            {{-- treinamento_concluído --}}
+                            <div>
+                                <span>Treinamento concluído?</span>
+                                {{ Html::ul($errors->get('treinamento_concluido'), ['class' => 'ulError']) }}
+                                <div class="form-field form-field-littlePlus" id="at"> <span></span>
+                                    <select name="treinamento_concluído" id="treinamento_concluído">
+                                        <option value="1" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 1 ? 'selected' : '' }}>
+                                            Sim</option>
+                                        <option value="0" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 0 ? 'selected' : '' }}>
+                                            Não</option>
+                                    </select>
+                                    
+                                </div>
+                            </div>
                             
                             <span>Curso</span>
                             {{ Html::ul($errors->get('curso'), ['class' => 'ulError']) }}

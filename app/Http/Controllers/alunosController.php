@@ -76,6 +76,7 @@ class alunosController extends Controller
             'curso' => 'required|exists:curso,nome',
             'ativo' => 'required|in:0,1',
             'acesso' => 'required|in:0,1',
+            'treinamento_concluido' => 'required|in:0,1',
         );
         $messages = [
             'nome.required' => 'O campo nome é obrigatório',
@@ -88,6 +89,8 @@ class alunosController extends Controller
             'ativo.in' => 'O campo ativo deve ser sim ou não',
             'acesso.required' => 'O campo acesso é obrigatório',
             'acesso.in' => 'O campo acesso deve ser sim ou não',
+            'treinamento_concluido.required' => 'O campo treinamento concluído é obrigatório',
+            'treinamento_concluido.in' => 'O campo treinamento concluído deve ser sim ou não',
         ];
         $validator = Validator::make(Request::all(), $rules, $messages);
         
@@ -107,6 +110,7 @@ class alunosController extends Controller
                 $usuario->telefone = Request::get('telefone');
                 $usuario->ativo = Request::get('ativo');
                 $usuario->nivel_de_acesso = Request::get('acesso');
+                $usuario->treinamento_concluido = Request::get('treinamento_concluido');
                 $usuario->save();
                 $loctoRed = $usuario->usuario_id;
                 $usuario_curso = new usuario_curso;
@@ -148,6 +152,7 @@ class alunosController extends Controller
         $usuario->horario = $usuario_curso->horario;
         $usuario->ativo = $usuario->ativo == 1 ? 'Sim' : 'Não';
         $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
+        $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'Sim' : 'Não';
         return (View::make('alunos.show')->with('aluno', $usuario));
     }
 
@@ -166,6 +171,7 @@ class alunosController extends Controller
         $usuario->curso = $curso->nome;
         $usuario->horario = $usuario_curso->horario;
         $usuario->ativo = $usuario->ativo == 1 ? 'Sim' : 'Não';
+        $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'Sim' : 'Não';
         $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
         return (View::make('alunos.edit')->with('aluno', $usuario));
     }
@@ -188,6 +194,7 @@ class alunosController extends Controller
             'curso' => 'required|exists:curso,nome',
             'ativo' => 'required|in:0,1',
             'acesso' => 'required|in:0,1',
+            'treinamento_concluido' => 'required|in:0,1',
         );
         $messages = [
             'nome.required' => 'O campo nome é obrigatório',
@@ -200,6 +207,8 @@ class alunosController extends Controller
             'ativo.in' => 'O campo ativo deve ser sim ou não',
             'acesso.required' => 'O campo acesso é obrigatório',
             'acesso.in' => 'O campo acesso deve ser sim ou não',
+            'treinamento_concluido.required' => 'O campo treinamento concluído é obrigatório',
+            'treinamento_concluido.in' => 'O campo treinamento concluído deve ser sim ou não',
         ];
         $validator = Validator::make(Request::all(), $rules, $messages);
         
@@ -251,6 +260,7 @@ class alunosController extends Controller
                 $usuario->telefone = Request::get('telefone');
                 $usuario->ativo = Request::get('ativo');
                 $usuario->nivel_de_acesso = Request::get('acesso');
+                $usuario->treinamento_concluido = Request::get('treinamento_concluido');
                 $usuario->save();
                 $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
                 

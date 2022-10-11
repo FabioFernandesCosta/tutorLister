@@ -82,6 +82,14 @@
                                     <input readonly type="text" value="{{ $aluno->ativo }}" name="ativo"  id="ativo">
                                 </div>
                             </div>
+                            <div>
+                                <span>Concluiu treinamento?</span>
+                                <div class="form-field form-field-littlePlus" id="tr"> <span></span>
+                                    
+                                    {{-- input version of the select above --}}
+                                    <input readonly type="text" value="{{ $aluno->treinamento_concluido }}" name="treinamento_concluido"  id="treinamento_concluido">
+                                </div>
+                            </div>
     
                             <span>Curso</span>
                             {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}

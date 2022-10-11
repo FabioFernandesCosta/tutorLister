@@ -112,6 +112,7 @@ class DashboardController extends Controller
         $alunosCursos = usuario::selectRaw('curso.nome as curso, count(*) as total')
             ->join('usuario_curso', 'usuario.usuario_id', '=', 'usuario_curso.usuario_id')
             ->join('curso', 'curso.curso_id', '=', 'usuario_curso.curso_id')
+            ->where('usuario.ativo', '=', 1)
             ->groupBy('curso')
             ->pluck('total', 'curso')->all();
 
@@ -143,13 +144,32 @@ class DashboardController extends Controller
         $AlunosAtividadesChart->borderColours = $borderColours;
 
         
+        //numero de alunos que concluiram e não concluiram o treinamento
+        $alunosTreinoConcluido = usuario::selectRaw('usuario.treinamento_concluido as concluido, count(*) as total')
+            ->groupBy('concluido')
+            ->pluck('total', 'concluido')->all();
+
+        // Generate random colours for the groups
+        $AlunosTreinoConcluidoChart = new dashboard;
+        $AlunosTreinoConcluidoChart->labels = array_map(function ($concluido) {
+            return $concluido == 0 ? 'Não concluído' : 'Concluído ';
+        }, array_keys($alunosTreinoConcluido));
+        $AlunosTreinoConcluidoChart->dataset = [
+            'Total' => array_values($alunosTreinoConcluido),
+        ];
+        $AlunosTreinoConcluidoChart->colours = $backgroundColours;
+        $AlunosTreinoConcluidoChart->borderColours = $borderColours;
+
+        //dd($AlunosTreinoConcluidoChart);
+
         
 
         
         return view('dashboard')
         ->with('chart', $chart)
         ->with('AlunosCursosChart', $AlunosCursosChart)
-        ->with('AlunosAtividadesChart', $AlunosAtividadesChart);
+        ->with('AlunosAtividadesChart', $AlunosAtividadesChart)
+        ->with('AlunosTreinoConcluidoChart', $AlunosTreinoConcluidoChart);
         // , compact('chart'), compact('AlunosAtividadesChart'), compact('AlunosCursosChart'));
     }
 

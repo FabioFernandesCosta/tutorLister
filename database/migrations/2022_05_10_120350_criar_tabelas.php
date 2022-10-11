@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('organizacao');
             $table->string('telefone');
             $table->boolean('ativo');
+            $table->boolean('treinamento_concluido');
             $table->integer('nivel_de_acesso');
             $table->string('email')->unique();
             //provider_id

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Login</title>
+    <title>Dashboard - TutorLister</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 
@@ -19,7 +19,10 @@
 <body class="antialiased">
     @include('sidemenu')
     <div class="wrapAll">
-        <div id="repart2">
+        <span id="pageTitle">
+            Dashboard
+        </span>
+        <div id="repart2Canvas">
             <div class="chartContainer">
                 <canvas id="AtvChart"></canvas>
             </div>
@@ -53,29 +56,29 @@
                     labels: {!! json_encode($chart->labels) !!},
                     datasets: [{
                             label: 'Atividades totais',
-                            backgroundColor: {!! json_encode($chart->colours) !!},
-                            borderColor: {!! json_encode($chart->borderColours) !!},
+                            backgroundColor: {!! json_encode($chart->colours[0]) !!},
+                            borderColor: {!! json_encode($chart->borderColours[0]) !!},
                             borderWidth: 1,
                             data: {!! json_encode($chart->dataset['Total']) !!}
                         },
                         {
                             label: 'atividades abertas',
-                            backgroundColor: {!! json_encode($chart->colours) !!},
-                            borderColor: {!! json_encode($chart->borderColours) !!},
+                            backgroundColor: {!! json_encode($chart->colours[1]) !!},
+                            borderColor: {!! json_encode($chart->borderColours[1]) !!},
                             borderWidth: 1,
                             data: {!! json_encode($chart->dataset['Abertas']) !!}
                         },
                         {
                             label: 'atividades fechadas',
-                            backgroundColor: {!! json_encode($chart->colours) !!},
-                            borderColor: {!! json_encode($chart->borderColours) !!},
+                            backgroundColor: {!! json_encode($chart->colours[2]) !!},
+                            borderColor: {!! json_encode($chart->borderColours[2]) !!},
                             borderWidth: 1,
                             data: {!! json_encode($chart->dataset['Fechadas']) !!}
                         },
                         {
                             label: 'atividades em andamento',
-                            backgroundColor: {!! json_encode($chart->colours) !!},
-                            borderColor: {!! json_encode($chart->borderColours) !!},
+                            backgroundColor: {!! json_encode($chart->colours[3]) !!},
+                            borderColor: {!! json_encode($chart->borderColours[3]) !!},
                             borderWidth: 1,
                             data: {!! json_encode($chart->dataset['Em andamento']) !!}
                         },
@@ -85,6 +88,7 @@
                 },
                 // Configuration options go here
                 options: {
+                    responsive: true,
                     scales: {
                         yAxes: [{
                             ticks: {
@@ -122,10 +126,10 @@
                     title: {
                         display: true,
                         text: 'Atividades nos últimos meses',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontColor: '#122C4B',
                         fontFamily: "'Muli', sans-serif",
-                        padding: 25,
+                        padding: 15,
                     },
 
 
@@ -149,6 +153,7 @@
                     }]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         yAxes: [{
                             ticks: {
@@ -186,10 +191,10 @@
                     title: {
                         display: true,
                         text: 'Alunos ativos por curso',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontColor: '#122C4B',
                         fontFamily: "'Muli', sans-serif",
-                        padding: 25,
+                        padding: 15,
                     },
                 }
             });
@@ -212,6 +217,7 @@
                     }]
                 },
                 options: {
+                    responsive: true,
                     //make it a side bar chart
                     indexAxis: 'x',
                     scales: {
@@ -251,10 +257,10 @@
                     title: {
                         display: true,
                         text: 'Top 10 alunos com mais atividades',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontColor: '#122C4B',
                         fontFamily: "'Muli', sans-serif",
-                        padding: 25,
+                        padding: 15,
                     },
 
 
@@ -278,6 +284,7 @@
                     }]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         yAxes: [{
                             ticks: {
@@ -315,10 +322,10 @@
                     title: {
                         display: true,
                         text: 'Alunos com treinamento concluído',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontColor: '#122C4B',
                         fontFamily: "'Muli', sans-serif",
-                        padding: 25,
+                        padding: 15,
                     },
                 }
             });

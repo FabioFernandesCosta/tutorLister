@@ -100,7 +100,7 @@ class alunosController extends Controller
             ->withInput(Request::all());
         } else {
             $loctoRed;
-            DB::transaction(function () {
+            $result = DB::transaction(function () {
 
                 $usuario = new usuario;
                 //dd($usuario);
@@ -129,9 +129,9 @@ class alunosController extends Controller
                 //Session::flash('message', 'Aluno cadastrado com sucesso!');
                 //dd("test");
                 //dd($loctoRed);
-                return Redirect::to('alunos/' . $usuario->usuario_id);
+                return ('alunos/' . $usuario->usuario_id);
             });
-            return Redirect::to('alunos/');
+            return Redirect::to($result);
         }
 
     }
@@ -219,7 +219,7 @@ class alunosController extends Controller
         } else {
             
             
-            DB::transaction(function () use ($id) {
+            $result = DB::transaction(function () use ($id) {
                 //get a deep copy of usuario and usuario_curso before update
 
                 
@@ -294,9 +294,9 @@ class alunosController extends Controller
                 //Session::flash('message', 'Aluno cadastrado com sucesso!');
                 //dd("test");
                 //dd($loctoRed);
-                return Redirect::to('alunos/' . $usuario->usuario_id);
+                return ('alunos/' . $usuario->usuario_id);
             });
-            return Redirect::to('alunos/');
+            return Redirect::to($result);
         }
     }
 

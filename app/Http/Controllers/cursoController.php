@@ -59,7 +59,7 @@ class cursoController extends Controller
     public function store(Request $request)
     {
         //
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(Request::all(), [
             'nome' => 'required',
             'area_curso' => 'required',
         ]);
@@ -70,12 +70,12 @@ class cursoController extends Controller
                 ->withInput();
         } else {
             $curso = new curso;
-            $curso->nome = $request->nome;
-            $curso->area_curso = $request->area_curso;
+            $curso->nome = Request::get('nome');
+            $curso->area_curso = Request::get('area_curso');
             $curso->save();
 
             Session::flash('message', 'Curso cadastrado com sucesso!');
-            return Redirect::to('cursos');
+            return Redirect::to('cursos/'.$curso->curso_id.'/edit');
         }
     }
 
@@ -114,7 +114,7 @@ class cursoController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(Request::all(), [
             'nome' => 'required',
             'area_curso' => 'required',
         ]);
@@ -124,14 +124,14 @@ class cursoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            DB::transaction(function () use ($request, $id) {
-                $curso = curso::find($id);
-                $curso->nome = $request->nome;
-                $curso->area_curso = $request->area_curso;
-                $curso->save();
-            });
+
+            $curso = curso::find($id);
+            $curso->nome = Request::get('nome');
+            $curso->area_curso = Request::get('area_curso');
+            $curso->save();
+
             Session::flash('message', 'Curso atualizado com sucesso!');
-            return Redirect::to('cursos');
+            return Redirect::to('cursos/' . $id . '/edit');
         }
     }
 

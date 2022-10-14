@@ -100,17 +100,6 @@ class atividadeControler extends Controller
         }
 
 
-        // $data->filter(function ($query) {
-        //     if (Request::get("min") != null) {
-        //         dd(Request::get("min"), $data->where('atividade_id', '=', 1)->get());
-        //         dd(Request::get("min"), $query->where('atividade_id', '=', 1)->get());
-        //         $query->where('atividade.data_atividade', '>=', Request::get("min"));
-        //     }
-        //     if (Request::get("max") != null) {
-        //         $query->where('atividade.data_atividade', '<=', Request::get("max"));
-        //     }
-        // });
-
         return datatables($data)->toJson();
         
         
@@ -183,7 +172,7 @@ class atividadeControler extends Controller
                 ->withInput()
                 ->withErrors($validator);
         } else {
-            DB::transaction(function () {
+            $result = DB::transaction(function () {
                 //informações para registro da atividade em si
                 $atividade = new atividade;
                 $atividade->data_atividade = Request::get('DoneData');
@@ -239,10 +228,10 @@ class atividadeControler extends Controller
                 // redirect
                 Session::flash('message', 'Atividade registrada com successo!');
                 $sucesso = true;
-                return Redirect::to('atividades/' . $atividade->atividade_id);
+                return ('atividades/' . $atividade->atividade_id);
                 
             });
-            return Redirect::to('atividades/');
+            return Redirect::to($result);
         }
         
     }

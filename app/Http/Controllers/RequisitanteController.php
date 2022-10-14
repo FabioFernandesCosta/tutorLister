@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Request;
+use Redirect;
 use App\Models\requisitante;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
@@ -76,21 +77,21 @@ class requisitanteController extends Controller
         $validator = Validator::make(Request::all(), $rules, $messages);
 
         if ($validator->fails()) {
-            return redirect('requisitantes/create')
+            return Redirect::to('requisitantes/create')
                         ->withErrors($validator)
                         ->withInput();
         } else {
-            DB::transaction(function () {
-                $requisitante = new requisitante;
-                $requisitante->empresa = Request::get('empresa');
-                $requisitante->nome = Request::get('nome');
-                $requisitante->email = Request::get('email');
-                $requisitante->telefone = Request::get('telefone');
-                $requisitante->save();
-            });
+
+            $requisitante = new requisitante;
+            $requisitante->empresa = Request::get('empresa');
+            $requisitante->nome = Request::get('nome');
+            $requisitante->email = Request::get('email');
+            $requisitante->telefone = Request::get('telefone');
+            $requisitante->save();
+
 
             // redirect
-            return redirect('requisitantes')->with('message', 'Requisitante cadastrado com sucesso!');
+            return Redirect::to('requisitantes/'.$requisitante->id)->with('message', 'Requisitante cadastrado com sucesso!');
         }
     }
 
@@ -158,7 +159,7 @@ class requisitanteController extends Controller
                 $requisitante->telefone = Request::get('telefone');
                 $requisitante->save();
             });
-            return redirect('requisitantes')->with('message', 'Requisitante atualizado com sucesso!');
+            return Redirect::to('requisitantes/'.$id)->with('message', 'Requisitante atualizado com sucesso!');
         }
 
     }

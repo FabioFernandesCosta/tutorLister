@@ -9,7 +9,7 @@
     <footer class="pageFooterContainer">
 
             <div class="pageFooter">
-                ©2022 Copyright by Fábio Fernandes Costa <br>
+                Developed by Fábio Fernandes Costa <br>
                 From NPI - Núcleo de Práticas em Informática <br>
                 Centro Universitário Filadélfia - UNIFIL
             </div>

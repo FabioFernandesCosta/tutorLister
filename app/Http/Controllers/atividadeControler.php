@@ -537,7 +537,7 @@ class atividadeControler extends Controller
         }else{
 
             //trata cada elemento de $data como uma atividade para salvar no banco
-            DB::transaction(function () use($data) {
+            $result = DB::transaction(function () use($data) {
                 foreach ($data as &$key) {
                     //cria atividade
 
@@ -596,9 +596,10 @@ class atividadeControler extends Controller
                     $historico_controller = new historicoController;
                     $historico_controller->store(["", "Atividade importada", $atv->atividade_id, $user_id, NULL, NULL, 0]);
 
+                    return ('atividades/');
                 }
             });
-            return Redirect::to('atividades');
+            return Redirect::to($result);
         }
     }
 }

@@ -356,7 +356,7 @@ class alunosController extends Controller
         }else{
 
             //trata cada elemento de $data como uma atividade para salvar no banco
-            DB::transaction(function () use($data) {
+            $result = DB::transaction(function () use($data) {
                 foreach ($data as &$key) {
                     //cria aluno
                     $usuario = new usuario;
@@ -380,11 +380,13 @@ class alunosController extends Controller
                     $user_id = $user->usuario_id;
                     
                     $historico_controller = new historicoController;
-                    $historico_controller->store(["", "Aluno importado", $usuario->usuario_id, user_id, NULL, NULL, 1]);
+                    $historico_controller->store(["", "Aluno importado", $usuario->usuario_id, $user_id, NULL, NULL, 1]);
+
+                    return ('alunos/');
                     
                 }
             });
-            return Redirect::to('alunos');
+            return Redirect::to($result);
         }
     }
 }

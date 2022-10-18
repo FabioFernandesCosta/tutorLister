@@ -259,13 +259,18 @@ class atividadeControler extends Controller
                 "atividade.descricao",
                 "atividade.status",
                 DB::raw('group_concat(DISTINCT requisitante.requisitante_id) as requisitante'),
-                DB::raw('group_concat(DISTINCT usuario.nome) as nome'))
+                DB::raw('group_concat(DISTINCT usuario.nome) as nome'),
+                DB::raw('group_concat(DISTINCT usuario.usuario_id) as usId'))
         ->groupBy('atividade.atividade_id')
         ->where('atividade.atividade_id', '=', $id)
         ->get();
         
         $atv[0]->nome = explode(",",$atv[0]->nome);
-        // requisitante::find($atv[0]->requisitante);
+        // add to $atv[0] the id equivalent to the user name
+        $atv[0]->nomeId = explode(",",$atv[0]->usId);
+
+
+
         $atv[0]->requisitante = requisitante::find($atv[0]->requisitante);
 
         return View::make('atividades.show') ->with('atv', $atv);

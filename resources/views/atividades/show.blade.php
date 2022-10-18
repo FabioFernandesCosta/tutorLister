@@ -65,15 +65,13 @@
                             </div>
         
                             @foreach ($atv[0]->nome as $key => $value)
-                            
                             <div id="userContainer">
         
                                 <div class="form-field" id="involv"> <span></span>
-                                    
-                                    <input type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value='{{$value}}'>
-                                    <datalist id="users">
-                                        <option value="(puxar de acordo com usuarios existentes no banco)"></option>
-                                    </datalist>
+                                    {{-- <a> with href = "alunos/{{nomeId}}" --}}
+                                    <a style="text-decoration: none" href={{ url('alunos/' . $atv[0]->nomeId[$key]) }}>
+                                        <input type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value='{{$value}}'>
+                                    </a>
                                 </div>
                             </div>
                             @endforeach

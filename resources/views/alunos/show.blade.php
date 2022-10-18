@@ -177,11 +177,10 @@
                                     searching: false,
                                     paging: false,
                                     info: false,
+                                    responsive: true,
+                                    scrollX: true,
 
-                                    // "createdRow": function(row, data, dataIndex) {
-                                    //     $(row).attr('onclick', 'location.href="{{ URL::to('atividades') }}/' + data
-                                    //         .usuario_id + '";');
-                                    // },
+                                    
                                     //when a row is clicked, redirect to the atividade page using the atividade_id
                                     "createdRow": function(row, data, dataIndex) {
                                         $(row).attr('onclick', 'location.href="{{ URL::to('atividades') }}/' + data

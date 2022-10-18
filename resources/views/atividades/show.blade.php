@@ -34,10 +34,10 @@
 
         {{-- detalhes do selecionado --}}
         <div class="AtvBtns">
-
             <a style="text-decoration: none;" href={{ url('atividades') }}>
                 <button class="dt-button">Voltar</button>
             </a>
+
             <a style="text-decoration: none;" href={{ url('atividades/' . $atv[0]->atividade_id .'/edit') }}>
                 @if ($atv[0]->status == 'Arquivado')
                     <button class="dt-button" disabled>Editar</button>
@@ -67,10 +67,10 @@
                             @foreach ($atv[0]->nome as $key => $value)
                             <div id="userContainer">
         
-                                <div class="form-field" id="involv"> <span></span>
+                                <div style="cursor: pointer" class="form-field" id="involv"> <span></span>
                                     {{-- <a> with href = "alunos/{{nomeId}}" --}}
                                     <a style="text-decoration: none" href={{ url('alunos/' . $atv[0]->nomeId[$key]) }}>
-                                        <input type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value='{{$value}}'>
+                                        <input style="cursor: pointer" type="text" name="InvolvedUsers" id="InvolvedUsers" list="users" readonly value='{{$value}}'>
                                     </a>
                                 </div>
                             </div>
@@ -80,11 +80,11 @@
 
                             <span>Requisitante</span>
                             <div class="form-field" id="req"> <span></span>
+                                {{-- <a> that link to requisitantes/{requisitante_id} --}}
+                                <a style="text-decoration: none" href={{ url('requisitantes/' . $atv[0]->requisitante->requisitante_id) }}>
+                                    <input style="cursor: pointer" type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value={{$atv[0]->requisitante->nome}}>
+                                </a>
                                 
-                                <input type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value={{$atv[0]->requisitante->nome}}>
-                                <datalist id="reqs">
-                                    <option value="(puxar de acordo com dados existentes no banco)"></option>
-                                </datalist>
                             </div>
                         </div>
                     </div>

@@ -50,64 +50,70 @@
             {{ Form::model($atv, ['route' => ['atividades.update', $atv->atividade_id], 'method' => 'PUT', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
 
 
-            {{-- https://stackoverflow.com/questions/35332784/how-to-call-a-controller-function-inside-a-view-in-laravel-5 --}}
-            
-
             <div>
                 <div id="repart2">
                     <div>
 
                         <div style="display: flex;">
-        
+
                             Alunos envolvidos
-                            
+
                         </div>
                         {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
                         <div id="userContainer">
-                            
+
                             @if (null !== old('InvolvedUsers'))
                                 @foreach (old('InvolvedUsers') as $user)
-                                <div style="display: grid; grid-template-columns: 95% auto">
-                                    <div class="form-field" id="involv">
-                                        <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
-                                            list="users" value="{{ $user }}">
-                                        @include('autocomplete', ['campo' => '.usuario'])
+                                    <div style="display: grid; grid-template-columns: 95% auto">
+                                        <div class="form-field" id="involv">
+                                            <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
+                                                list="users" value="{{ $user }}">
+                                            @include('autocomplete', ['campo' => '.usuario'])
+                                        </div>
+                                        <a href="javascript:void(0)" class="add_button" title="add field"><img
+                                                style="margin: auto; margin-top: 0"
+                                                src="{{ url('/image/mais.png') }}" /></a>
                                     </div>
-                                    <a href="javascript:void(0)" class="add_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
-                                </div>
                                 @endforeach
                             @else
                                 @foreach ($atv->usuarios as $key => $value)
-                                <div style="display: grid; grid-template-columns: 95% auto">
-                                    <div class="form-field" id="involv">
-                                        <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
-                                            list="users" value='{{ $value->nome }}'>
-                                        @include('autocomplete', ['campo' => '.usuario'])
+                                    <div style="display: grid; grid-template-columns: 95% auto">
+                                        <div class="form-field" id="involv">
+                                            <input type="text" name="InvolvedUsers[]" id="usuario" class="usuario"
+                                                list="users" value='{{ $value->nome }}'>
+                                            @include('autocomplete', ['campo' => '.usuario'])
+                                        </div>
+                                        <a href="javascript:void(0)" class="add_button" title="add field"><img
+                                                style="margin: auto; margin-top: 0"
+                                                src="{{ url('/image/mais.png') }}" /></a>
                                     </div>
-                                    <a href="javascript:void(0)" class="add_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
-                                </div>
                                 @endforeach
-        
+
                             @endif
                         </div>
                     </div>
                     <div>
 
                         <span>Requisitante</span>
-        
+
                         {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }}
-                        <div style="display: grid; grid-template-columns: 95% auto">
+                        <div style="display: grid; grid-template-columns: auto 5rem">
                             <div class="form-field" id="req"> <span></span>
                                 @if (old('Requisitante') !== null)
-                                    <input type="text" name="Requisitante" id="Requisitante" value="{{ old('Requisitante') }}"
-                                        list="users">
+                                    <input type="text" name="Requisitante" id="Requisitante"
+                                        value="{{ old('Requisitante') }}" list="users">
                                 @else
                                     <input type="text" name="Requisitante" id="Requisitante" list="reqs"
                                         value={{ $atv->requisitante->nome }}>
                                 @endif
                                 @include('autocomplete', ['campo' => '#Requisitante'])
                             </div>
-                            <a target="_blank" href="{{ url('requisitantes/create') }}"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
+                            <button class="dt-button mt-3" type="button" style="margin-bottom: 20px;">
+                                <a style="text-decoration: none; color: black" target="_blank"
+                                    href="http://localhost:8000/requisitantes/create">
+                                    Novo
+                                </a>
+                            </button>
                         </div>
                     </div>
 
@@ -124,9 +130,11 @@
                         {{ Html::ul($errors->get('DoneData'), ['class' => 'ulError']) }}
                         <div class="form-field dth"> <span></span>
                             @if (old('DoneData') !== null)
-                                <input type="date" name="DoneData" id="DoneData" value="{{ old('DoneData') }}" max="{{ date('Y-m-d') }}">
+                                <input type="date" name="DoneData" id="DoneData" value="{{ old('DoneData') }}"
+                                    max="{{ date('Y-m-d') }}">
                             @else
-                                <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }} max="{{ date('Y-m-d') }}">
+                                <input type="date" name="DoneData" id="DoneData" value={{ $atv->data_atividade }}
+                                    max="{{ date('Y-m-d') }}">
                             @endif
                         </div>
                     </div>
@@ -194,14 +202,15 @@
 
                 <div>
 
-                    <a onclick="return confirm('Cancelar edição?')" href="{{ url('atividades/' . $atv->atividade_id) }}">
+                    <a onclick="return confirm('Cancelar edição?')"
+                        href="{{ url('atividades/' . $atv->atividade_id) }}">
                         <button type="button" class="btn dt-button outline-btn"
                             style="margin-top: 45px;">Cancelar</button>
                     </a>
                 </div>
                 <div class="btn-right">
 
-                    {{ Form::submit('Salvar', ['class' => 'btn mt-3 dt-button', 'style' => 'margin-top: 45px',  'onclick'=>"return confirm('Confirmar edição?');"]) }}
+                    {{ Form::submit('Salvar', ['class' => 'btn mt-3 dt-button', 'style' => 'margin-top: 45px', 'onclick' => "return confirm('Confirmar edição?');"]) }}
 
                 </div>
             </div>
@@ -215,24 +224,26 @@
     @include('footer')
 </body>
 <script>
-        
-
     $(document).ready(function() {
         var maxfields = 10;
         var wrapper = $("#userContainer");
         var add_button = $(".add_button");
 
         var x = 1;
-        var userInput = `<input type="text" class="usuario" required='required' name="InvolvedUsers[0]" id="usuario" list="users">`;
-        
+        var userInput =
+            `<input type="text" class="usuario" required='required' name="InvolvedUsers[0]" id="usuario" list="users">`;
+
         $(add_button).click(function() {
             typeaheadInit();
             if (x < maxfields) {
                 x++;
-                var involvHTML = `<div style="display: grid; grid-template-columns: 95% auto"><div class="form-field form-field-little" id="involv`+ x + `"> </div> <a href="javascript:void(0)" class="rmv_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{url('/image/menos.png')}}" /></a> </div>`;
+                var involvHTML =
+                    `<div style="display: grid; grid-template-columns: 95% auto"><div class="form-field form-field-little" id="involv` +
+                    x +
+                    `"> </div> <a href="javascript:void(0)" class="rmv_button" title="add field"><img style="margin: auto; margin-top: 0" src="{{ url('/image/menos.png') }}" /></a> </div>`;
                 //$(wrapper).append(involvHTML);
                 $(involvHTML).appendTo(wrapper);
-                $(userInput).appendTo("#involv"+x).typeahead({
+                $(userInput).appendTo("#involv" + x).typeahead({
                     source: function(query, process) {
                         return $.get('/consultar', {
                             term: ".usuario_" + query
@@ -254,5 +265,6 @@
 
     });
 </script>
+
 </html>>
 {{-- https://stackoverflow.com/questions/44517785/php-laravel-html-forms-array-of-values --}}

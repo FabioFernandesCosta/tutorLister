@@ -153,7 +153,26 @@ class alunosController extends Controller
         $usuario->ativo = $usuario->ativo == 1 ? 'Sim' : 'Não';
         $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
         $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'Sim' : 'Não';
-        return (View::make('alunos.show')->with('aluno', $usuario));
+
+
+        return (
+            View::make('alunos.show')
+            ->with('aluno', $usuario)
+        );
+    }
+
+    public function atvsUser($id){
+
+        $atv = (DB::table('usuario_atividade')
+        //only first 25 characters from atividade.descricao
+        ->select(DB::raw('SUBSTRING(atividade.descricao, 1, 45) as descricao'), 'atividade.data_atividade', 'atividade.hora_atividade', 'atividade.atividade_id')
+        ->join('atividade', 'usuario_atividade.atividade_id', '=', 'atividade.atividade_id')
+        ->where('usuario_atividade.usuario_id', $id)
+        ->orderBy('atividade.data_atividade', 'desc')
+        ->take(17));
+
+        $atv = datatables($atv)->toJson();
+        return $atv;
     }
 
     /**

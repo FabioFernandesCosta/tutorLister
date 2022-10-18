@@ -120,6 +120,7 @@ Route::group( ['middleware' => 'auth' ], function() {
     Route::get('atividades/{id}/historico', [historicoController::class, 'show']);
     //historicoUser
     Route::get('alunos/{id}/historicoUser', [historicoController::class, 'showUser']);
+    Route::get('alunos/{id}/atividades', [alunosController::class, 'atvsUser']);
 
 
     Route::get('cursos/getdata', [cursoController::class, 'getdata']);

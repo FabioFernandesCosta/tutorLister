@@ -66,19 +66,20 @@
         
                         </div>
     
-                    <div>
-                        <span>Requisitante</span>
-                        {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }}
-                        <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="text" value="{{ old('Requisitante') }}" name="Requisitante"
-                                required='required' id="Requisitante" list="reqs">
+                        <div >
+                            <span>Requisitante</span>
+                            {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }}
+                            <div style="display: grid; grid-template-columns: 95% auto">
+
+                                <div class="form-field form-field-little" id="req"> <span></span>
+                                    <input type="text" value="{{ old('Requisitante') }}" name="Requisitante"
+                                        required='required' id="Requisitante" list="reqs">
+                                </div>
+                                <a target="_blank" href="{{ url('requisitantes/create') }}"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
+                            </div>
                         </div>
-    
-    
-    
-    
-    
-                    </div>
+                        {{-- <a> href new requisitante --}}
+                        
                 </div>
 
                 <div id="repart3">

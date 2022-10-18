@@ -60,14 +60,7 @@
                         <div style="display: flex;">
         
                             Alunos envolvidos
-                              
-                            <a href=""> +</a>
-                             
-                            <a href="">-</a>
-                            {{-- <button type="button" onclick="addField()" class="miniBtn"
-                                style="margin-top: 0; margin-left:5px; height:20px">add</button><button type="button"
-                                onclick="rmvField()" class="miniBtn" style="margin-top: 0;height:20px">rmv</button> --}}
-        
+                            
                         </div>
                         {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
                         <div id="userContainer">
@@ -103,15 +96,18 @@
                         <span>Requisitante</span>
         
                         {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }}
-                        <div class="form-field" id="req"> <span></span>
-                            @if (old('Requisitante') !== null)
-                                <input type="text" name="Requisitante" id="Requisitante" value="{{ old('Requisitante') }}"
-                                    list="users">
-                            @else
-                                <input type="text" name="Requisitante" id="Requisitante" list="reqs"
-                                    value={{ $atv->requisitante->nome }}>
-                            @endif
-                            @include('autocomplete', ['campo' => '#Requisitante'])
+                        <div style="display: grid; grid-template-columns: 95% auto">
+                            <div class="form-field" id="req"> <span></span>
+                                @if (old('Requisitante') !== null)
+                                    <input type="text" name="Requisitante" id="Requisitante" value="{{ old('Requisitante') }}"
+                                        list="users">
+                                @else
+                                    <input type="text" name="Requisitante" id="Requisitante" list="reqs"
+                                        value={{ $atv->requisitante->nome }}>
+                                @endif
+                                @include('autocomplete', ['campo' => '#Requisitante'])
+                            </div>
+                            <a target="_blank" href="{{ url('requisitantes/create') }}"><img style="margin: auto; margin-top: 0" src="{{url('/image/mais.png')}}" /></a>
                         </div>
                     </div>
 

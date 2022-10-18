@@ -180,8 +180,6 @@
                                     responsive: true,
                                     scrollX: true,
 
-                                    
-                                    //when a row is clicked, redirect to the atividade page using the atividade_id
                                     "createdRow": function(row, data, dataIndex) {
                                         $(row).attr('onclick', 'location.href="{{ URL::to('atividades') }}/' + data
                                             .atividade_id + '";');

@@ -160,11 +160,7 @@ class DashboardController extends Controller
         $AlunosTreinoConcluidoChart->colours = $backgroundColours;
         $AlunosTreinoConcluidoChart->borderColours = $borderColours;
 
-        //dd($AlunosTreinoConcluidoChart);
 
-        
-
-        
         return view('dashboard')
         ->with('chart', $chart)
         ->with('AlunosCursosChart', $AlunosCursosChart)

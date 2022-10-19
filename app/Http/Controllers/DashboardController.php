@@ -19,29 +19,65 @@ class DashboardController extends Controller
     public function index()
     {
         //get atividades grouped by data_realizacao last 13 months and year
-        $atividades = atividade::selectRaw('concat(month(data_atividade), year(data_atividade)) as mes, count(*) as total')
+        $atividades = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
-
-        $atividadesAbertas = atividade::selectRaw('concat(month(data_atividade), year(data_atividade)) as mes, count(*) as total')
+            
+        $atividadesAbertas = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
             ->where('status', 'Aberto')
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
-        $atividadesEmAndamento = atividade::selectRaw('concat(month(data_atividade), year(data_atividade)) as mes, count(*) as total')
+        $atividadesEmAndamento = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
             ->where('status', 'Em andamento')
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
-        $atividadesFechadas = atividade::selectRaw('concat(month(data_atividade), year(data_atividade)) as mes, count(*) as total')
+        $atividadesFechadas = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
             ->where('status', 'Fechado')
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
+        $atividadesCanceladas = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
+            ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
+            ->where('status', 'Cancelado')
+            ->groupBy('mes')
+            ->pluck('total', 'mes')->all();
+
+        //add a 0 to the beginning of the array key name if it has less than 6 characters	
+
+
+
+        //insert into all arrays above the empty months
+        for ($i = 0; $i < 13; $i++) {
+            $mes = date('Ym', strtotime('-' . $i . ' months'));
+            if (!isset($atividades[$mes])) {
+                $atividades[$mes] = 0;
+            }
+            if (!isset($atividadesAbertas[$mes])) {
+                $atividadesAbertas[$mes] = 0;
+            }
+            if (!isset($atividadesEmAndamento[$mes])) {
+                $atividadesEmAndamento[$mes] = 0;
+            }
+            if (!isset($atividadesFechadas[$mes])) {
+                $atividadesFechadas[$mes] = 0;
+            }
+            if (!isset($atividadesCanceladas[$mes])) {
+                $atividadesCanceladas[$mes] = 0;
+            }
+        }
+        //reorder the arrays by key in a way that 102022 > 012022 > 122021
+
+        ksort($atividades);
+        ksort($atividadesAbertas);
+        ksort($atividadesEmAndamento);
+        ksort($atividadesFechadas);
+        ksort($atividadesCanceladas);
 
         // Generate random colours for the groups
         $backgroundColours = [];
@@ -76,37 +112,40 @@ class DashboardController extends Controller
         $chart->labels = (array_keys($atividades));
 
         $meses = array(
-            1 => 'Janeiro',
-            2 => 'Fevereiro',
-            3 => 'Março',
-            4 => 'Abril',
-            5 => 'Maio',
-            6 => 'Junho',
-            7 => 'Julho',
-            8 => 'Agosto',
-            9 => 'Setembro',
-            10 => 'Outubro',
-            11 => 'Novembro',
-            12 => 'Dezembro',
+            '01' => 'Janeiro',
+            '02' => 'Fevereiro',
+            '03' => 'Março',
+            '04' => 'Abril',
+            '05' => 'Maio',
+            '06' => 'Junho',
+            '07' => 'Julho',
+            '08' => 'Agosto',
+            '09' => 'Setembro',
+            '10' => 'Outubro',
+            '11' => 'Novembro',
+            '12' => 'Dezembro',
         );
+        // dd($atividadesCanceladas[102022]);
 
         //label chart with mes name (atvChart)
         $chart->labels = array_map(function ($mes) use ($meses) {
-            //split mes last 4 chars = year and first 2 or 1 chars = month
-            $mes = substr($mes, -4) . '-' . substr($mes, 0, -4);
-            $mes = date('Y-m', strtotime($mes));
-            return $meses[date('n', strtotime($mes))] . ' ' . date('Y', strtotime($mes));
+            //split mes first 4 chars = year and last 2 chars = month (example: 102022 is understand as outubro 2022)
+            $year = substr($mes, 0, 4);
+            $month = substr($mes, 4, 2);
+            return $meses[$month] . ' ' . $year;
         }, $chart->labels);
+
+        //$atividades keys are equal numeric monthYear (example 62022 or 102022) convert it to be only the month
 
         $chart->dataset = [
             'Total' => array_values($atividades),
             'Abertas' => array_values($atividadesAbertas),
             'Em andamento' => array_values($atividadesEmAndamento),
             'Fechadas' => array_values($atividadesFechadas),
+            'Canceladas' => array_values($atividadesCanceladas),
         ];
         $chart->colours = $backgroundColours;
         $chart->borderColours = $borderColours;
-
 
         //alunos (usuario) grouped by curso.nome
         $alunosCursos = usuario::selectRaw('curso.nome as curso, count(*) as total')

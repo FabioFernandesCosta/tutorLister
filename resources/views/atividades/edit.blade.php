@@ -170,15 +170,24 @@
                                     <option value="Aberto" selected>Aberto</option>
                                     <option value="Em andamento">Em andamento</option>
                                     <option value="Fechado">Fechado</option>
+                                    <option value="Cancelado">Cancelado</option>
                                 @elseif($atv->status == 'Em andamento')
                                     <option value="Aberto">Aberto</option>
                                     <option value="Em andamento" selected>Em andamento</option>
                                     <option value="Fechado">Fechado</option>
+                                    <option value="Cancelado">Cancelado</option>
                                 @elseif($atv->status == 'Fechado')
                                     <option value="Aberto">Aberto</option>
                                     <option value="Em andamento">Em andamento</option>
                                     <option value="Fechado" selected>Fechado</option>
                                     <option value="Arquivado">Arquivado</option>
+                                    <option value="Cancelado">Cancelado</option>
+                                @elseif($atv->status == 'Cancelado')
+                                    <option value="Aberto">Aberto</option>
+                                    <option value="Em andamento">Em andamento</option>
+                                    <option value="Fechado">Fechado</option>
+                                    <option value="Arquivado">Arquivado</option>
+                                    <option value="Cancelado" selected>Cancelado</option>
                                 @endif
                             </select>
                         </div>

@@ -161,6 +161,7 @@ class atividadeControler extends Controller
             'Donehour.required' => 'O campo Hora da atividade é obrigatorio',
             'CargaHoraria.required' => 'O campo Carga horária é obrigatorio',
             'descricao.required' => 'O campo Descrição é obrigatorio',
+            'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado'
         );
         $validator = Validator::make(Request::all(), $rules, $mensagens);
         // validate
@@ -326,6 +327,7 @@ class atividadeControler extends Controller
                     'CargaHoraria' => 'required',
                     'descricao' => 'required',
                     'Requisitante' => 'required|exists:requisitante,nome',
+                    'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado'
                 );
                 $mensagens = array(
                     'Requisitante.exists' => 'O valor no campo Requsitante é invalido',

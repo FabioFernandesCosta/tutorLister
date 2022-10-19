@@ -66,22 +66,33 @@
                             backgroundColor: {!! json_encode($chart->colours[1]) !!},
                             borderColor: {!! json_encode($chart->borderColours[1]) !!},
                             borderWidth: 1,
-                            data: {!! json_encode($chart->dataset['Abertas']) !!}
+                            data: {!! json_encode($chart->dataset['Abertas']) !!},
+                            hidden: true,
                         },
                         {
                             label: 'atividades fechadas',
                             backgroundColor: {!! json_encode($chart->colours[2]) !!},
                             borderColor: {!! json_encode($chart->borderColours[2]) !!},
                             borderWidth: 1,
-                            data: {!! json_encode($chart->dataset['Fechadas']) !!}
+                            data: {!! json_encode($chart->dataset['Fechadas']) !!},
+                            hidden: true,
                         },
                         {
                             label: 'atividades em andamento',
                             backgroundColor: {!! json_encode($chart->colours[3]) !!},
                             borderColor: {!! json_encode($chart->borderColours[3]) !!},
                             borderWidth: 1,
-                            data: {!! json_encode($chart->dataset['Em andamento']) !!}
+                            data: {!! json_encode($chart->dataset['Em andamento']) !!},
+                            hidden: true,
                         },
+                        {
+                            label: 'atividades canceladas',
+                            backgroundColor: {!! json_encode($chart->colours[4]) !!},
+                            borderColor: {!! json_encode($chart->borderColours[4]) !!},
+                            borderWidth: 1,
+                            data: {!! json_encode($chart->dataset['Canceladas']) !!},
+                            hidden: true,
+                        }
 
 
                     ]

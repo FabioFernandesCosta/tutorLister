@@ -19,7 +19,7 @@
 
 
         <h1>Editar Curso: {{ $curso->nome }}</h1>
-        <h3>ID-{{ $curso->usuario_id }}</h3>
+        <h3>ID-{{ $curso->curso_id }}</h3>
 
 
 

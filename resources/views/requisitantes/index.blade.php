@@ -84,7 +84,7 @@
                         {{-- list of returned columns = ['requisitante_id', 'nome', 'email', 'telefone', 'empresa'] --}}
                         <th>ID</th>
                         <th>Nome</th>
-                        <th>Email</th>
+                        <th>E-mail</th>
                         <th>Telefone</th>
                         <th>Empresa</th>
                     </tr>

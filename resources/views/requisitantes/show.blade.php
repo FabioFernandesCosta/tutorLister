@@ -74,7 +74,7 @@
                             
                         </div>
                         <div id="userContainer">
-                            Email
+                            E-mail
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 <input readonly type="email" value="{{ $requisitante->email }}" name="email"  id="email">
                             </div>

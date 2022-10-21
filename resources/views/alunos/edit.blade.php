@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Atividade ID-{{ $aluno->usuario_id }} - TutorLister</title>
+    <title>Aluno ID-{{ $aluno->usuario_id }} - TutorLister</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
     <style>

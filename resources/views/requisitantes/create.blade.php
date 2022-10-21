@@ -75,7 +75,7 @@
 
                     </div>
                     <div id="userContainer">
-                        Email
+                        E-mail
                         {{ Html::ul($errors->get('email'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-little" id="req"> <span></span>
                             <input type="email" value="{{ old('email') }}" name="email" required='required'

@@ -118,10 +118,10 @@
                     <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
                         <tbody>
                             <tr>
-                                <td>Data minima:</td>
+                                <td>Data mínima:</td>
                                 <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="min"
                                         name="min"></td>
-                                <td>Data maxima:</td>
+                                <td>Data máxima:</td>
                                 <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="max"
                                         name="max"></td>
                             </tr>

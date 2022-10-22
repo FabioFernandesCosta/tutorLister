@@ -141,6 +141,17 @@
                         $(row).attr('onclick', 'location.href="{{ URL::to('alunos') }}/' + data
                             .usuario_id + '";');
                     },
+                    //where ativo = 1 change to "Sim" and ativo = 0 change to "Não"
+                    "columnDefs": [{
+                        "render": function(data, type, row) {
+                            if (data == 1) {
+                                return "Sim";
+                            } else {
+                                return "Não";
+                            }
+                        },
+                        "targets": 4
+                    }],
 
                     "processing": true,
                     "serverSide": true,

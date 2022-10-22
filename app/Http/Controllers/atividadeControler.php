@@ -143,6 +143,7 @@ class atividadeControler extends Controller
     {
         $sucesso = false;
         
+        
             //code...
         
         $rules = array(
@@ -187,6 +188,7 @@ class atividadeControler extends Controller
 
                 //procura pelos usuarios no banco e se existirem cria a relação com a atividade
                 $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
+                
                 foreach ($invUs as &$key) {
                     $usuario = '';
                     $usuario = DB::table("usuario")

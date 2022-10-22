@@ -25,7 +25,7 @@
     </div>
     <div class="wrapAll">
         <span id="pageTitle">
-            Importar
+            Importar atividades
         </span>
 
         <div class="tableContainer">

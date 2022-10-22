@@ -177,7 +177,6 @@
                                     searching: false,
                                     paging: false,
                                     info: false,
-                                    responsive: true,
                                     scrollX: true,
 
                                     "language": {

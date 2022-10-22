@@ -102,7 +102,7 @@
                         
                         
                         <div class="form-field" id="req"> <span></span>
-                            <input type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value={{implode(" / ",[$atv[0]->requisitante->telefone,$atv[0]->requisitante->email])}}>
+                            <input type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value="{{implode(" / ",[$atv[0]->requisitante->telefone,$atv[0]->requisitante->email])}}">
                             <datalist id="reqs">
                                 <option value="(puxar de acordo com dados existentes no banco)"></option>
                             </datalist>

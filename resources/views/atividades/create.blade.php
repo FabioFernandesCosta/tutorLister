@@ -49,7 +49,7 @@
 
                                     <div class="form-field form-field-little" id="involv">
                                         <input type="text" class="usuario" required='required'
-                                            name="InvolvedUsers[0]" value="{{ $user }}" id="usuario"
+                                            name="InvolvedUsers[]" value="{{ $user }}" id="usuario"
                                             list="users">
                                     </div>
                                     <a href="javascript:void(0)" class="add_button" title="add field"><img
@@ -60,7 +60,7 @@
                         @else
                             <div style="display: grid; grid-template-columns: 95% auto">
                                 <div class="form-field form-field-little" id="involv">
-                                    <input type="text" class="usuario" required='required' name="InvolvedUsers[0]"
+                                    <input type="text" class="usuario" required='required' name="InvolvedUsers[]"
                                         value="{{ old('InvolvedUsers.0') }}" id="usuario" list="users">
                                 </div>
                                 <a href="javascript:void(0)" class="add_button" style="margin-bottom: 20px; margin-top: 5px;" title="add field">
@@ -180,7 +180,7 @@
 
         var x = 1;
         var userInput =
-            `<input type="text" class="usuario" required='required' name="InvolvedUsers[0]" id="usuario" list="users">`;
+            `<input type="text" class="usuario" required='required' name="InvolvedUsers[]" id="usuario" list="users">`;
 
         $(add_button).click(function() {
             typeaheadInit();

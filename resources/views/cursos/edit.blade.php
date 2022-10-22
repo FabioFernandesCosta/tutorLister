@@ -63,7 +63,7 @@
 
                 <div>
 
-                    <a onclick="return confirm('Cancelar edição?')" href="{{ url('cursos/' . $curso->curso_id) }}">
+                    <a onclick="return confirm('Cancelar edição?')" href="{{ url('cursos/') }}">
                         <button type="button" class="btn dt-button outline-btn"
                             style="margin-top: 45px;">Cancelar</button>
                     </a>

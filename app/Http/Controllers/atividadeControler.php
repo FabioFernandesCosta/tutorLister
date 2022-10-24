@@ -21,7 +21,7 @@ use DateTime;
 use Illuminate\Support\Facades\Auth;
 
 
-
+// Classe de controle de atividades
 class atividadeControler extends Controller
 {
     /**
@@ -38,12 +38,11 @@ class atividadeControler extends Controller
     {
         $search = str_replace(['.', '#'], '' , explode('_', Request::get('term')));
         $result = DB::table(strtolower($search[0]))->where('nome', 'LIKE', '%'. $search[1]. '%')->pluck('nome');
-        //dd(response()->json($result));
- 
         return response()->json($result);
             
     }
 
+    // retorna as atividades em formato json para serem usadas no datatables
     public function getData(Request $request){
         
         $data = ((
@@ -66,43 +65,28 @@ class atividadeControler extends Controller
                     ->addSelect(DB::raw("group_concat(usuario.nome) as nomeUs"))
             
         ));
-        // dd($data->first(), Request::get("min"));
-        //dd(gettype(Request::get("min")), Request::get("min"));
         $min = strtotime(Request::get("min"));
         $max = strtotime(Request::get("max"));
         
         
-        //dd([$min, $max], DB::table('atividade')->select(DB::raw("data_atividade"))->first());
-        
-        //if (min not null and max null) { where data_atividade >= min}
         if ($min != null && $max == null) {
-            //$min = date('d/m/Y', strtotime(Request::get("min")));
             $min = date("Y-m-d", ($min) );
-            //dd($min);
-            //$data = $data->where('atividade.data_atividade', '>=', $min);
-            //$data = $data->DB::raw("where atividade.data_atividade >= $min");
             $data = $data->whereRaw (("DATE(atividade.data_atividade) >= '".($min)."'"));
         }
 
-        //if (min null and max not null) { where data_atividade <= max}
         elseif ($min == null && $max != null) {
             $max = date("Y-m-d", ($max) );
-            //$data = $data->where('atividade.data_atividade', '<=', $max);
             $data = $data->whereRaw (("DATE(atividade.data_atividade) <= '".($max)."'"));
         }
 
-        //if (min not null and max not null) { where data_atividade between min and max}
         elseif ($min != null && $max != null) {
             $min = date("Y-m-d", ($min) );
             $max = date("Y-m-d", ($max) );
-            //data whereRaw between min and max
             $data = $data->whereRaw (("DATE(atividade.data_atividade) between '".($min)."' and '".($max)."'"));
         }
 
 
         return datatables($data)->toJson();
-        
-        
     }
 
     function array_contains($str, array $arr){
@@ -141,11 +125,6 @@ class atividadeControler extends Controller
      */
     public function store(Request $request)
     {
-        $sucesso = false;
-        
-        
-            //code...
-        
         $rules = array(
             'InvolvedUsers' => 'required|exists:usuario,nome',
             'DoneData' => 'required|before:tomorrow',
@@ -165,17 +144,13 @@ class atividadeControler extends Controller
             'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado'
         );
         $validator = Validator::make(Request::all(), $rules, $mensagens);
-        // validate
-        // read more on validation at http://laravel.com/docs/validation
         
-        // process the login
         if ($validator->fails()) {
             return back()
                 ->withInput()
                 ->withErrors($validator);
         } else {
             $result = DB::transaction(function () {
-                //informações para registro da atividade em si
                 $atividade = new atividade;
                 $atividade->data_atividade = Request::get('DoneData');
                 $atividade->hora_atividade = Request::get('DoneHour');
@@ -186,8 +161,8 @@ class atividadeControler extends Controller
                 $atividade->status = Request::get('status');
                 $atividade->save();
 
-                //procura pelos usuarios no banco e se existirem cria a relação com a atividade
-                $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
+                
+                $invUs = Request::get('InvolvedUsers'); 
                 
                 foreach ($invUs as &$key) {
                     $usuario = '';
@@ -201,9 +176,6 @@ class atividadeControler extends Controller
                         $us_atv->atividade_id = $atividade->atividade_id;
                     
                         
-                    }else{
-                        dd($usuario[0]->nome, $key);
-                        dd("error, 111");
                     }
                     $us_atv->save();
                 }
@@ -217,8 +189,6 @@ class atividadeControler extends Controller
                     $atv_req = new atividade_requisitante;
                     $atv_req->requisitante_id = $requisitante[0]->requisitante_id;
                     $atv_req->atividade_id = $atividade->atividade_id;
-                }else{
-                    dd("error, 111");
                 }
                 $atv_req->save();
 
@@ -228,9 +198,7 @@ class atividadeControler extends Controller
                 $historico_controller = new historicoController;
                 $historico_controller->store(["", "criar atividade", $atividade->atividade_id, $user_id, NULL, NULL, 0]);
 
-                // redirect
                 Session::flash('message', 'Atividade registrada com successo!');
-                $sucesso = true;
                 return ('atividades/' . $atividade->atividade_id);
                 
             });
@@ -247,7 +215,6 @@ class atividadeControler extends Controller
      */
     public function show($id)
     {
-        //
         $atv = DB::table('atividade')
         ->join('usuario_atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
         ->join('usuario','usuario_atividade.usuario_id', '=', 'usuario.usuario_id')
@@ -302,7 +269,6 @@ class atividadeControler extends Controller
             array_push($arr, $us[0]);
         }
         $atv->usuarios = $arr;
-        //dd($atv->usuarios[0][0]->nome);
 
         return View::make('atividades.edit')->with('atv',$atv);
     }
@@ -316,11 +282,6 @@ class atividadeControler extends Controller
      */
     public function update($id)
     {
-        
-        //
-
-         // validate
-                // read more on validation at http://laravel.com/docs/validation
                 
                 $rules = array(
                     'InvolvedUsers' => 'required|exists:usuario,nome',
@@ -391,8 +352,7 @@ class atividadeControler extends Controller
                         $atv->descricao = Request::get('descricao');
                         $atv->status = Request::get('status');
                         $atv->save();
-                        //procura pelos usuarios no banco e se existirem cria a relação com a atividade
-                        $invUs = Request::get('InvolvedUsers'); //pega lista de nomes dos usuario envolvidos
+                        $invUs = Request::get('InvolvedUsers'); 
                         $ind = 0;
                         
                         DB::table("usuario_atividade")
@@ -406,7 +366,6 @@ class atividadeControler extends Controller
                             ->get();
                             
                             
-                            //dd($atv->atividade_id, $usuario[0]->usuario_id);
                             if (strtolower($usuario[0]->nome)== strtolower($key)) {
                                 $us_atv = new usuario_atividade;
                                 $us_atv->usuario_id = $usuario[0]->usuario_id;
@@ -416,9 +375,6 @@ class atividadeControler extends Controller
                                 
                                 
                                 $us_atv->save();
-                            }else{
-                                dd($usuario[0]->nome, $key);
-                                dd("error, 111");
                             }
                             $ind += 1;
                         }
@@ -439,23 +395,17 @@ class atividadeControler extends Controller
                         if (strtolower($requisitante->nome) == strtolower($req)) {
                             $atv_req = atividade_requisitante::where("atividade_id", "=", $atv->atividade_id)
                             ->first();
-                            //dd($atv_req);
                             $atv_req->requisitante_id = $requisitante->requisitante_id;
                             $atv_req->atividade_id = $atv->atividade_id;
-                        }else{
-                            dd("error, 111");
                         }
 
                         $atv_req->save();
-
-                        //get id of the user who made the change (the user who is logged in)
                         $user = Auth::user();
                         $user_id = $user->usuario_id;
 
                         $historico_controller = new historicoController;
                         $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),0]);
 
-                        // redirect
                         Session::flash('message', 'Atividade registrada com successo!');
                     });
                     return Redirect::to('atividades/'.$id);
@@ -469,10 +419,6 @@ class atividadeControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
 
     
     public function export(Request $request){
@@ -481,25 +427,18 @@ class atividadeControler extends Controller
 
 
     public function import_atv(Request $request){
-
-        //save into database the arrays (0 to 6) that comes from Request
         $data = Request::all();
         
-        
-        //transpoe $data
-        //dd($data);
         $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
 
         
         foreach ($data as &$key){
-            //format key 3 from dd/mm/yyyy to yyyy-mm-dd
             if ($key[3] == null or str_contains($key[3], '/')) {
                 $key[3] = str_replace('/', '-', $key[3]);
                 $key[3] = date("Y-m-d", strtotime($key[3]));
             }else{
                 $key[3] = 'nad';
             }
-            //change formated_date from dd-mm-yyyy to yyyy-mm-dd
 
             if ($key[4] == null or str_contains($key[4], ':')) {
                 $key[4] = date("H:i:s", strtotime($key[4]));
@@ -509,11 +448,9 @@ class atividadeControler extends Controller
 
             if ($key[5] == null or str_contains($key[5], ':')) {
                 $key[5] = date("H:i:s", strtotime($key[5]));
-                //dd($key[5]);
             }
         }
         
-        //laravel validator rules if $formated_date is a valid date in the format yyyy-mm-dd
         $rules = array(
             '*.0' => 'required|string|max:255',
             '*.1' => 'required|string|max:255',
@@ -525,7 +462,6 @@ class atividadeControler extends Controller
             '*.6' => 'nullable|string',
         );
 
-        //laravel validator messages
         $messages = array(
             '*.0.required' => 'O campo "Descrição" é obrigatório.',
             '*.1.required' => 'O campo "Usuarios envolvidos" é obrigatório.',
@@ -537,8 +473,6 @@ class atividadeControler extends Controller
 
 
         $validator = Validator::make($data, $rules, $messages);
-        //dd($validator->errors(), $data);
-        //if validator fails, redirect to the same page with the errors
         if ($validator->fails()) {
             return Redirect::to('atividades/import')
             ->withErrors($validator)
@@ -549,9 +483,6 @@ class atividadeControler extends Controller
             $result = DB::transaction(function () use($data) {
                 foreach ($data as &$key) {
                     //cria atividade
-
-                    
-
                     $atv = new atividade;
                     $atv->descricao = $key[0];
                     $atv->data_atividade = $key[3];
@@ -577,9 +508,6 @@ class atividadeControler extends Controller
                             $us_atv->usuario_id = $usuario[0]->usuario_id;
                             $us_atv->atividade_id = $atv->atividade_id;
                             $us_atv->save();
-                        }else{
-                            dd($usuario[0]->nome, $keyy);
-                            dd("error, 111");
                         }
                         $ind += 1;
                     }
@@ -589,13 +517,10 @@ class atividadeControler extends Controller
                     ->where("nome", "=", $req)
                     ->first();
 
-                    //dd($req);
                     if (strtolower($requisitante->nome) == strtolower($req)) {
                         $atv_req = new atividade_requisitante;
                         $atv_req->requisitante_id = $requisitante->requisitante_id;
                         $atv_req->atividade_id = $atv->atividade_id;
-                    }else{
-                        dd("error, 111");
                     }
                     $atv_req->save();
                     

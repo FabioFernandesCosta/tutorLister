@@ -42,7 +42,6 @@ class requisitanteController extends Controller
 
     public function consultar(Request $request){
 
-        // dd($search);
         $search = str_replace(['.', '#'], '' , explode('_', Request::get('term')));
         // $result = DB::table('requisitante')->where('empresa', 'LIKE', '%'. $search[1]. '%')->pluck('empresa');
         // same as above buut with distinct

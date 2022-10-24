@@ -46,18 +46,13 @@ class sistemaPontoController extends Controller
         $max = strtotime(Request::get("max"));
 
         if ($min != null && $max == null) {
-            //$min = date('d/m/Y', strtotime(Request::get("min")));
             $min = date("Y-m-d", ($min) );
-            //dd($min);
-            //$data = $data->where('atividade.data_atividade', '>=', $min);
-            //$data = $data->DB::raw("where atividade.data_atividade >= $min");
            $horario =$horario->whereRaw (("DATE(horario.dia) >= '".($min)."'"));
         }
 
         //if (min null and max not null) { where data_atividade <= max}
         elseif ($min == null && $max != null) {
             $max = date("Y-m-d", ($max) );
-            //$data = $data->where('atividade.data_atividade', '<=', $max);
            $horario =$horario->whereRaw (("DATE(horario.dia) <= '".($max)."'"));
         }
 
@@ -65,7 +60,6 @@ class sistemaPontoController extends Controller
         elseif ($min != null && $max != null) {
             $min = date("Y-m-d", ($min) );
             $max = date("Y-m-d", ($max) );
-            //data whereRaw between min and max
            $horario =$horario->whereRaw(("DATE(horario.dia) between '".($min)."' and '".($max)."'"));
         }
 
@@ -92,7 +86,6 @@ class sistemaPontoController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(Request::all());
         
         //if the newest horario in DB from the user is a null hora_fim, then edit its hora fim to the Request hora, else create a new horario
         $user = usuario::find(auth()->user()->usuario_id);
@@ -105,17 +98,13 @@ class sistemaPontoController extends Controller
             $horario->save();
         }else{
             $horario = new horario();
-            // $horario->hora_inicio = Request::input('hora');
-            //get current day from server
             $horario->dia = date('Y-m-d');
-            //get current time from server
             $datetime = new \DateTime();
             $datetime->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
             $horario->hora_inicio = $datetime->format('H:i:s');
             $horario->usuario_id = $user->usuario_id;
             $horario->save();
         }
-        //redirect to same url
         return redirect()->back();
     }
 

@@ -18,7 +18,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //get atividades grouped by data_realizacao last 13 months and year
         $atividades = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
             ->groupBy('mes')
@@ -71,7 +70,6 @@ class DashboardController extends Controller
                 $atividadesCanceladas[$mes] = 0;
             }
         }
-        //reorder the arrays by key in a way that 102022 > 012022 > 122021
 
         ksort($atividades);
         ksort($atividadesAbertas);
@@ -125,7 +123,6 @@ class DashboardController extends Controller
             '11' => 'Novembro',
             '12' => 'Dezembro',
         );
-        // dd($atividadesCanceladas[102022]);
 
         //label chart with mes name (atvChart)
         $chart->labels = array_map(function ($mes) use ($meses) {

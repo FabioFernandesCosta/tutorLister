@@ -141,29 +141,15 @@ class cursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //não precisa
-    }
+    
 
     public function import_cursos(Request $request){
-        //save into database the arrays (0 to 6) that comes from Request
         $data = Request::all();
-        
-        
-        //transpoe $data
-        //dd($data);
-        //[nome, curso, horario, email, telefone]
         $data = array_map(null, $data[0], $data[1]);
-        
-        
-        //laravel validator rules if $formated_date is a valid date in the format yyyy-mm-dd
         $rules = array(
             '*.0' => 'required',
             '*.1' => 'required',
         );
-        
-        //laravel validator messages
         $messages = array(
             '*.0.required' => 'O campo nome é obrigatório',
             '*.1.required' => 'O campo curso é obrigatório',
@@ -172,8 +158,6 @@ class cursoController extends Controller
         
         
         $validator = Validator::make($data, $rules, $messages);
-        //dd($validator->errors(), $data);
-        //if validator fails, redirect to the same page with the errors
         if ($validator->fails()) {
             return Redirect::to('cursos/import')
             ->withErrors($validator)
@@ -190,7 +174,6 @@ class cursoController extends Controller
                     $curso->save();
                 }
             });
-           // dd($data);
             return Redirect::to('cursos');
         }
     

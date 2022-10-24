@@ -103,8 +103,6 @@ class alunosController extends Controller
             $result = DB::transaction(function () {
 
                 $usuario = new usuario;
-                //dd($usuario);
-                //convert telefone into and int
                 $usuario->email = Request::get('email');
                 $usuario->nome = Request::get('nome');
                 $usuario->telefone = Request::get('telefone');
@@ -126,9 +124,6 @@ class alunosController extends Controller
                 $historico_controller = new historicoController;
                 $historico_controller->store(["", "Usuário criado", $usuario->usuario_id, $user_id, NULL, NULL, 1]);
                 
-                //Session::flash('message', 'Aluno cadastrado com sucesso!');
-                //dd("test");
-                //dd($loctoRed);
                 return ('alunos/' . $usuario->usuario_id);
             });
             return Redirect::to($result);
@@ -290,10 +285,8 @@ class alunosController extends Controller
                 }
                 
 
-                //find curso_id based on curso name (request curso)
                 $curso = curso::where('nome', Request::get('curso'))->first();
                 if($usuario_curso->curso_id != $curso->curso_id){
-                    //dd($usuario_curso->curso_id, $curso->curso_id);
                     array_push($changedFields[0], 'Curso');
                     array_push($changedFields[1], $curso->nome);
                     array_push($changedFields[2], curso::find($usuario_curso->curso_id)->nome);
@@ -310,9 +303,6 @@ class alunosController extends Controller
                 // $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1])]);
                 $historico_controller->store([implode(", ", $changedFields[0]), "editar", $usuario->usuario_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
                 
-                //Session::flash('message', 'Aluno cadastrado com sucesso!');
-                //dd("test");
-                //dd($loctoRed);
                 return ('alunos/' . $usuario->usuario_id);
             });
             return Redirect::to($result);
@@ -333,17 +323,10 @@ class alunosController extends Controller
 
     public function import_alunos(Request $request){
 
-        //save into database the arrays (0 to 6) that comes from Request
         $data = Request::all();
-        
-        
-        //transpoe $data
-        //dd($data);
-        //[nome, curso, horario, email, telefone]
         $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4]);
 
         
-        //laravel validator rules if $formated_date is a valid date in the format yyyy-mm-dd
         $rules = array(
             '*.0' => 'required|string|max:255',
             '*.1' => 'required|string|max:255|exists:curso,nome',
@@ -351,8 +334,6 @@ class alunosController extends Controller
             '*.3' => 'required|email|max:255',
             '*.4' => 'nullable|regex:/^\d{2}\s\d{9}$/',
         );
-
-        //laravel validator messages
         $messages = array(
             'required' => 'O campo :attribute é obrigatório.',
             'string' => 'O campo :attribute deve ser uma string.',
@@ -366,8 +347,6 @@ class alunosController extends Controller
 
 
         $validator = Validator::make($data, $rules, $messages);
-        //dd($validator->errors(), $data);
-        //if validator fails, redirect to the same page with the errors
         if ($validator->fails()) {
             return Redirect::to('alunos/import')
             ->withErrors($validator)

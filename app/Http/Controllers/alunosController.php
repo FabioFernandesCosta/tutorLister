@@ -40,7 +40,6 @@ class alunosController extends Controller
             ->select('usuario.usuario_id','usuario.nome as usNome', 'usuario.email', 'usuario.telefone', 'usuario.ativo', 'curso.nome as crNome')
             ->groupBy('usuario.usuario_id', 'curso.nome')
         )->toJson());
-        //list of returned columns = ['usuario_id', 'nome', 'email', 'telefone', 'ativo', 'nome_curso']
     }
     public function index()
     {
@@ -74,9 +73,10 @@ class alunosController extends Controller
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
             //check if curso with name exists in the database
             'curso' => 'required|exists:curso,nome',
-            'ativo' => 'required|in:0,1',
             'acesso' => 'required|in:0,1',
             'treinamento_concluido' => 'required|in:0,1',
+            'npi' => 'required|in:0,1',
+            'aluno_tutor' => 'required|in:0,1',
         );
         $messages = [
             'nome.required' => 'O campo nome é obrigatório',
@@ -85,12 +85,14 @@ class alunosController extends Controller
             'telefone.regex' => 'O campo telefone deve ser no formato (xx xxxxxxxxx)',
             'curso.required' => 'O campo curso é obrigatório',
             'curso.exists' => 'O curso informado não existe nos registros',
-            'ativo.required' => 'O campo ativo é obrigatório',
-            'ativo.in' => 'O campo ativo deve ser sim ou não',
             'acesso.required' => 'O campo acesso é obrigatório',
             'acesso.in' => 'O campo acesso deve ser sim ou não',
             'treinamento_concluido.required' => 'O campo treinamento concluído é obrigatório',
             'treinamento_concluido.in' => 'O campo treinamento concluído deve ser sim ou não',
+            'npi.required' => 'O campo NPI é obrigatório',
+            'npi.in' => 'O campo NPI deve ser sim ou não',
+            'aluno_tutor.required' => 'O campo aluno tutor é obrigatório',
+            'aluno_tutor.in' => 'O campo aluno tutor deve ser sim ou não',
         ];
         $validator = Validator::make(Request::all(), $rules, $messages);
         
@@ -106,9 +108,10 @@ class alunosController extends Controller
                 $usuario->email = Request::get('email');
                 $usuario->nome = Request::get('nome');
                 $usuario->telefone = Request::get('telefone');
-                $usuario->ativo = Request::get('ativo');
                 $usuario->nivel_de_acesso = Request::get('acesso');
                 $usuario->treinamento_concluido = Request::get('treinamento_concluido');
+                $usuario->npi = Request::get('npi');
+                $usuario->aluno_tutor = Request::get('aluno_tutor');
                 $usuario->save();
                 $loctoRed = $usuario->usuario_id;
                 $usuario_curso = new usuario_curso;
@@ -145,7 +148,8 @@ class alunosController extends Controller
         $curso = curso::find($usuario_curso->curso_id);
         $usuario->curso = $curso->nome;
         $usuario->horario = $usuario_curso->horario;
-        $usuario->ativo = $usuario->ativo == 1 ? 'Sim' : 'Não';
+        $usuario->npi = $usuario->npi == 1 ? 'Sim' : 'Não';
+        $usuario->aluno_tutor = $usuario->aluno_tutor == 1 ? 'Sim' : 'Não';
         $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
         $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'Sim' : 'Não';
 
@@ -184,7 +188,8 @@ class alunosController extends Controller
         $curso = curso::find($usuario_curso->curso_id);
         $usuario->curso = $curso->nome;
         $usuario->horario = $usuario_curso->horario;
-        $usuario->ativo = $usuario->ativo == 1 ? 'Sim' : 'Não';
+        $usuario->npi = $usuario->npi == 1 ? 'Sim' : 'Não';
+        $usuario->aluno_tutor = $usuario->aluno_tutor == 1 ? 'Sim' : 'Não';
         $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'Sim' : 'Não';
         $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
         return (View::make('alunos.edit')->with('aluno', $usuario));
@@ -206,9 +211,10 @@ class alunosController extends Controller
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
             //check if curso with name exists in the database
             'curso' => 'required|exists:curso,nome',
-            'ativo' => 'required|in:0,1',
             'acesso' => 'required|in:0,1',
             'treinamento_concluido' => 'required|in:0,1',
+            'npi' => 'required|in:0,1',
+            'aluno_tutor' => 'required|in:0,1',
         );
         $messages = [
             'nome.required' => 'O campo nome é obrigatório',
@@ -217,12 +223,14 @@ class alunosController extends Controller
             'telefone.regex' => 'O campo telefone deve ser no formato (xx xxxxxxxxx)',
             'curso.required' => 'O campo curso é obrigatório',
             'curso.exists' => 'O curso informado não existe nos registros',
-            'ativo.required' => 'O campo ativo é obrigatório',
-            'ativo.in' => 'O campo ativo deve ser sim ou não',
             'acesso.required' => 'O campo acesso é obrigatório',
             'acesso.in' => 'O campo acesso deve ser sim ou não',
             'treinamento_concluido.required' => 'O campo treinamento concluído é obrigatório',
             'treinamento_concluido.in' => 'O campo treinamento concluído deve ser sim ou não',
+            'npi.required' => 'O campo NPI é obrigatório',
+            'npi.in' => 'O campo NPI deve ser sim ou não',
+            'aluno_tutor.required' => 'O campo aluno tutor é obrigatório',
+            'aluno_tutor.in' => 'O campo aluno tutor deve ser sim ou não',
         ];
         $validator = Validator::make(Request::all(), $rules, $messages);
         
@@ -272,7 +280,8 @@ class alunosController extends Controller
                 $usuario->email = Request::get('email');
                 $usuario->nome = Request::get('nome');
                 $usuario->telefone = Request::get('telefone');
-                $usuario->ativo = Request::get('ativo');
+                $usuario->npi = Request::get('npi');
+                $usuario->aluno_tutor = Request::get('aluno_tutor');
                 $usuario->nivel_de_acesso = Request::get('acesso');
                 $usuario->treinamento_concluido = Request::get('treinamento_concluido');
                 $usuario->save();
@@ -324,7 +333,7 @@ class alunosController extends Controller
     public function import_alunos(Request $request){
 
         $data = Request::all();
-        $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4]);
+        $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
 
         
         $rules = array(
@@ -333,6 +342,8 @@ class alunosController extends Controller
             '*.2' => 'nullable|string|max:255|in:Manhã,Tarde,Noite',
             '*.3' => 'required|email|max:255',
             '*.4' => 'nullable|regex:/^\d{2}\s\d{9}$/',
+            '*.5' => 'nullable|in:Sim,Não',
+            '*.6' => 'nullable|in:Sim,Não',
         );
         $messages = array(
             'required' => 'O campo :attribute é obrigatório.',
@@ -361,7 +372,8 @@ class alunosController extends Controller
                     $usuario->email = $key[3];
                     $usuario->nome = $key[0];
                     $usuario->telefone = $key[4];
-                    $usuario->ativo = 1;
+                    $usuario->npi = $key[5];
+                    $usuario->aluno_tutor = $key[6];
                     $usuario->nivel_de_acesso = 0;
                     $usuario->save();
 

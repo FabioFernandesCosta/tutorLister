@@ -75,6 +75,15 @@
                     Telefone
                 </span>
                 <select class="select" name="telefone"></select>
+                <span>
+                    NPI
+                </span>
+                <select class="select" name="npi"></select>
+                <span>
+                    Aluno Tutor
+                </span>
+                <select class="select" name="aluno_tutor"></select>
+
                 
 
             </div>
@@ -101,6 +110,8 @@
                         <th>Horário</th>
                         <th>Email</th>
                         <th>Telefone</th>
+                        <th>NPI</th>
+                        <th>Aluno Tutor</th>
                         
                     </tr>
                 </thead>
@@ -132,9 +143,11 @@
                     '2' => old('2'),
                     '3' => old('3'),
                     '4' => old('4'),
+                    '5' => old('5'),
+                    '6' => old('6'),
                 ];
                 if ($data[0] != null) {
-                    $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4]);
+                    $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
                     //dd($data);
                 }
                 
@@ -152,7 +165,9 @@
                                 curso: item[1],
                                 horario: item[2],
                                 email: item[3],
-                                telefone: item[4]
+                                telefone: item[4],
+                                npi: item[5],
+                                aluno_tutor: item[6],
                             }
                         });
                     } else {
@@ -213,7 +228,15 @@
                         {
                             data: 'telefone',
                             name: 'hora_realizacao'
-                        }
+                        },
+                        {
+                            data: 'npi',
+                            name: 'npi'
+                        },
+                        {
+                            data: 'aluno_tutor',
+                            name: 'aluno_tutor'
+                        },
                     ],
                 });
 
@@ -262,6 +285,8 @@
                             var horario = $('select[name="horario"]').val();
                             var email = $('select[name="email"]').val();
                             var telefone = $('select[name="telefone"]').val();
+                            var npi = $('select[name="npi"]').val();
+                            var aluno_tutor = $('select[name="aluno_tutor"]').val();
                             
 
                             var data = fileCsv.map(function(item) {
@@ -270,7 +295,9 @@
                                     curso: item[curso],
                                     horario: item[horario],
                                     email: item[email],
-                                    telefone: item[telefone]
+                                    telefone: item[telefone],
+                                    npi: item[npi],
+                                    aluno_tutor: item[aluno_tutor],
 
                                 }
                             });

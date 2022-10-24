@@ -97,12 +97,11 @@
             <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer">
                 <thead>
                     <tr>
-                        {{-- list of returned columns = ['usuario_id', 'nome', 'email', 'telefone', 'ativo', 'nome_curso'] --}}
+                        {{-- list of returned columns = ['usuario_id', 'nome', 'email', 'telefone', 'nome_curso'] --}}
                         <th>ID</th>
                         <th>Nome</th>
                         <th>E-mail</th>
                         <th>Telefone</th>
-                        <th>Ativo</th>
                         <th>Curso</th>
                     </tr>
                 </thead>
@@ -141,17 +140,8 @@
                         $(row).attr('onclick', 'location.href="{{ URL::to('alunos') }}/' + data
                             .usuario_id + '";');
                     },
-                    //where ativo = 1 change to "Sim" and ativo = 0 change to "Não"
-                    "columnDefs": [{
-                        "render": function(data, type, row) {
-                            if (data == 1) {
-                                return "Sim";
-                            } else {
-                                return "Não";
-                            }
-                        },
-                        "targets": 4
-                    }],
+                    
+                    
 
                     "processing": true,
                     "serverSide": true,
@@ -195,9 +185,6 @@
                         },
                         {
                             "data": "telefone"
-                        },
-                        {
-                            "data": "ativo"
                         },
                         {
                             "data": "crNome",

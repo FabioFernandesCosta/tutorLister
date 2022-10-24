@@ -106,12 +106,21 @@
                                 </div>
                             </div>
                             <div>
-                                <span>Está ativo?</span>
+                                <span>Está no NPI?</span>
+                                <div class="form-field form-field-littlePlus" id="np"> <span></span>
+
+                                    {{-- input version of the select above --}}
+                                    <input readonly type="text" value="{{ $aluno->npi }}" name="npi"
+                                        id="npi">
+                                </div>
+                            </div>
+                            <div>
+                                <span>Está no Aluno Tutor?</span>
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
 
                                     {{-- input version of the select above --}}
-                                    <input readonly type="text" value="{{ $aluno->ativo }}" name="ativo"
-                                        id="ativo">
+                                    <input readonly type="text" value="{{ $aluno->aluno_tutor }}" name="aluno_tutor"
+                                        id="aluno_tutor">
                                 </div>
                             </div>
                             <div>

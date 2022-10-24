@@ -77,14 +77,28 @@
                                 </div>
                             </div>
                             <div>
-                                <span>Está ativo?</span>
-                                {{ Html::ul($errors->get('ativo'), ['class' => 'ulError']) }}
+                                <span>Está no NPI?</span>
+                                {{ Html::ul($errors->get('npi'), ['class' => 'ulError']) }}
+                                <div class="form-field form-field-littlePlus" id="np"> <span></span>
+                                    {{-- acesso select default value if old is not null and if is null --}}
+                                    <select name="npi" id="npi">
+                                        <option value="1" {{ (old('npi') ?? $aluno->npi) == 1 ? 'selected' : '' }}>
+                                            Sim</option>
+                                        <option value="0" {{ (old('npi') ?? $aluno->npi) == 0 ? 'selected' : '' }}>
+                                            Não</option>
+                                    </select>
+                                    
+                                </div>
+                            </div>
+                            <div>
+                                <span>Está no Aluno Tutor?</span>
+                                {{ Html::ul($errors->get('aluno_tutor'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
-                                    <select name="ativo" id="ativo">
-                                        <option value="1" {{ (old('ativo') ?? $aluno->ativo) == 1 ? 'selected' : '' }}>
+                                    <select name="aluno_tutor" id="aluno_tutor">
+                                        <option value="1" {{ (old('aluno_tutor') ?? $aluno->aluno_tutor) == 1 ? 'selected' : '' }}>
                                             Sim</option>
-                                        <option value="0" {{ (old('ativo') ?? $aluno->ativo) == 0 ? 'selected' : '' }}>
+                                        <option value="0" {{ (old('aluno_tutor') ?? $aluno->aluno_tutor) == 0 ? 'selected' : '' }}>
                                             Não</option>
                                     </select>
                                     

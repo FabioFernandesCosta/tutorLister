@@ -55,12 +55,22 @@
                             </div>
                         </div>
                         <div>
-                            <span>Está ativo?</span>
-                            {{ Html::ul($errors->get('ativo'), ['class' => 'ulError']) }}
-                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
-                                <select name="ativo" required='required' id="ativo">
-                                    <option value="1">Sim</option>
+                            <span>Está no NPI?</span>
+                            {{ Html::ul($errors->get('npi'), ['class' => 'ulError']) }}
+                            <div class="form-field form-field-littlePlus" id="np"> <span></span>
+                                <select name="npi" required='required' id="npi">
                                     <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <span>Está no Aluno Tutor?</span>
+                            {{ Html::ul($errors->get('aluno_tutor'), ['class' => 'ulError']) }}
+                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
+                                <select name="aluno_tutor" required='required' id="aluno_tutor">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
                                 </select>
                             </div>
                         </div>

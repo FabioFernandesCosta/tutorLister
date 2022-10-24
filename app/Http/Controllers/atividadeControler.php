@@ -63,6 +63,21 @@ class atividadeControler extends Controller
                     //DB::raw('group_concat( usuario.nome) as nomeUs'))
                     ->groupBy('atividade.atividade_id')
                     ->addSelect(DB::raw("group_concat(usuario.nome) as nomeUs"))
+                    
+                    ->where(function($query){
+                        if(Auth::user()->npi==true and Auth::user()->aluno_tutor==true){
+                            $query->where('atividade.organizacao', '=', strtolower('npi'));
+                            $query->orWhere('atividade.organizacao', '=', strtolower('aluno_tutor'));
+                        }else if(Auth::user()->npi==true){
+                            $query->where('atividade.organizacao', '=', strtolower('npi'));
+                        }else if(Auth::user()->aluno_tutor==true){
+                            $query->where('atividade.organizacao', '=', strtolower('aluno_tutor'));
+                        }
+                    })
+
+                    
+                    
+
             
         ));
         $min = strtotime(Request::get("min"));
@@ -132,7 +147,8 @@ class atividadeControler extends Controller
             'CargaHoraria' => 'required',
             'descricao' => 'required',
             'Requisitante' => 'required|exists:requisitante,nome',
-            
+            'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado',
+            'organizacao' => 'required|in:npi,aluno_tutor',
         );
         $mensagens = array(
             'Requisitante.exists' => 'O valor no campo Requisitante é invalido',
@@ -141,7 +157,12 @@ class atividadeControler extends Controller
             'Donehour.required' => 'O campo Hora da atividade é obrigatorio',
             'CargaHoraria.required' => 'O campo Carga horária é obrigatorio',
             'descricao.required' => 'O campo Descrição é obrigatorio',
-            'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado'
+            'status.required' => 'O campo Status é obrigatorio',
+            'organizacao.required' => 'O campo Organização é obrigatorio',
+            'status.in' => 'O valor no campo Status é invalido',
+            'organizacao.in' => 'O valor no campo Organização é invalido',
+
+
         );
         $validator = Validator::make(Request::all(), $rules, $mensagens);
         
@@ -159,6 +180,7 @@ class atividadeControler extends Controller
                 $atividade->data_registro = date("Y-m-d");
                 $atividade->hora_registro = date("h:i:s");
                 $atividade->status = Request::get('status');
+                $atividade->organizacao = strtolower(Request::get('organizacao'));
                 $atividade->save();
 
                 
@@ -228,6 +250,7 @@ class atividadeControler extends Controller
                 "atividade.carga", 
                 "atividade.descricao",
                 "atividade.status",
+                "atividade.organizacao",
                 DB::raw('group_concat(DISTINCT requisitante.requisitante_id) as requisitante'),
                 DB::raw('group_concat(DISTINCT usuario.nome) as nome'),
                 DB::raw('group_concat(DISTINCT usuario.usuario_id) as usId'))
@@ -290,7 +313,10 @@ class atividadeControler extends Controller
                     'CargaHoraria' => 'required',
                     'descricao' => 'required',
                     'Requisitante' => 'required|exists:requisitante,nome',
-                    'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado'
+                    'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado',
+                    'organizacao' => 'required|in:npi,aluno_tutor',
+
+
                 );
                 $mensagens = array(
                     'Requisitante.exists' => 'O valor no campo Requsitante é invalido',
@@ -299,6 +325,10 @@ class atividadeControler extends Controller
                     'Donehour.required' => 'O campo Hora da atividade é obrigatorio',
                     'CargaHoraria.required' => 'O campo Carga horária é obrigatorio',
                     'descricao.required' => 'O campo Descrição horária é obrigatorio',
+                    'status.required' => 'O campo Status é obrigatorio',
+                    'organizacao.required' => 'O campo Organização é obrigatorio',
+                    'status.in' => 'O valor no campo Status é invalido',
+                    'organizacao.in' => 'O valor no campo Organização é invalido',
                 );
                 $validator = Validator::make(Request::all(), $rules, $mensagens);
                 
@@ -351,6 +381,7 @@ class atividadeControler extends Controller
                         $atv->carga = Request::get('CargaHoraria');
                         $atv->descricao = Request::get('descricao');
                         $atv->status = Request::get('status');
+                        $atv->organizacao = strtolower(Request::get('organizacao'));
                         $atv->save();
                         $invUs = Request::get('InvolvedUsers'); 
                         $ind = 0;
@@ -428,6 +459,7 @@ class atividadeControler extends Controller
 
     public function import_atv(Request $request){
         $data = Request::all();
+        
         
         $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
 

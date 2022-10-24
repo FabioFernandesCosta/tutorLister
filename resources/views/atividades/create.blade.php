@@ -133,6 +133,20 @@
                             </select>
                         </div>
                     </div>
+                    @if (Auth::user()->npi==1 and Auth::user()->aluno_tutor==1)
+                    <div>
+                        <span>NPI ou Aluno Tutor?</span>
+                        <div class="form-field form-field-littlePlus" id="or"> <span></span>
+                            <select name="organizacao" required='required' id="organizacao">
+                                <option value="npi">NPI</option>
+                                <option value="aluno tutor">Aluno Tutor</option>
+                            </select>
+                        </div>
+                    </div>
+                    @else
+                        {{-- if Auth::user()->npi==1 value = npi, else if Auth::user()->aluno_tutor==1 vale = aluno_tutor --}}
+                        <input type="hidden" id="organizacao" name="organizacao" value="{{ Auth::user()->npi==1 ? 'npi' : 'aluno tutor' }}">
+                    @endif
                 </div>
             </div>
             <div>

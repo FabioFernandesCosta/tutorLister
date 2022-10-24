@@ -83,9 +83,16 @@
                                                 list="users" value='{{ $value->nome }}'>
                                             @include('autocomplete', ['campo' => '.usuario'])
                                         </div>
-                                        <a href="javascript:void(0)" class="add_button" title="add field"><img
-                                                style="margin: auto; margin-top: 0"
-                                                src="{{ url('/image/mais.png') }}" /></a>
+                                        {{-- if index > 1 use rmv_button with img /image/menos.png --}}
+                                        @if ($key > 0)
+                                            <a href="javascript:void(0)" class="rmv_button" title="add field"><img
+                                                    style="margin: auto; margin-top: 0"
+                                                    src="{{ url('/image/menos.png') }}" /></a>
+                                        @else
+                                            <a href="javascript:void(0)" class="add_button" title="add field"><img
+                                                    style="margin: auto; margin-top: 0"
+                                                    src="{{ url('/image/mais.png') }}" /></a>
+                                        @endif
                                     </div>
                                 @endforeach
 
@@ -192,6 +199,27 @@
                             </select>
                         </div>
                     </div>
+                    @if (Auth::user()->npi==1 and Auth::user()->aluno_tutor==1)
+                    <div>
+                        <span>NPI ou Aluno Tutor?</span>
+                        <div class="form-field form-field-littlePlus" id="or"> <span></span>
+                            <select name="organizacao" required='required' id="organizacao">
+                                <option @php
+                                    if($atv->organizacao == 'NPI'){
+                                        echo 'selected';
+                                    }
+                                @endphp value="npi">NPI</option>
+                                <option @php
+                                    if($atv->organizacao == 'Aluno Tutor'){
+                                        echo 'selected';
+                                    }
+                                @endphp value="aluno tutor">Aluno Tutor</option>
+                            </select>
+                        </div>
+                    </div>
+                    @else
+                        <input type="hidden" id="organizacao" name="organizacao" value="{{ $atv->organizacao }}">
+                    @endif
                 </div>
             </div>
             <div>

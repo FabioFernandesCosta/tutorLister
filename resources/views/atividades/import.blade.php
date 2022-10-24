@@ -82,6 +82,10 @@
                     Status:
                 </span>
                 <select class="select" name="status"></select>
+                <span>
+                    NPI ou Aluno Tutor?:
+                </span>
+                <select class="select" name="organizacao"></select>
 
             </div>
             <button id="mapButton" type="button" class="dt-button outline-btn" style="margin-top: 10px">Carregar na tabela</button>
@@ -109,6 +113,7 @@
                         <th>Hora de realização</th>
                         <th>Carga horária da atividade</th>
                         <th>Status</th>
+                        <th>NPI ou Aluno Tutor</th>
                     </tr>
                 </thead>
             </table>
@@ -141,9 +146,10 @@
                     '4' => old('4'),
                     '5' => old('5'),
                     '6' => old('6'),
+                    '7' => old('7'),
                 ];
                 if ($data[0] != null) {
-                    $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
+                    $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7]);
                     //dd($data);
                 }
                 
@@ -163,7 +169,8 @@
                                 data_realizacao: item[3],
                                 hora_realizacao: item[4],
                                 carga_horaria: item[5],
-                                status: item[6]
+                                status: item[6],
+                                organizacao: item[7],
                             }
                         });
                     } else {
@@ -232,7 +239,11 @@
                         {
                             data: 'status',
                             name: 'status'
-                        }
+                        },
+                        {
+                            data: 'organizacao',
+                            name: 'organizacao'
+                        },
                     ],
                 });
 
@@ -280,6 +291,7 @@
                             var hora_realizacao = $('select[name="hora_realizacao"]').val();
                             var carga_horaria = $('select[name="carga_horaria"]').val();
                             var status = $('select[name="status"]').val();
+                            var organizacao = $('select[name="organizacao"]').val();
 
                             var data = fileCsv.map(function(item) {
                                 return {
@@ -289,7 +301,8 @@
                                     data_realizacao: item[data_realizacao],
                                     hora_realizacao: item[hora_realizacao],
                                     carga_horaria: item[carga_horaria],
-                                    status: item[status]
+                                    status: item[status],
+                                    organizacao: item[organizacao],
                                 }
                             });
                             //if any item in the array is null or undefined, set it to am empty string

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('organizacao');
             $table->string('telefone');
             $table->boolean('ativo');
+            $table->boolean('npi');
+            $table->boolean('aluno_tutor');
             $table->boolean('treinamento_concluido');
             $table->integer('nivel_de_acesso');
             $table->string('email')->unique();
@@ -41,6 +43,8 @@ return new class extends Migration
             $table->time('carga');
             $table->text('descricao');
             $table->text('status');
+            //organizacao npi ou aluno_tutor
+            $table->text('organizacao');
         });
         
 

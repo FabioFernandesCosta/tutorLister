@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('provider_id')->nullable();
             //avatar
             $table->string('avatar')->nullable();
+            //admin
+            $table->boolean('admin')->default(false);
 
             $table->rememberToken();
         });

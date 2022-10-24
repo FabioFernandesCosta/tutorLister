@@ -23,5 +23,11 @@ class usuario extends Authenticatable
         'remember_token',
     ];
     public $timestamps = false;
+
+
+
+    public function isAdmin(){
+        return $this->admin==1;
+    }
 }
 

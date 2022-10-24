@@ -69,18 +69,24 @@ Route::group( ['middleware' => 'auth' ], function() {
 
     // Route::get('/charts', 'ChartController@index')->name('charts');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
-    Route::get('/atividades/import', function () {
-        return view('atividades.import');
+
+
+    //any import view is protected by admin middleware
+    Route::group( ['middleware' => 'isAdmin' ], function() {
+        Route::get('/atividades/import', function () {
+            return view('atividades.import');
+        });
+        
+        Route::get('/alunos/import', function () {
+            return view('alunos.import');
+        });
+        
+        Route::get('/cursos/import', function () {
+            return view('cursos.import');
+        });
     });
     
-    Route::get('/alunos/import', function () {
-        return view('alunos.import');
-    });
     
-    Route::get('/cursos/import', function () {
-        return view('cursos.import');
-    });
 
             
     //route to getData from UserLoggedData controller
@@ -96,12 +102,27 @@ Route::group( ['middleware' => 'auth' ], function() {
     });
     */
     //alunos
-    Route::get('alunos/getdata', [alunosController::class, 'getdata']);
-    Route::controller(alunosController::class)->group(function(){
-        Route::resource('alunos', alunosController::class)->except(['destroy']);
-        Route::post('/alunos/import/store', 'import_alunos')->name('alunos.import_alunos');
-        Route::post('/alunos/getdata', 'getdata')->name('alunos.getData');
-    });
+    Route::group( ['middleware' => 'isAdmin' ], function() {
+
+        Route::get('alunos/getdata', [alunosController::class, 'getdata']);
+        Route::controller(alunosController::class)->group(function(){
+            Route::resource('alunos', alunosController::class)->except(['destroy']);
+            Route::post('/alunos/import/store', 'import_alunos')->name('alunos.import_alunos');
+            Route::post('/alunos/getdata', 'getdata')->name('alunos.getData');
+        });
+        //historicoUser
+        Route::get('alunos/{id}/historicoUser', [historicoController::class, 'showUser']);
+        Route::get('alunos/{id}/atividades', [alunosController::class, 'atvsUser']);
+
+
+        Route::get('cursos/getdata', [cursoController::class, 'getdata']);
+        Route::controller(cursoController::class)->group(function(){
+            //route resource cursos without destroy and show
+            Route::resource('cursos', cursoController::class, ['except' => ['destroy', 'show']]);
+            Route::post('/cursos/import/store', 'import_cursos')->name('cursos.import_cursos');
+            Route::post('/cursos/getdata', 'getdata')->name('cursos.getData');
+        });
+    }); //admin middleware
     
     Route::get('consultar', [atividadeControler::class, 'consultar']);
     Route::get('atividades/getdata', [atividadeControler::class, 'getdata']);
@@ -118,18 +139,10 @@ Route::group( ['middleware' => 'auth' ], function() {
     
     //historico
     Route::get('atividades/{id}/historico', [historicoController::class, 'show']);
-    //historicoUser
-    Route::get('alunos/{id}/historicoUser', [historicoController::class, 'showUser']);
-    Route::get('alunos/{id}/atividades', [alunosController::class, 'atvsUser']);
+    
 
 
-    Route::get('cursos/getdata', [cursoController::class, 'getdata']);
-    Route::controller(cursoController::class)->group(function(){
-        //route resource cursos without destroy and show
-        Route::resource('cursos', cursoController::class, ['except' => ['destroy', 'show']]);
-        Route::post('/cursos/import/store', 'import_cursos')->name('cursos.import_cursos');
-        Route::post('/cursos/getdata', 'getdata')->name('cursos.getData');
-    });
+    
 
     Route::get('requisitantes/getdata', [requisitanteController::class, 'getdata']);
     Route::get('requisitantes/consultar', [requisitanteController::class, 'consultar']);
@@ -141,7 +154,6 @@ Route::group( ['middleware' => 'auth' ], function() {
     Route::get('ponto/getdata', [sistemaPontoController::class, 'getdata']);
     Route::get('ponto/getdataAll', [sistemaPontoController::class, 'getdata2']);
     Route::controller(sistemaPontoController::class)->group(function(){
-        // Route::resource('ponto', sistemaPontoController::class, ['except' => ['destroy', 'update']]);
         // the route above, but only with index and store
         Route::resource('ponto', sistemaPontoController::class, ['only' => ['index', 'store']]);
         Route::post('/ponto/getdata', 'getdata')->name('sistemaPontoController.getData');

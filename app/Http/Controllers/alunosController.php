@@ -37,7 +37,7 @@ class alunosController extends Controller
             DB::table('usuario')
             ->join('usuario_curso', 'usuario.usuario_id', '=', 'usuario_curso.usuario_id')
             ->join('curso', 'usuario_curso.curso_id', '=', 'curso.curso_id')
-            ->select('usuario.usuario_id','usuario.nome as usNome', 'usuario.email', 'usuario.telefone', 'usuario.ativo', 'curso.nome as crNome')
+            ->select('usuario.usuario_id','usuario.nome as usNome', 'usuario.email', 'usuario.telefone', 'curso.nome as crNome')
             ->groupBy('usuario.usuario_id', 'curso.nome')
         )->toJson());
     }
@@ -73,8 +73,8 @@ class alunosController extends Controller
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
             //check if curso with name exists in the database
             'curso' => 'required|exists:curso,nome',
-            'acesso' => 'required|in:0,1',
-            'treinamento_concluido' => 'required|in:0,1',
+            'acesso' => 'required|in:0,1,2,3',
+            'treinamento_concluido' => 'required|in:0,1,2,3',
             'npi' => 'required|in:0,1',
             'aluno_tutor' => 'required|in:0,1',
         );
@@ -86,7 +86,7 @@ class alunosController extends Controller
             'curso.required' => 'O campo curso é obrigatório',
             'curso.exists' => 'O curso informado não existe nos registros',
             'acesso.required' => 'O campo acesso é obrigatório',
-            'acesso.in' => 'O campo acesso deve ser sim ou não',
+            'acesso.in' => 'O campo acesso deve ser: NPI, Aluno Tutor, ambos ou nenhum',
             'treinamento_concluido.required' => 'O campo treinamento concluído é obrigatório',
             'treinamento_concluido.in' => 'O campo treinamento concluído deve ser sim ou não',
             'npi.required' => 'O campo NPI é obrigatório',
@@ -150,8 +150,10 @@ class alunosController extends Controller
         $usuario->horario = $usuario_curso->horario;
         $usuario->npi = $usuario->npi == 1 ? 'Sim' : 'Não';
         $usuario->aluno_tutor = $usuario->aluno_tutor == 1 ? 'Sim' : 'Não';
-        $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
-        $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'Sim' : 'Não';
+        // nivel de acesso: 1 = NPI, 2 = Aluno Tutor, 3 = NPI e Aluno Turor, outros = não
+        $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'NPI' : ($usuario->nivel_de_acesso == 2 ? 'Aluno Tutor' : ($usuario->nivel_de_acesso == 3 ? 'NPI e Aluno Tutor' : 'Não'));
+        // treinamento concluido: 0 = nenhum, 1 = NPI, 2 = Aluno Tutor, 3 = NPI e Aluno Tutor
+        $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'NPI' : ($usuario->treinamento_concluido == 2 ? 'Aluno Tutor' : ($usuario->treinamento_concluido == 3 ? 'NPI e Aluno Tutor' : 'Nenhum'));
 
 
         return (
@@ -190,7 +192,7 @@ class alunosController extends Controller
         $usuario->horario = $usuario_curso->horario;
         $usuario->npi = $usuario->npi == 1 ? 'Sim' : 'Não';
         $usuario->aluno_tutor = $usuario->aluno_tutor == 1 ? 'Sim' : 'Não';
-        $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'Sim' : 'Não';
+        $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'NPI' : ($usuario->treinamento_concluido == 2 ? 'Aluno Tutor' : ($usuario->treinamento_concluido == 3 ? 'NPI e Aluno Tutor' : 'Nenhum'));
         $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
         return (View::make('alunos.edit')->with('aluno', $usuario));
     }
@@ -211,8 +213,8 @@ class alunosController extends Controller
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
             //check if curso with name exists in the database
             'curso' => 'required|exists:curso,nome',
-            'acesso' => 'required|in:0,1',
-            'treinamento_concluido' => 'required|in:0,1',
+            'acesso' => 'required|in:0,1,2,3',
+            'treinamento_concluido' => 'required|in:0,1,2,3',
             'npi' => 'required|in:0,1',
             'aluno_tutor' => 'required|in:0,1',
         );
@@ -265,11 +267,6 @@ class alunosController extends Controller
                     array_push($changedFields[0], 'Telefone');
                     array_push($changedFields[1], Request::get('telefone'));
                     array_push($changedFields[2], $usuario->telefone);
-                }
-                if($usuario->ativo != Request::get('ativo')){
-                    array_push($changedFields[0], 'Ativo');
-                    array_push($changedFields[1], Request::get('ativo'));
-                    array_push($changedFields[2], $usuario->ativo);
                 }
                 if($usuario->nivel_de_acesso != Request::get('acesso')){
                     array_push($changedFields[0], 'Nível de acesso');
@@ -366,6 +363,19 @@ class alunosController extends Controller
 
             //trata cada elemento de $data como uma atividade para salvar no banco
             $result = DB::transaction(function () use($data) {
+                //converti key[5] e key[6] para 1 (sim) ou 0 (não)
+                foreach($data as $key => $value){
+                    if($value[5] == 'Sim'){
+                        $data[$key][5] = 1;
+                    }else{
+                        $data[$key][5] = 0;
+                    }
+                    if($value[6] == 'Sim'){
+                        $data[$key][6] = 1;
+                    }else{
+                        $data[$key][6] = 0;
+                    }
+                }
                 foreach ($data as &$key) {
                     //cria aluno
                     $usuario = new usuario;

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('ativo');
             $table->boolean('npi');
             $table->boolean('aluno_tutor');
-            $table->boolean('treinamento_concluido');
+            $table->integer('treinamento_concluido')->default(0);
             $table->integer('nivel_de_acesso');
             $table->string('email')->unique();
             //provider_id

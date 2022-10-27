@@ -95,7 +95,7 @@
                                     id="usuario">
                             </div>
                             <div>
-                                <span>Tem acesso ao sistema?</span>
+                                <span>Nivel de acesso ao sistema</span>
                                 <div class="form-field form-field-littlePlus" id="ac"> <span></span>
 
                                     {{-- input version of the select above --}}
@@ -163,7 +163,6 @@
                         <div id="userContainer">
                             <h3 class="itemTittle">Últimas atividade de {{ $aluno->nome }}</h3>
 
-                            {{-- table using $atividades (descricao, data_atividade and hora_atividade) as its fields and atividade_id as link to atividades --}}
                             <table id="av15" class="display">
                                 <thead>
                                     <tr>
@@ -179,7 +178,7 @@
                         </div>
 
                         <script>
-                            //datatable av15 using route alunos/{id}/atividades
+
                             $(document).ready(function() {
                                 $('#av15').DataTable({
                                     "ordering": false,

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Aluno ID-{{$requisitante->requisitante_id}} - TutorLister</title>
+    <title>Requisitante ID-{{$requisitante->requisitante_id}} - TutorLister</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
@@ -27,7 +27,7 @@
     </div>
     <div class="wrapAll">
         
-        <h1>Aluno: {{ $requisitante->nome }}</h1>
+        <h1>Requisitante: {{ $requisitante->nome }}</h1>
         <h3>ID-{{$requisitante->requisitante_id}}</h3>
 
 

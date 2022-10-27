@@ -76,11 +76,11 @@
                 </span>
                 <select class="select" name="telefone"></select>
                 <span>
-                    NPI
+                    NPI (Sim ou Não)
                 </span>
                 <select class="select" name="npi"></select>
                 <span>
-                    Aluno Tutor
+                    Aluno Tutor (Sim ou Não)
                 </span>
                 <select class="select" name="aluno_tutor"></select>
 

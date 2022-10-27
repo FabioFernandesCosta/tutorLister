@@ -21,7 +21,7 @@
 <body class="antialiased" id="eventBody">
     <div class="wrapAll">
 
-        
+
         <h1>Registrar Aluno</h1>
 
         <!-- if there are creation errors, they will show here -->
@@ -42,15 +42,18 @@
                         {{-- erros --}}
                         {{ Html::ul($errors->get('nome'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="text" value="{{ old('nome') }}" name="nome" required='required' id="usuario">
+                            <input type="text" value="{{ old('nome') }}" name="nome" required='required'
+                                id="usuario">
                         </div>
                         <div>
-                            <span>Tem acesso ao sistema?</span>
+                            <span>Níveis de acesso ao sistema</span>
                             {{ Html::ul($errors->get('acesso'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-littlePlus" id="ac"> <span></span>
                                 <select name="acesso" required='required' id="acesso">
-                                    <option value="1">Sim</option>
-                                    <option value="0">Não</option>
+                                    <option value="1">NPI</option>
+                                    <option value="2">Aluno Tutor</option>
+                                    <option value="3">NPI e Aluno Tutor</option>
+                                    <option selected value="0">Nenhum</option>
                                 </select>
                             </div>
                         </div>
@@ -64,69 +67,83 @@
                                 </select>
                             </div>
                         </div>
-                        <div>
-                            <span>Está no Aluno Tutor?</span>
-                            {{ Html::ul($errors->get('aluno_tutor'), ['class' => 'ulError']) }}
-                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
-                                <select name="aluno_tutor" required='required' id="aluno_tutor">
-                                    <option value="0">Não</option>
-                                    <option value="1">Sim</option>
-                                </select>
+                        @if (Auth::user()->npi == 1)
+                            <div>
+                                <span>Está no Aluno Tutor?</span>
+                                {{ Html::ul($errors->get('aluno_tutor'), ['class' => 'ulError']) }}
+                                <div class="form-field form-field-littlePlus" id="at"> <span></span>
+                                    <select name="aluno_tutor" required='required' id="aluno_tutor">
+                                        <option value="0">Não</option>
+                                        <option value="1">Sim</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <span>Concluiu treinamento?</span>
-                            {{ Html::ul($errors->get('treinamento_concluido'), ['class' => 'ulError']) }}
-                            <div class="form-field form-field-littlePlus" id="at"> <span></span>
-                                <select name="treinamento_concluido" required='required' id="treinamento_concluido">
-                                    <option value="1">Sim</option>
-                                    <option value="0">Não</option>
-                                </select>
+                        @endif
+
+                        @if (Auth::user()->aluno_tutor == 1)
+                            <div>
+                                <span>Concluiu treinamento?</span>
+                                {{ Html::ul($errors->get('treinamento_concluido'), ['class' => 'ulError']) }}
+                                <div class="form-field form-field-littlePlus" id="at"> <span></span>
+                                    <select name="treinamento_concluido" required='required' id="treinamento_concluido">
+                                        <option value="1">NPI</option>
+                                        <option value="2">Aluno Tutor</option>
+                                        <option value="3">NPI e Aluno Tutor</option>
+                                        <option selected value="0">Nenhum</option>
+
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        
+                        @endif
+
                         <span>Curso</span>
                         {{-- {{ Html::ul($errors->get('Requisitante'), ['class' => 'ulError']) }} --}}
                         {{-- erros --}}
                         {{ Html::ul($errors->get('curso'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="text" value="{{ old('curso') }}" name="curso" required='required' id="curso">
+                            <input type="text" value="{{ old('curso') }}" name="curso" required='required'
+                                id="curso">
                         </div>
                         @include('autocomplete', ['campo' => '#curso'])
-                        
+
                         <div>
                             <span>Horário</span>
                             {{ Html::ul($errors->get('horario'), ['class' => 'ulError']) }}
-                            
+
                             <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                 <select name="horario" required='required' id="horario">
-                                    <option value="Manhã" {{ old('horario') == 'Manhã' ? 'selected' : '' }}>Manhã</option>
-                                    <option value="Tarde" {{ old('horario') == 'Tarde' ? 'selected' : '' }}>Tarde</option>
-                                    <option value="Noite" {{ old('horario') == 'Noite' ? 'selected' : '' }}>Noite</option>
+                                    <option value="Manhã" {{ old('horario') == 'Manhã' ? 'selected' : '' }}>Manhã
+                                    </option>
+                                    <option value="Tarde" {{ old('horario') == 'Tarde' ? 'selected' : '' }}>Tarde
+                                    </option>
+                                    <option value="Noite" {{ old('horario') == 'Noite' ? 'selected' : '' }}>Noite
+                                    </option>
                                 </select>
                             </div>
 
                         </div>
-                        
-                        
+
+
 
                     </div>
                     <div id="userContainer">
                         E-mail
                         {{ Html::ul($errors->get('email'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="email" value="{{ old('email') }}" name="email" required='required' id="email">
+                            <input type="email" value="{{ old('email') }}" name="email" required='required'
+                                id="email">
                         </div>
                         Telefone
                         {{ Html::ul($errors->get('telefone'), ['class' => 'ulError']) }}
                         <div class="form-field form-field-little" id="req"> <span></span>
-                            <input type="tel" value="{{ old('telefone') }}" name="telefone" required='required' id="telefone" pattern="[0-9]{2} [0-9]{9}" placeholder="43 123456789">
+                            <input type="tel" value="{{ old('telefone') }}" name="telefone" required='required'
+                                id="telefone" pattern="[0-9]{2} [0-9]{9}" placeholder="43 123456789">
                         </div>
 
                     </div>
                 </div>
             </div>
-            
+
 
             <div class="atvFormBtn">
                 <div>

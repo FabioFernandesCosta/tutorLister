@@ -64,13 +64,17 @@
                                 <input type="text" value="{{ old('nome') ?? $aluno->nome }}" name="nome" id="usuario">
                             </div>
                             <div>
-                                <span>Tem acesso ao sistema?</span>
+                                <span>Níveis de acesso ao sistema</span>
                                 {{ Html::ul($errors->get('acesso'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="ac"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
                                     <select name="acesso" id="acesso">
                                         <option value="1" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 1 ? 'selected' : '' }}>
-                                            Sim</option>
+                                            NPI</option>
+                                        <option value="2" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 2 ? 'selected' : '' }}>
+                                            Aluno Tutor</option>
+                                        <option value="3" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 3 ? 'selected' : '' }}>
+                                            NPI e Aluno Tutor</option>
                                         <option value="0" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 0 ? 'selected' : '' }}>
                                             Não</option>
                                     </select>
@@ -109,11 +113,15 @@
                                 <span>Treinamento concluído?</span>
                                 {{ Html::ul($errors->get('treinamento_concluido'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
-                                    <select name="treinamento_concluído" id="treinamento_concluído">
+                                    <select name="treinamento_concluido" id="treinamento_concluido">
                                         <option value="1" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 1 ? 'selected' : '' }}>
-                                            Sim</option>
+                                            NPI</option>
+                                        <option value="2" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 2 ? 'selected' : '' }}>
+                                            Aluno Tutor</option>
+                                        <option value="3" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 3 ? 'selected' : '' }}>
+                                            NPI e Aluno Tutor</option>
                                         <option value="0" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 0 ? 'selected' : '' }}>
-                                            Não</option>
+                                            Nenhum</option>
                                     </select>
                                     
                                 </div>

@@ -43,7 +43,7 @@ Route::get('login/google/callback', function () {
     $user = usuario::where('email', $googleUser->email)->first();
 
     if ($user) {
-        if ($user->nivel_de_acesso == 1) {
+        if ($user->nivel_de_acesso >= 1) {
             $user->avatar = $googleUser->avatar;
             $user->save();
             Auth::login($user);

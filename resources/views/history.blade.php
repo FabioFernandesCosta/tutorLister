@@ -89,14 +89,19 @@
 
 <script>
     let atvId;
-
+    
     if (window.location.href.indexOf("atividades") > -1) {
         atvId = '<?php try{echo $atv[0]->atividade_id;}catch(Exception $e){} ?>' + '/historico';
     }
     else if(window.location.href.indexOf("alunos") > -1) {
         atvId = '<?php try{echo $aluno->usuario_id;}catch(Exception $e){} ?>' + '/historicoUser';
+    }else if(window.location.href.indexOf("requisitantes") > -1) {
+        atvId = '<?php try{echo $requisitante->requisitante_id;}catch(Exception $e){} ?>' + '/historicoRequisitantes';
+    }//cursos
+    else if(window.location.href.indexOf("cursos") > -1) {
+        atvId = '/cursos/<?php try{echo $curso->curso_id;}catch(Exception $e){} ?>' + '/historicoCurso';
     }
-    console.log(atvId);
+    
     $(document).ready(function() {
         console.log(atvId);
         $('#JqueryAtvHistTable').DataTable({

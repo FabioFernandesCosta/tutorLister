@@ -103,7 +103,7 @@
         //retrieve full name from string data.name
         $('#fullName').text(data.name);
         //retrieve id from data.id and put as href in editUser
-        $('#editUser').attr('href', "{{ url('alunos') }}"+"/"+data.id+"/edit");
+        $('#editUser').attr('href', "{{ url('alunos') }}"+"/"+data.id+"/selfEdit");
       }
     });
     // transition: visibility 0.25s, opacity 0.25s linear, left 0.25s linear;

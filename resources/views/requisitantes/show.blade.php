@@ -94,7 +94,7 @@
                 
             </form>
         </div>
-
+        @include('history')
     </div>
     @include('footer')
 

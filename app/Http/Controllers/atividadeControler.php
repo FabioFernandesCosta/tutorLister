@@ -148,7 +148,7 @@ class atividadeControler extends Controller
             'descricao' => 'required',
             'Requisitante' => 'required|exists:requisitante,nome',
             'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado',
-            'organizacao' => 'required|in:npi,aluno_tutor',
+            'organizacao' => 'required|in:npi,aluno tutor',
         );
         $mensagens = array(
             'Requisitante.exists' => 'O valor no campo Requisitante é invalido',
@@ -172,6 +172,11 @@ class atividadeControler extends Controller
                 ->withErrors($validator);
         } else {
             $result = DB::transaction(function () {
+                // if organizacao = "aluno tutor" set it to "aluno_tutor"
+                $organizacao = Request::get('organizacao');
+                if($organizacao == "aluno tutor"){
+                    $organizacao = "aluno_tutor";
+                }
                 $atividade = new atividade;
                 $atividade->data_atividade = Request::get('DoneData');
                 $atividade->hora_atividade = Request::get('DoneHour');
@@ -180,7 +185,7 @@ class atividadeControler extends Controller
                 $atividade->data_registro = date("Y-m-d");
                 $atividade->hora_registro = date("h:i:s");
                 $atividade->status = Request::get('status');
-                $atividade->organizacao = strtolower(Request::get('organizacao'));
+                $atividade->organizacao = strtolower($organizacao);
                 $atividade->save();
 
                 
@@ -266,6 +271,13 @@ class atividadeControler extends Controller
 
         $atv[0]->requisitante = requisitante::find($atv[0]->requisitante);
 
+        //change atv[0]->organizacao to Aluno Tutor if it is aluno_tutor and to NPI if it is npi
+        if($atv[0]->organizacao == "aluno_tutor"){
+            $atv[0]->organizacao = "Aluno Tutor";
+        }else if($atv[0]->organizacao == "npi"){
+            $atv[0]->organizacao = "NPI";
+        }
+
         return View::make('atividades.show') ->with('atv', $atv);
     }
 
@@ -314,7 +326,7 @@ class atividadeControler extends Controller
                     'descricao' => 'required',
                     'Requisitante' => 'required|exists:requisitante,nome',
                     'status' => 'required|in:Aberto,Fechado,Em andamento,Arquivado,Cancelado',
-                    'organizacao' => 'required|in:npi,aluno_tutor',
+                    'organizacao' => 'required|in:npi,aluno tutor',
 
 
                 );
@@ -340,6 +352,10 @@ class atividadeControler extends Controller
                 } else {
                     DB::transaction(function () use ($id){
                         $atv = atividade::findOrFail($id);
+                        $organizacao = Request::get('organizacao');
+                        if($organizacao == "aluno tutor"){
+                            $organizacao = "aluno_tutor";
+                        }
 
 
                         $changedFields = array(array(), array(), array());
@@ -376,12 +392,13 @@ class atividadeControler extends Controller
                             array_push($changedFields[2], $atv->status);
                         }
 
+                        
                         $atv->data_atividade = Request::get('DoneData');
                         $atv->hora_atividade = Request::get('DoneHour');
                         $atv->carga = Request::get('CargaHoraria');
                         $atv->descricao = Request::get('descricao');
                         $atv->status = Request::get('status');
-                        $atv->organizacao = strtolower(Request::get('organizacao'));
+                        $atv->organizacao = strtolower($organizacao);
                         $atv->save();
                         $invUs = Request::get('InvolvedUsers'); 
                         $ind = 0;

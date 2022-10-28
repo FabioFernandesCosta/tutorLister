@@ -144,7 +144,7 @@
                         <div>
                             <span>NPI ou Aluno Tutor?</span>
                             <div class="form-field" id="or"> <span></span>
-                                <input type="text" name="organizacao" id="organizacao" readonly value="{{strtoupper($atv[0]->organizacao)}}">
+                                <input type="text" name="organizacao" id="organizacao" readonly value="{{($atv[0]->organizacao)}}">
                             </div>
                         </div>
 

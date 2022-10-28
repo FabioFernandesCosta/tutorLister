@@ -12,6 +12,7 @@ use DateTime;
 use App\Models\curso;
 use App\Models\usuario_curso;
 use App\Models\usuario;
+use Illuminate\Support\Facades\Auth;
 
 class cursoController extends Controller
 {
@@ -73,6 +74,11 @@ class cursoController extends Controller
             $curso->nome = Request::get('nome');
             $curso->area_curso = Request::get('area_curso');
             $curso->save();
+            $user = Auth::user();
+            $user_id = $user->usuario_id;
+            $historico_controller = new historicoController;
+            // $historico_controller->store(["", "Curso criado", $usuario->usuario_id, $user_id, NULL, NULL, 2]);
+            $historico_controller->store(["", "Curso craido", $curso->curso_id, $user_id, NULL, NULL, 2]);
 
             Session::flash('message', 'Curso cadastrado com sucesso!');
             return Redirect::to('cursos/'.$curso->curso_id.'/edit');
@@ -124,11 +130,30 @@ class cursoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             $curso = curso::find($id);
+            //find differences between old and new values
+            $changedFields = array(array(), array(), array());
+            if($curso->nome != Request::get('nome')){
+                array_push($changedFields[0], 'Nome');
+                array_push($changedFields[1], Request::get('nome'));
+                array_push($changedFields[2], $curso->nome);
+            }
+            if($curso->area_curso != Request::get('area_curso')){
+                array_push($changedFields[0], 'Area do curso');
+                array_push($changedFields[1], Request::get('area_curso'));
+                array_push($changedFields[2], $curso->area_curso);
+            }
+
             $curso->nome = Request::get('nome');
             $curso->area_curso = Request::get('area_curso');
             $curso->save();
+            
+            $user = Auth::user();
+            $user_id = $user->usuario_id;
+            $historico_controller = new historicoController;
+            $historico_controller->store([implode(", ", $changedFields[0]), "editar", $curso->curso_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),2]);
+
+
 
             Session::flash('message', 'Curso atualizado com sucesso!');
             return Redirect::to('cursos/' . $id . '/edit');

@@ -77,7 +77,7 @@
             {{ Form::close() }}
         </div>
 
-
+        @include('history')
 
 
     </div>

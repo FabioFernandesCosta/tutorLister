@@ -20,7 +20,16 @@
 
 <body class="antialiased" id="eventBody">
     <div class="wrapAll">
-
+        {{-- if theres errors show all --}}
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
         <h1>Registrar Atividade</h1>
 

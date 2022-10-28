@@ -16,39 +16,43 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        //if request org is not set, $whereValue = auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : ''), if it is set, $whereValue = request org
+        $whereValue = $request->org == null ? (auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : '')) : $request->org;
+        // dd($whereValue);
         $atividades = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
             //if auth user npi = 1, show all activities with organizacao = NPI, same for auth user aluno_tutor
-            ->where('organizacao', '=', auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : ''))
+            ->where('organizacao', '=', $whereValue)
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
             
         $atividadesAbertas = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
-            ->where('organizacao', '=', auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : ''))
+            ->where('organizacao', '=', $whereValue)
             ->where('status', 'Aberto')
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
         $atividadesEmAndamento = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
-            ->where('organizacao', '=', auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : ''))
+            ->where('organizacao', '=', $whereValue)
             ->where('status', 'Em andamento')
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
         $atividadesFechadas = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
-            ->where('organizacao', '=', auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : ''))
+            ->where('organizacao', '=', $whereValue)
             ->where('status', 'Fechado')
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
         $atividadesCanceladas = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
-            ->where('organizacao', '=', auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : ''))
+            ->where('organizacao', '=', $whereValue)
             ->where('status', 'Cancelado')
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
@@ -155,12 +159,15 @@ class DashboardController extends Controller
             ->join('usuario_curso', 'usuario.usuario_id', '=', 'usuario_curso.usuario_id')
             ->join('curso', 'curso.curso_id', '=', 'usuario_curso.curso_id');
             // ->where('usuario.ativo', '=', 1)
-            if (auth()->user()->npi == 1) {
-                $alunosCursos->where('usuario.npi', '=', 1);
-            } elseif (auth()->user()->aluno_tutor == 1) {
-                $alunosCursos->where('usuario.aluno_tutor', '=', 1);
-            }
-            $alunosCursos = $alunosCursos
+            //if $whereValue = npi, then where('usuario.npi', '=', 1)   // else if $whereValue = aluno_tutor then where('usuario.aluno_tutor', '=', 1)
+
+        if ($whereValue == 'npi') {
+            $alunosCursos = $alunosCursos->where('usuario.npi', '=', 1);
+        } else if ($whereValue == 'aluno_tutor') {
+            $alunosCursos = $alunosCursos->where('usuario.aluno_tutor', '=', 1);
+        }
+
+        $alunosCursos = $alunosCursos
             ->groupBy('curso')
             ->pluck('total', 'curso')->all();
 
@@ -178,7 +185,7 @@ class DashboardController extends Controller
         $alunosAtividades = usuario::selectRaw('usuario.nome as aluno, count(*) as total')
             ->join('usuario_atividade', 'usuario.usuario_id', '=', 'usuario_atividade.usuario_id')
             ->join('atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
-            ->where('organizacao', '=', auth()->user()->npi == 1 ? 'npi' : (auth()->user()->aluno_tutor == 1 ? 'aluno_tutor' : ''))
+            ->where('organizacao', '=', $whereValue)
             ->groupBy('aluno')
             ->orderBy('total', 'desc')
             ->limit(10)
@@ -196,18 +203,17 @@ class DashboardController extends Controller
         
         //numero de alunos que concluiram e não concluiram o treinamento
         $alunosTreinoConcluido = usuario::selectRaw('usuario.treinamento_concluido as concluido, count(*) as total');
-            //where if user is npi show only from users with npi = 1, if user is aluno_tutor show only from users with aluno_tutor = 1
-            if (auth()->user()->npi == 1) {
-                $alunosTreinoConcluido->where('usuario.npi', '=', 1);
-            } elseif (auth()->user()->aluno_tutor == 1) {
-                $alunosTreinoConcluido->where('usuario.aluno_tutor', '=', 1);
-            }
             
-            $alunosTreinoConcluido = $alunosTreinoConcluido
+        if ($whereValue == 'npi') {
+            $alunosTreinoConcluido = $alunosTreinoConcluido->where('usuario.npi', '=', 1);
+        } else if ($whereValue == 'aluno_tutor') {
+            $alunosTreinoConcluido = $alunosTreinoConcluido->where('usuario.aluno_tutor', '=', 1);
+        }
+            
+        $alunosTreinoConcluido = $alunosTreinoConcluido
             ->groupBy('concluido')
             ->pluck('total', 'concluido')->all();
 
-        // Generate random colours for the groups
         $AlunosTreinoConcluidoChart = new dashboard;
         $AlunosTreinoConcluidoChart->labels = array_map(function ($concluido) {
             return $concluido == 0 ? 'Não concluído' : 'Concluído ';
@@ -218,12 +224,12 @@ class DashboardController extends Controller
         $AlunosTreinoConcluidoChart->colours = $backgroundColours;
         $AlunosTreinoConcluidoChart->borderColours = $borderColours;
 
-
         return view('dashboard')
         ->with('chart', $chart)
         ->with('AlunosCursosChart', $AlunosCursosChart)
         ->with('AlunosAtividadesChart', $AlunosAtividadesChart)
-        ->with('AlunosTreinoConcluidoChart', $AlunosTreinoConcluidoChart);
+        ->with('AlunosTreinoConcluidoChart', $AlunosTreinoConcluidoChart)
+        ->with('dashboardType', $whereValue);
         // , compact('chart'), compact('AlunosAtividadesChart'), compact('AlunosCursosChart'));
     }
 

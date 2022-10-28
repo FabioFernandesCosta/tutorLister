@@ -20,8 +20,23 @@
     @include('sidemenu')
     <div class="wrapAll">
         <span id="pageTitle">
-            Dashboard
+            {{-- if theres no $dashboardType echo Dashboard NPI, else echo Dashboard $dashboardType --}}
+
+            Dashboard {{ (!isset($dashboardType) or ($dashboardType == 'npi')) ? 'NPI' : 'Aluno Tutor' }}
+
         </span>
+        {{-- button to dashboard.post route that allow auth user that has npi = 1 and aluno_tutor = 1 to switch between npi dashboard and aluno tutor dashboard, it has a form that send org, org = 1 if $dashboardType not set or = 2, else = 1 --}}
+        @if (Auth::user()->npi == 1 && Auth::user()->aluno_tutor == 1)
+            <form action="{{ route('dashboard.post') }}" method="POST">
+                @csrf
+                <input type="hidden" name="org"
+                    value="{{ (!isset($dashboardType) or $dashboardType == 'npi') ? 'aluno_tutor' : 'npi' }}">
+                <button type="submit" class="dt-button btn-primary">Trocar para Dashboard
+                    {{ (!isset($dashboardType) or $dashboardType == 'npi') ? 'Aluno Tutor' : 'NPI' }}</button>
+            </form>
+        @endif
+
+
         <div id="repart2Canvas">
             <div class="chartContainer">
                 <canvas id="AtvChart"></canvas>
@@ -142,6 +157,7 @@
                         fontFamily: "'Muli', sans-serif",
                         padding: 15,
                     },
+                    //set chart background color to ##e9e9e9
 
 
                 }

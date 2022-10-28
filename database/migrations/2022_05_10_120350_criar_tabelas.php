@@ -129,9 +129,9 @@ return new class extends Migration
             $table->string('campo_modificado');
             $table->string('acao');
             $table->bigInteger('atividade_id') -> unsigned();
-            $table->bigInteger('usuario_id') -> unsigned();
+            $table->bigInteger('editor') -> unsigned();
             $table->foreign('atividade_id') -> references('atividade_id') -> on('atividade') -> onUpdate('cascade') -> onDelete('cascade');
-            $table->foreign('usuario_id') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->foreign('editor') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
             $table->date('data_modificacao');
             $table->string('valor_anterior');
             $table->string('novo_valor');
@@ -143,6 +143,32 @@ return new class extends Migration
             $table->string('acao');
             $table->bigInteger('usuario_id') -> unsigned();
             $table->foreign('usuario_id') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->bigInteger('editor') -> unsigned();
+            $table->foreign('editor') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->date('data_modificacao');
+            $table->string('valor_anterior')->nullable();
+            $table->string('novo_valor')->nullable();
+        });
+        
+        Schema::create('historicoCurso', function (Blueprint $table){
+            $table->id('historico_id');
+            $table->string('campo_modificado');
+            $table->string('acao');
+            $table->bigInteger('curso_id') -> unsigned();
+            $table->foreign('curso_id') -> references('curso_id') -> on('curso') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->bigInteger('editor') -> unsigned();
+            $table->foreign('editor') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
+            $table->date('data_modificacao');
+            $table->string('valor_anterior')->nullable();
+            $table->string('novo_valor')->nullable();
+        });
+        
+        Schema::create('historicoRequisitante', function (Blueprint $table){
+            $table->id('historico_id');
+            $table->string('campo_modificado');
+            $table->string('acao');
+            $table->bigInteger('requisitante_id') -> unsigned();
+            $table->foreign('requisitante_id') -> references('requisitante_id') -> on('requisitante') -> onUpdate('cascade') -> onDelete('cascade');
             $table->bigInteger('editor') -> unsigned();
             $table->foreign('editor') -> references('usuario_id') -> on('usuario') -> onUpdate('cascade') -> onDelete('cascade');
             $table->date('data_modificacao');

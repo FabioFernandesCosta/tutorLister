@@ -7,6 +7,7 @@ use App\Models\requisitante;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 
 class requisitanteController extends Controller
@@ -88,6 +89,11 @@ class requisitanteController extends Controller
             $requisitante->telefone = Request::get('telefone');
             $requisitante->save();
 
+            $user = Auth::user();
+            $user_id = $user->usuario_id;
+            $historico_controller = new historicoController;
+            $historico_controller->store(["", "Requisitante craido", $requisitante->requisitante_id, $user_id, NULL, NULL, 3]);
+
 
             // redirect
             return Redirect::to('requisitantes/'.$requisitante->id)->with('message', 'Requisitante cadastrado com sucesso!');
@@ -152,11 +158,40 @@ class requisitanteController extends Controller
 
             DB::transaction(function () use ($id) {
                 $requisitante = requisitante::find($id);
+                $changedFields = array(array(), array(), array());
+                if($requisitante->nome != Request::get('nome')){
+                    array_push($changedFields[0], 'Nome');
+                    array_push($changedFields[1], Request::get('nome'));
+                    array_push($changedFields[2], $requisitante->nome);
+                }
+                if($requisitante->empresa != Request::get('empresa')){
+                    array_push($changedFields[0], 'Empresa');
+                    array_push($changedFields[1], Request::get('empresa'));
+                    array_push($changedFields[2], $requisitante->empresa);
+                }
+                if($requisitante->email != Request::get('email')){
+                    array_push($changedFields[0], 'Email');
+                    array_push($changedFields[1], Request::get('email'));
+                    array_push($changedFields[2], $requisitante->email);
+                }
+                if($requisitante->telefone != Request::get('telefone')){
+                    array_push($changedFields[0], 'Telefone');
+                    array_push($changedFields[1], Request::get('telefone'));
+                    array_push($changedFields[2], $requisitante->telefone);
+                }
+
+
                 $requisitante->nome = Request::get('nome');
                 $requisitante->empresa = Request::get('empresa');
                 $requisitante->email = Request::get('email');
                 $requisitante->telefone = Request::get('telefone');
                 $requisitante->save();
+
+                $user = Auth::user();
+                $user_id = $user->usuario_id;
+                $historico_controller = new historicoController;
+                $historico_controller->store([implode(", ", $changedFields[0]), "editar", $requisitante->requisitante_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),3]);
+
             });
             return Redirect::to('requisitantes/'.$id)->with('message', 'Requisitante atualizado com sucesso!');
         }

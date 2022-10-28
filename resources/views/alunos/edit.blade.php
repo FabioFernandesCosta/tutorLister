@@ -44,8 +44,11 @@
         
         <div class="atvDetalhes" style="height: auto">
 
-
-            {{ Form::model($aluno, ['route' => ['alunos.update', $aluno->usuario_id], 'method' => 'PUT', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
+            @if (Auth::user()->usuario_id == $aluno->usuario_id)
+                {{ Form::model($aluno, ['route' => ['alunos.selfUpdate', $aluno->usuario_id], 'method' => 'PUT', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
+            @else
+                {{ Form::model($aluno, ['route' => ['alunos.update', $aluno->usuario_id], 'method' => 'PUT', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
+            @endif
 
 
             {{-- https://stackoverflow.com/questions/35332784/how-to-call-a-controller-function-inside-a-view-in-laravel-5 --}}
@@ -63,6 +66,8 @@
                                 {{-- nome input value if old is not null and if is null --}}
                                 <input type="text" value="{{ old('nome') ?? $aluno->nome }}" name="nome" id="usuario">
                             </div>
+                            @if (Auth::user()->admin == 1)
+                                
                             <div>
                                 <span>Níveis de acesso ao sistema</span>
                                 {{ Html::ul($errors->get('acesso'), ['class' => 'ulError']) }}
@@ -80,6 +85,7 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div>
                                 <span>Está no NPI?</span>
                                 {{ Html::ul($errors->get('npi'), ['class' => 'ulError']) }}
@@ -126,6 +132,7 @@
                                     
                                 </div>
                             </div>
+                            @endif
                             
                             <span>Curso</span>
                             {{ Html::ul($errors->get('curso'), ['class' => 'ulError']) }}
@@ -188,6 +195,7 @@
                 </div>
                 <div class="btn-right">
 
+                    
                     {{ Form::submit('Salvar', ['class' => 'btn mt-3 dt-button', 'style' => 'margin-top: 45px',  'onclick'=>"return confirm('Confirmar edição?');"]) }}
 
                 </div>

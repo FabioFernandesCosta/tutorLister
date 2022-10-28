@@ -143,6 +143,11 @@ class alunosController extends Controller
     public function show($id)
     {
         //
+        if (Auth::user()->admin != 1) {
+            if (Auth::user()->usuario_id != $id) {
+                return Redirect::to('dashboard');
+            }
+        }
         $usuario = usuario::find($id);
         $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
         $curso = curso::find($usuario_curso->curso_id);
@@ -166,7 +171,12 @@ class alunosController extends Controller
 
         $atv = (DB::table('usuario_atividade')
         //only first 25 characters from atividade.descricao
-        ->select(DB::raw('SUBSTRING(atividade.descricao, 1, 45) as descricao'), 'atividade.data_atividade', 'atividade.hora_atividade', 'atividade.atividade_id')
+        ->select(
+            DB::raw('SUBSTRING(atividade.descricao, 1, 45) as descricao'),
+            DB::raw("DATE_FORMAT(atividade.data_atividade, '%d/%m/%Y') as data_atividade"),
+            DB::raw("TIME_FORMAT(atividade.hora_atividade, '%H:%i') as hora_atividade"),
+            'atividade.atividade_id') 
+        // DB::raw("DATE_FORMAT(atividade.data_atividade, '%d/%m/%Y') as data_atividade"),
         ->join('atividade', 'usuario_atividade.atividade_id', '=', 'atividade.atividade_id')
         ->where('usuario_atividade.usuario_id', $id)
         ->orderBy('atividade.data_atividade', 'desc')
@@ -184,7 +194,14 @@ class alunosController extends Controller
      */
     public function edit($id)
     {
-        //
+        //if auth user usuario_id is not equal to $id, redirect to dashboard
+        if (Auth::user()->admin != 1) {
+            if (Auth::user()->usuario_id != $id) {
+                return Redirect::to('dashboard');
+            }
+        }
+
+
         $usuario = usuario::find($id);
         $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
         $curso = curso::find($usuario_curso->curso_id);
@@ -207,6 +224,12 @@ class alunosController extends Controller
     public function update(Request $request, $id)
     {
         //
+        if (Auth::user()->admin != 1) {
+            if (Auth::user()->usuario_id != $id) {
+                return Redirect::to('dashboard');
+            }
+        }
+
         $rules = array( 
             'nome' => 'required',
             'email' => 'required|email',
@@ -268,10 +291,22 @@ class alunosController extends Controller
                     array_push($changedFields[1], Request::get('telefone'));
                     array_push($changedFields[2], $usuario->telefone);
                 }
-                if($usuario->nivel_de_acesso != Request::get('acesso')){
-                    array_push($changedFields[0], 'Nível de acesso');
-                    array_push($changedFields[1], Request::get('acesso'));
-                    array_push($changedFields[2], $usuario->nivel_de_acesso);
+                // if($usuario->nivel_de_acesso != Request::get('acesso')){
+                //     array_push($changedFields[0], 'Nível de acesso');
+                //     array_push($changedFields[1], Request::get('acesso'));
+                //     array_push($changedFields[2], $usuario->nivel_de_acesso);
+                // }
+                //npi
+                if($usuario->npi != Request::get('npi')){
+                    array_push($changedFields[0], 'NPI');
+                    array_push($changedFields[1], Request::get('npi'));
+                    array_push($changedFields[2], $usuario->npi);
+                }
+                //aluno tutor
+                if($usuario->aluno_tutor != Request::get('aluno_tutor')){
+                    array_push($changedFields[0], 'Aluno Tutor');
+                    array_push($changedFields[1], Request::get('aluno_tutor'));
+                    array_push($changedFields[2], $usuario->aluno_tutor);
                 }
 
                 $usuario->email = Request::get('email');

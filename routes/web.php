@@ -61,6 +61,10 @@ Route::get('login/google/callback', function () {
         
 Route::group( ['middleware' => 'auth' ], function() {
 
+
+    
+
+
     //logout
     Route::get('/logout', function () {
         Auth::logout();
@@ -69,6 +73,11 @@ Route::group( ['middleware' => 'auth' ], function() {
 
     // Route::get('/charts', 'ChartController@index')->name('charts');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::controller(DashboardController::class)->group(function(){
+        //post version
+        Route::post('/dashboard', [DashboardController::class, 'index'])->name('dashboard.post');
+    });
+    
 
 
     //any import view is protected by admin middleware
@@ -118,11 +127,23 @@ Route::group( ['middleware' => 'auth' ], function() {
         Route::get('cursos/getdata', [cursoController::class, 'getdata']);
         Route::controller(cursoController::class)->group(function(){
             //route resource cursos without destroy and show
-            Route::resource('cursos', cursoController::class, ['except' => ['destroy', 'show']]);
+            Route::resource('cursos', cursoController::class, ['except' => ['destroy']]);
             Route::post('/cursos/import/store', 'import_cursos')->name('cursos.import_cursos');
             Route::post('/cursos/getdata', 'getdata')->name('cursos.getData');
         });
+        Route::get('cursos/{id}/historicoCurso', [historicoController::class, 'showCurso']);
+
+        
     }); //admin middleware
+    //route to alunos edit, update and show
+    Route::get('alunos/{id}/selfEdit', [alunosController::class, 'edit']);
+    Route::put('alunos/{id}/selfUpdate', [alunosController::class, 'update'])->name('alunos.selfUpdate');
+    Route::get('alunos/{id}/selfShow', [alunosController::class, 'show']);
+
+
+
+
+
     
     Route::get('consultar', [atividadeControler::class, 'consultar']);
     Route::get('atividades/getdata', [atividadeControler::class, 'getdata']);
@@ -150,6 +171,7 @@ Route::group( ['middleware' => 'auth' ], function() {
         Route::resource('requisitantes', requisitanteController::class, ['except' => ['destroy']]);
         Route::post('/requisitantes/getdata', 'getdata')->name('requisitantes.getData');
     });
+    Route::get('requisitantes/{id}/historicoRequisitantes', [historicoController::class, 'showRequisitante']);
 
     Route::get('ponto/getdata', [sistemaPontoController::class, 'getdata']);
     Route::get('ponto/getdataAll', [sistemaPontoController::class, 'getdata2']);

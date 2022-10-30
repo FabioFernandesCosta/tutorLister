@@ -41,6 +41,15 @@ class sistemaPontoController extends Controller
             DB::raw("DATE_FORMAT(horario.hora_fim, '%H:%i') as hora_fim"),
             'usuario.nome')
             ->join('usuario', 'usuario.usuario_id', '=', 'horario.usuario_id');
+        //if auth user npi = 1; where usuario.npi = 1, if auth user aluno_tutor = 1; where usuario.aluno_tutor = 1, if both = 1; all users
+        if(auth()->user()->npi == 1 && auth()->user()->aluno_tutor == 1){
+            $horario = $horario->where('usuario.npi', 1)->orWhere('usuario.aluno_tutor', 1);
+        }else if(auth()->user()->npi == 1){
+            $horario = $horario->where('usuario.npi', 1);
+        }else if(auth()->user()->aluno_tutor == 1){
+            $horario = $horario->where('usuario.aluno_tutor', 1);
+        }
+
 
         $min = strtotime(Request::get("min"));
         $max = strtotime(Request::get("max"));

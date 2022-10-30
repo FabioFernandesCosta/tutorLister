@@ -16,7 +16,7 @@
 
         /* outline button */
     </style>
-    
+
 
 
 </head>
@@ -94,12 +94,14 @@
                 </div>
                 <div id="indexButtons" style="display: grid; grid-template-columns: 50% 50%; margin-top: 1rem">
                 </div>
-                
+
             </div>
-            
-            <div id="repart2" style="grid-template-columns: 36% 56%; gap:8%; padding:3.5rem 0">
+            {{-- id = repart2 if auth user admin = 1 --}}
+            <div id="{{ Auth::user()->admin == 1 ? 'repart2' : '' }}" style="grid-template-columns: 36% 56%; gap:8%; padding:3.5rem 0">
                 <h3 style="">Seus registros</h3>
+                @if (Auth::user()->admin == 1)
                 <h3 id="histClick" class="itemTittle" ">Registro de pontos geral</h3>
+                @endif
                 <div>
 
                     <br><br>
@@ -114,6 +116,7 @@
                         </thead>
                     </table>
                 </div>
+                @if (Auth::user()->admin == 1)
                 <div>
                     <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
                         <tbody>
@@ -129,6 +132,7 @@
                             </tr>
                         </tbody>
                     </table>
+                        
                     <table id="JqueryAtvTableAll" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
                         <thead>
                             <tr id="tbr">
@@ -140,6 +144,7 @@
                         </thead>
                     </table>
                 </div>
+                @endif
 
             </div>
         </div>
@@ -222,6 +227,15 @@
                 ],
             });
 
+
+
+
+
+
+        });
+    </script>
+    @if (Auth::user()->admin == 1)
+        <script defer>
             var minDate, maxDate;
 
             minDateFilter = "";
@@ -253,9 +267,9 @@
                 ajax: {
                     url: "{{ url('ponto/getdataAll') }}",
                     data: function(d) {
-                            d.min = minDateFilter;
-                            d.max = maxDateFilter;
-                        }
+                        d.min = minDateFilter;
+                        d.max = maxDateFilter;
+                    }
                 },
 
                 //linguagem
@@ -295,20 +309,16 @@
 
 
             $('#min').change(function() {
-                    minDateFilter = $("#min").val();
-                    console.log("test");
-                    tableAll.draw();
-                });
-                $('#max').change(function() {
-                    maxDateFilter = $("#max").val();
-                    tableAll.draw();
-                });
-
-            
-
-
-        });
-    </script>
+                minDateFilter = $("#min").val();
+                console.log("test");
+                tableAll.draw();
+            });
+            $('#max').change(function() {
+                maxDateFilter = $("#max").val();
+                tableAll.draw();
+            });
+        </script>
+    @endif
     
 
 </body>

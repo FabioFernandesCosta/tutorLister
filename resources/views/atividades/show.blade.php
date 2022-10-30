@@ -61,7 +61,7 @@
 
                             <div style="display: flex;">
                                 
-                                Usuarios envolvidos 
+                                Alunos envolvidos 
                             </div>
         
                             @foreach ($atv[0]->nome as $key => $value)

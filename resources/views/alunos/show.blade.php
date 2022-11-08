@@ -52,7 +52,7 @@
 
 <body class="antialiased" id="eventBody">
 
-    </div>
+
     <div class="wrapAll">
 
         <h1>Aluno: {{ $aluno->nome }}</h1>
@@ -163,7 +163,7 @@
                         <div id="userContainer">
                             <h3 class="itemTittle">Últimas atividade de {{ $aluno->nome }}</h3>
 
-                            <table id="av15" class="display">
+                            <table id="av15" class="display nowrap dataTable" style="width: 100%">
                                 <thead>
                                     <tr>
                                         <th>Descrição</th>
@@ -171,8 +171,7 @@
                                         <th>Hora</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                </tbody>
+                                
                             </table>
 
                         </div>
@@ -185,7 +184,10 @@
                                     searching: false,
                                     paging: false,
                                     info: false,
-                                    scrollX: true,
+                                    // scrollX: true,
+                                    //adapt its size to the parent container
+                                    responsive: true,
+
 
                                     "language": {
                                         "lengthMenu": "Mostrar _MENU_ registros por página",

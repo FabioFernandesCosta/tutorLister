@@ -19,6 +19,7 @@ use Datatables;
 use App\Http\Controllers\historicoController;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
+use DateTimeZone;
 
 
 // Classe de controle de atividades
@@ -182,8 +183,13 @@ class atividadeControler extends Controller
                 $atividade->hora_atividade = Request::get('DoneHour');
                 $atividade->carga = Request::get('CargaHoraria');
                 $atividade->descricao = Request::get('descricao');
-                $atividade->data_registro = date("Y-m-d");
-                $atividade->hora_registro = date("h:i:s");
+
+                $date = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+
+                $atividade->data_registro = $date->format('Y-m-d');
+                $atividade->hora_registro = $date->format('H:i:s');
+
+
                 $atividade->status = Request::get('status');
                 $atividade->organizacao = strtolower($organizacao);
                 $atividade->save();

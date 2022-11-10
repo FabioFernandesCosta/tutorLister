@@ -94,7 +94,7 @@
         atvId = '<?php try{echo $atv[0]->atividade_id;}catch(Exception $e){} ?>' + '/historico';
     }
     else if(window.location.href.indexOf("alunos") > -1) {
-        atvId = '<?php try{echo $aluno->usuario_id;}catch(Exception $e){} ?>' + '/historicoUser';
+        atvId = '/alunos/<?php try{echo $aluno->usuario_id;}catch(Exception $e){} ?>' + '/historicoUser';
     }else if(window.location.href.indexOf("requisitantes") > -1) {
         atvId = '<?php try{echo $requisitante->requisitante_id;}catch(Exception $e){} ?>' + '/historicoRequisitantes';
     }//cursos
@@ -148,6 +148,8 @@
     x.style.opacity = "0";
     y.innerHTML = "Histórico ▼";
     z.style.height = "5.5rem";
+    // any child of x has height 0
+
 </script>
 
 </html>

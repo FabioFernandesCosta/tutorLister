@@ -268,7 +268,7 @@
 
         var x = 1;
         var userInput =
-            `<input type="text" class="usuario" required='required' name="InvolvedUsers[0]" id="usuario" list="users">`;
+            `<input type="text" class="usuario" required='required' name="InvolvedUsers[]" id="usuario" list="users">`;
 
         $(add_button).click(function() {
             typeaheadInit();

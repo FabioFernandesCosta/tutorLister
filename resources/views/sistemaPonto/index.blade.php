@@ -88,6 +88,15 @@
                     {{-- <div class="closeBtn" style="margin-top: 1rem">
                         <button type="submit" class="dt-button" style="margin-top: 1rem">Registrar</button>
                     </div> --}}
+                    {{-- if variable $error exits show it --}}
+                    @if(isset($erro))
+                    <div class="alert alert-danger" role="alert">
+                        {{ $erro }}
+                    </div>
+                    @endif
+                    
+
+
                     {{ Form::submit('Registrar', ['class' => ' mt-3 dt-button', 'style' => 'margin-top: 45px']) }}
                     {{ Form::close() }}
                     {{-- <button class="dt-button">test</button> --}}
@@ -136,6 +145,7 @@
                     <table id="JqueryAtvTableAll" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
                         <thead>
                             <tr id="tbr">
+                                <th>ID</th>
                                 <th>Nome</th>
                                 <th>Dia</th>
                                 <th>Entrada</th>
@@ -225,7 +235,14 @@
                         "data": "hora_fim"
                     }
                 ],
+                "columnDefs": [{
+                    "targets": 0,
+                    "render": function(data, type, row) {
+                        return moment(data).format('DD/MM/YYYY');
+                    }
+                }],
             });
+            
 
 
 
@@ -244,9 +261,11 @@
             var tableAll = $('#JqueryAtvTableAll').DataTable({
                 //order by the first column and second column in descending order and null as first
                 order: [
-                    [1, 'desc'],
                     [2, 'desc'],
-                    [3, 'desc'],
+                    // column 2 desc order date format dd/mm/yyyy as yyyy-mm-dd
+                    
+
+                    [1, 'asc'],
                 ],
 
                 "lengthMenu": [
@@ -292,7 +311,12 @@
                     }
                 },
 
-                "columns": [{
+                "columns": [
+                    {
+                        "data": "usuario_id",
+
+                    },
+                    {
                         "data": "nome"
                     },
                     {
@@ -305,8 +329,17 @@
                         "data": "hora_fim"
                     }
                 ],
+                // render all <td> from column 2 with data-sort='YYYYMMDD'
+                "columnDefs": [{
+                    "targets": 2,
+                    "render": function(data, type, row) {
+                        return moment(data).format('DD/MM/YYYY');
+                    }
+                }],
             });
-
+            
+            
+            
 
             $('#min').change(function() {
                 minDateFilter = $("#min").val();
@@ -316,6 +349,10 @@
             $('#max').change(function() {
                 maxDateFilter = $("#max").val();
                 tableAll.draw();
+            });
+            // print table ajax when draw
+            tableAll.on('draw', function() {
+                console.log(tableAll.ajax.json());
             });
         </script>
     @endif

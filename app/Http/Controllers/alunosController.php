@@ -444,4 +444,39 @@ class alunosController extends Controller
             return Redirect::to($result);
         }
     }
+
+    //login
+    public function login(Request $request){
+        $data = Request::all();
+        $rules = array(
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|max:255',
+        );
+        $messages = array(
+            'required' => 'O campo :attribute é obrigatório.',
+            'string' => 'O campo :attribute deve ser uma string.',
+            'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
+            'email' => 'O campo :attribute deve ser um email válido.',
+        );
+        $validator = Validator::make($data, $rules, $messages);
+        if ($validator->fails()) {
+            return Redirect::to('/')
+            ->withErrors($validator)
+            ->withInput();
+        }else{
+            $user = usuario::where([
+                'email' => Request::get('email'), 
+                'password' => Request::get('password')
+            ])->first();
+
+            if ($user) {
+                Auth::login($user);
+                return redirect()->intended('dashboard');
+            }else{
+                return Redirect::to('/')
+                ->withErrors(['email' => 'Email ou senha incorretos.'])
+                ->withInput();
+            }
+        }
+    }
 }

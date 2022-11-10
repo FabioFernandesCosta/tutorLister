@@ -13,6 +13,17 @@
             font-family: 'Nunito', sans-serif;
         }
     </style>
+    
+        
+</head>
+
+{{-- clicar-carregar --}}
+
+
+
+@include('sidemenu')
+
+<body class="antialiased" id="eventBody">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css"
         href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
@@ -42,15 +53,6 @@
     </script>
     <script type="text/javascript" charset="utf8"
         src="//cdn.datatables.net/plug-ins/1.12.1/filtering/row-based/range_dates.js"></script>
-</head>
-
-{{-- clicar-carregar --}}
-
-
-
-@include('sidemenu')
-
-<body class="antialiased" id="eventBody">
 
 
     <div class="wrapAll">
@@ -65,12 +67,15 @@
             <a style="text-decoration: none;" href={{ url('alunos') }}>
                 <button class="dt-button">Voltar</button>
             </a>
-            {{-- @php
-                dd($aluno->usuario_id);
-            @endphp --}}
-            <a style="text-decoration: none;" href={{ url('alunos/' . $aluno->usuario_id . '/edit') }}>
+            @php
+                $editUrl = (str_contains(url()->current(), 'selfShow')) ? url('alunos/' . $aluno->usuario_id . '/selfEdit') : url('alunos/' . $aluno->usuario_id . '/edit') ;
+            @endphp
+            <a style="text-decoration: none;" href={{ $editUrl }}>
                 <button class="dt-button">Editar</button>
             </a>
+            
+
+
 
         </div>
 
@@ -176,7 +181,7 @@
 
                         </div>
 
-                        <script>
+                        <script defer>
 
                             $(document).ready(function() {
                                 $('#av15').DataTable({
@@ -242,7 +247,10 @@
 
             </form>
         </div>
-        @include('history')
+        {{-- if url do not contains selfShow @include('history') --}}
+        @if (!str_contains(url()->current(), 'selfShow'))
+            @include('history')
+        @endif
     </div>
     @include('footer')
 

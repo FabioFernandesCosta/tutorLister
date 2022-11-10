@@ -99,7 +99,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Descrição</th>
-                        <th>Alunos envolvidos</th>
+                        <th>ID Alunos</th>
+                        <th>Alunos</th>
                         <th>Requisitante</th>
                         <th>Data de realização</th>
                         <th>Hora de realização</th>
@@ -186,6 +187,10 @@
                         {
                             "data": "descricao",
                             name: "descricao"
+                        },
+                        {
+                            "data": "IDUs",
+                            name: "usuario.usuario_id"
                         },
                         {
                             "data": "nomeUs",

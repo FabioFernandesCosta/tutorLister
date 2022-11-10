@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('treinamento_concluido')->default(0);
             $table->integer('nivel_de_acesso');
             $table->string('email')->unique();
+            $table->string('password');
             //provider_id
             $table->string('provider_id')->nullable();
             //avatar

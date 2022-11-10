@@ -60,10 +60,11 @@ class atividadeControler extends Controller
                     DB::raw("TIME_FORMAT(atividade.carga, '%H:%i') as carga"),
                     DB::raw("SUBSTR(atividade.descricao, 1, 64) as descricao"),
                     "atividade.status",
-                    DB::raw('group_concat(DISTINCT requisitante.nome) as requisitante'))
+                    DB::raw('group_concat(DISTINCT requisitante.nome ) as requisitante'))
                     //DB::raw('group_concat( usuario.nome) as nomeUs'))
                     ->groupBy('atividade.atividade_id')
-                    ->addSelect(DB::raw("group_concat(usuario.nome) as nomeUs"))
+                    ->addSelect(DB::raw("group_concat(usuario.nome SEPARATOR ', ') as nomeUs"))
+                    ->addSelect(DB::raw("group_concat(usuario.usuario_id SEPARATOR ', ') as IDUs"))
                     
                     ->where(function($query){
                         if(Auth::user()->npi==true and Auth::user()->aluno_tutor==true){
@@ -408,6 +409,7 @@ class atividadeControler extends Controller
                         $atv->save();
                         $invUs = Request::get('InvolvedUsers'); 
                         $ind = 0;
+
                         
                         DB::table("usuario_atividade")
                         ->where("atividade_id", "=", $atv->atividade_id)
@@ -418,20 +420,15 @@ class atividadeControler extends Controller
                             ->select("usuario_id", "nome")
                             ->where("nome", "=", $key)
                             ->get();
-                            
-                            
                             if (strtolower($usuario[0]->nome)== strtolower($key)) {
                                 $us_atv = new usuario_atividade;
                                 $us_atv->usuario_id = $usuario[0]->usuario_id;
-                                
                                 $us_atv->atividade_id = $atv->atividade_id;
-                                
-                                
-                                
-                                $us_atv->save();
                             }
+                            $us_atv->save();
                             $ind += 1;
                         }
+
 
                         
                         $req = Request::get('Requisitante');

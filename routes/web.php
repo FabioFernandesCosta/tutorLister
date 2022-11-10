@@ -35,6 +35,9 @@ Route::get('/auth/redirect', function () {
 });
 
 
+
+
+
 Route::get('login/google/callback', function () {
     //dd(var_dump(openssl_get_cert_locations()));
     $googleUser = Socialite::driver('google')->stateless()->user();
@@ -58,6 +61,11 @@ Route::get('login/google/callback', function () {
         return redirect('/') -> with('error', 'Email não registrado no sistema');
     }  
 });
+
+//normal login in alunoscontroler
+Route::post('/login/default', [alunosController::class, 'login'])->name('default.login');
+
+
         
 Route::group( ['middleware' => 'auth' ], function() {
 
@@ -138,7 +146,7 @@ Route::group( ['middleware' => 'auth' ], function() {
     //route to alunos edit, update and show
     Route::get('alunos/{id}/selfEdit', [alunosController::class, 'edit']);
     Route::put('alunos/{id}/selfUpdate', [alunosController::class, 'update'])->name('alunos.selfUpdate');
-    Route::get('alunos/{id}/selfShow', [alunosController::class, 'show']);
+    Route::get('alunos/{id}/selfShow', [alunosController::class, 'show'])->name('alunos.selfShow');
 
 
 

@@ -73,7 +73,7 @@
         <div style="margin: auto" id="fullName">usuario</div>
         <div style="margin-top: 10px">
           <a href="" style="margin: auto;" id="editUser">
-            <button style="; margin: auto; font-size: 0.9rem;" class="dt-button" >Editar seus dados</button>
+            <button style="; margin: auto; font-size: 0.9rem;" class="dt-button" >Seus dados</button>
           </a>
         </div>
         <div>
@@ -97,13 +97,21 @@
       success: function(data){
         //retrieve column avatar and user name from route userLoggedData
         $('#userAvatar').attr('src', data.avatar);
-        //retrieve first name from string data.name
-        $('#userName').text(data.name.substr(0, data.name.indexOf(' ')));
+        // if data.name dont has ' ' then show data.name
+        if(data.name.indexOf(' ') == -1){
+          $('#userName').text(data.name);
+          $('#fullName').text(data.name);
+        }else{
 
-        //retrieve full name from string data.name
-        $('#fullName').text(data.name);
+          //retrieve first name from string data.name 
+          
+          $('#userName').text(data.name.substr(0, data.name.indexOf(' ')));
+
+          //retrieve full name from string data.name
+          $('#fullName').text(data.name);
+      }
         //retrieve id from data.id and put as href in editUser
-        $('#editUser').attr('href', "{{ url('alunos') }}"+"/"+data.id+"/selfEdit");
+        $('#editUser').attr('href', "{{ url('alunos') }}"+"/"+data.id+"/selfShow");
       }
     });
     // transition: visibility 0.25s, opacity 0.25s linear, left 0.25s linear;

@@ -128,10 +128,8 @@ Route::group( ['middleware' => 'auth' ], function() {
             Route::post('/alunos/getdata', 'getdata')->name('alunos.getData');
         });
         //historicoUser
-        Route::get('alunos/{id}/historicoUser', [historicoController::class, 'showUser']);
-        Route::get('alunos/{id}/atividades', [alunosController::class, 'atvsUser']);
-
-
+        
+        
         Route::get('cursos/getdata', [cursoController::class, 'getdata']);
         Route::controller(cursoController::class)->group(function(){
             //route resource cursos without destroy and show
@@ -140,12 +138,14 @@ Route::group( ['middleware' => 'auth' ], function() {
             Route::post('/cursos/getdata', 'getdata')->name('cursos.getData');
         });
         Route::get('cursos/{id}/historicoCurso', [historicoController::class, 'showCurso']);
-
+        
         
     }); //admin middleware
     //route to alunos edit, update and show
+    Route::get('alunos/{id}/historicoUser', [historicoController::class, 'showUser']);
+    Route::get('alunos/{id}/atividades', [alunosController::class, 'atvsUser']);
     Route::get('alunos/{id}/selfEdit', [alunosController::class, 'edit']);
-    Route::put('alunos/{id}/selfUpdate', [alunosController::class, 'update'])->name('alunos.selfUpdate');
+    Route::post('alunos/{id}/selfUpdate', [alunosController::class, 'updateSelf'])->name('alunos.selfUpdate');
     Route::get('alunos/{id}/selfShow', [alunosController::class, 'show'])->name('alunos.selfShow');
 
 

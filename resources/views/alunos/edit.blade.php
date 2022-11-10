@@ -40,12 +40,23 @@
         <h1>Editar Aluno: {{ $aluno->nome }}</h1>
         <h3>ID-{{$aluno->usuario_id}}</h3>
 
+        {{-- if theres any error show it --}}
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div><br />
+        @endif
 
+        {{-- if theres any success show it --}}
         
         <div class="atvDetalhes" style="height: auto">
 
             @if (Auth::user()->usuario_id == $aluno->usuario_id)
-                {{ Form::model($aluno, ['route' => ['alunos.selfUpdate', $aluno->usuario_id], 'method' => 'PUT', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
+                {{ Form::model($aluno, ['route' => ['alunos.selfUpdate', $aluno->usuario_id], 'method' => 'POST', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
             @else
                 {{ Form::model($aluno, ['route' => ['alunos.update', $aluno->usuario_id], 'method' => 'PUT', 'class' => 'atvForm', 'autocomplete' => 'off']) }}
             @endif
@@ -91,10 +102,11 @@
                                 {{ Html::ul($errors->get('npi'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="np"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
+                                    
                                     <select name="npi" id="npi">
-                                        <option value="1" {{ (old('npi') ?? $aluno->npi) == 1 ? 'selected' : '' }}>
+                                        <option value="1" {{ ((old('npi') ?? $aluno->npi) == "Sim" ? 'selected' : '') }}>
                                             Sim</option>
-                                        <option value="0" {{ (old('npi') ?? $aluno->npi) == 0 ? 'selected' : '' }}>
+                                        <option value="0" {{ ((old('npi') ?? $aluno->npi) == "Não" ? 'selected' : '') }}>
                                             Não</option>
                                     </select>
                                     
@@ -106,9 +118,9 @@
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
                                     <select name="aluno_tutor" id="aluno_tutor">
-                                        <option value="1" {{ (old('aluno_tutor') ?? $aluno->aluno_tutor) == 1 ? 'selected' : '' }}>
+                                        <option value="1" {{ (old('aluno_tutor') ?? $aluno->aluno_tutor) == "Sim" ? 'selected' : '' }}>
                                             Sim</option>
-                                        <option value="0" {{ (old('aluno_tutor') ?? $aluno->aluno_tutor) == 0 ? 'selected' : '' }}>
+                                        <option value="0" {{ (old('aluno_tutor') ?? $aluno->aluno_tutor) == "Não" ? 'selected' : '' }}>
                                             Não</option>
                                     </select>
                                     
@@ -116,17 +128,18 @@
                             </div>
                             {{-- treinamento_concluído --}}
                             <div>
+
                                 <span>Treinamento concluído?</span>
                                 {{ Html::ul($errors->get('treinamento_concluido'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     <select name="treinamento_concluido" id="treinamento_concluido">
-                                        <option value="1" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 1 ? 'selected' : '' }}>
+                                        <option value="1" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == "NPI" ? 'selected' : '' }}>
                                             NPI</option>
-                                        <option value="2" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 2 ? 'selected' : '' }}>
+                                        <option value="2" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == "Aluno Tutor" ? 'selected' : '' }}>
                                             Aluno Tutor</option>
-                                        <option value="3" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 3 ? 'selected' : '' }}>
+                                        <option value="3" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == "NPI e Aluno Tutor" ? 'selected' : '' }}>
                                             NPI e Aluno Tutor</option>
-                                        <option value="0" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == 0 ? 'selected' : '' }}>
+                                        <option value="0" {{ (old('treinamento_concluido') ?? $aluno->treinamento_concluido) == "Nenhum" ? 'selected' : '' }}>
                                             Nenhum</option>
                                     </select>
                                     
@@ -148,14 +161,15 @@
                                 <div class="form-field form-field-littlePlus" id="at"> <span></span>
                                     {{-- horario select default value in case of old is not null and in case it is null --}}
                                     <select name="horario" id="horario">
-                                        <option value="Manhã" {{ (old('horario') ?? $aluno->horario) == 1 ? 'selected' : '' }}>
+                                        <option value="Manhã" {{ (old('horario') ?? $aluno->horario) == "Manhã" ? 'selected' : '' }}>
                                             Manhã</option>
-                                        <option value="Tarde" {{ (old('horario') ?? $aluno->horario) == 2 ? 'selected' : '' }}>
+                                        <option value="Tarde" {{ (old('horario') ?? $aluno->horario) == "Tarde" ? 'selected' : '' }}>
                                             Tarde</option>
-                                        <option value="Noite" {{ (old('horario') ?? $aluno->horario) == 3 ? 'selected' : '' }}>
+                                        <option value="Noite" {{ (old('horario') ?? $aluno->horario) == "Noite" ? 'selected' : '' }}>
                                             Noite</option>
                                     </select>
                                 </div>
+                                
                             </div>
                             
                             
@@ -167,6 +181,16 @@
                             <div class="form-field form-field-little" id="req"> <span></span>
                                 {{-- email input value if old is not null and if is null --}}
                                 <input type="text" value="{{ old('email') ?? $aluno->email }}" name="email" id="email" required>
+                            </div>
+                            Senha
+                            {{ Html::ul($errors->get('password'), ['class' => 'ulError']) }}
+                            <div style="display: grid; grid-template-columns: 95% auto; gap: 1%">
+                                <div class="form-field form-field-little" id="req"> <span></span>
+                                    {{-- password input value if old is not null and if is null --}}
+                                    <input type="password" value="{{ old('password') ?? $aluno->password }}" name="password" id="password" required>
+                                </div><a href="javascript:void(0)" id="passwordImg" class="hidden"><img
+                                    style="margin: auto; margin-top: 0"
+                                    src="{{ url('/image/hidden.png') }}" /></a>
                             </div>
                             Telefone
                             {{ Html::ul($errors->get('telefone'), ['class' => 'ulError']) }}
@@ -241,7 +265,16 @@
             $(this).parent('div').remove();
             x--;
         })
-
+        // when hidden is clicked change img to show and change type to text
+        $("#passwordImg").click(function() {
+            if ($("#password").attr("type") == "password") {
+                $("#password").attr("type", "text");
+                $("#passwordImg").html("<img style='margin: auto; margin-top: 0' src='{{ url('/image/show.png') }}' />");
+            } else {
+                $("#password").attr("type", "password");
+                $("#passwordImg").html("<img style='margin: auto; margin-top: 0' src='{{ url('/image/hidden.png') }}' />");
+            }
+        });
 
     });
 </script>

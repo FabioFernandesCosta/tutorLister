@@ -350,6 +350,120 @@ class alunosController extends Controller
         }
     }
 
+    public function updateSelf(Request $request){
+        // this function is equal to update, but it is used when the user is editing his own data
+        
+        $rules = array( 
+            'nome' => 'required',
+            'email' => 'required|email',
+            'telefone' => 'regex:/^\d{2}\s\d{9}$/',
+            //check if curso with name exists in the database
+            'curso' => 'required|exists:curso,nome',
+            
+            
+            
+        );
+        $messages = [
+            'nome.required' => 'O campo nome é obrigatório',
+            'email.required' => 'O campo email é obrigatório',
+            'email.email' => 'O campo email deve ser um email válido',
+            'telefone.regex' => 'O campo telefone deve ser no formato (xx xxxxxxxxx)',
+            'curso.required' => 'O campo curso é obrigatório',
+            'curso.exists' => 'O curso informado não existe nos registros',
+            'acesso.required' => 'O campo acesso é obrigatório',
+            'acesso.in' => 'O campo acesso deve ser sim ou não',
+            'treinamento_concluido.required' => 'O campo treinamento concluído é obrigatório',
+            'treinamento_concluido.in' => 'O campo treinamento concluído deve ser sim ou não',
+            'npi.required' => 'O campo NPI é obrigatório',
+            'npi.in' => 'O campo NPI deve ser sim ou não',
+            'aluno_tutor.required' => 'O campo aluno tutor é obrigatório',
+            'aluno_tutor.in' => 'O campo aluno tutor deve ser sim ou não',
+        ];
+
+        $validator = Validator::make(Request::all(), $rules, $messages);
+        $id = Auth::user()->usuario_id;
+
+        if ($validator->fails()) {
+            return Redirect::to('alunos/' . $id . '/selfEdit')
+                ->withErrors($validator)
+                ->withInput(Request::except('password'));
+        } else {
+            $result = DB::transaction(function () use ($id) {
+                $usuario = usuario::find($id);
+                $changedFields = array(array(), array(), array());
+                if($usuario->nome != Request::get('nome')){
+                    array_push($changedFields[0], 'Nome');
+                    array_push($changedFields[1], Request::get('nome'));
+                    array_push($changedFields[2], $usuario->nome);
+                }
+                if($usuario->email != Request::get('email')){
+                    array_push($changedFields[0], 'Email');
+                    array_push($changedFields[1], Request::get('email'));
+                    array_push($changedFields[2], $usuario->email);
+                }
+                if($usuario->telefone != Request::get('telefone')){
+                    array_push($changedFields[0], 'Telefone');
+                    array_push($changedFields[1], Request::get('telefone'));
+                    array_push($changedFields[2], $usuario->telefone);
+                }
+                // if($usuario->nivel_de_acesso != Request::get('acesso')){
+                //     array_push($changedFields[0], 'Nível de acesso');
+                //     array_push($changedFields[1], Request::get('acesso'));
+                //     array_push($changedFields[2], $usuario->nivel_de_acesso);
+                // }
+                //npi
+                if($usuario->npi != Request::get('npi')){
+                    array_push($changedFields[0], 'NPI');
+                    array_push($changedFields[1], Request::get('npi'));
+                    array_push($changedFields[2], $usuario->npi);
+                }
+                //aluno tutor
+                if($usuario->aluno_tutor != Request::get('aluno_tutor')){
+                    array_push($changedFields[0], 'Aluno Tutor');
+                    array_push($changedFields[1], Request::get('aluno_tutor'));
+                    array_push($changedFields[2], $usuario->aluno_tutor);
+                }
+
+                $usuario->email = Request::get('email');
+                $usuario->nome = Request::get('nome');
+                $usuario->telefone = Request::get('telefone');
+                
+                $usuario->save();
+
+                $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
+                if($usuario_curso->horario != Request::get('horario')){
+                    array_push($changedFields[0], 'Horário');
+                    array_push($changedFields[1], Request::get('horario'));
+                    array_push($changedFields[2], $usuario_curso->horario);
+                }
+                $curso = curso::where('nome', Request::get('curso'))->first();
+                if($usuario_curso->curso_id != $curso->curso_id){
+                    array_push($changedFields[0], 'Curso');
+                    array_push($changedFields[1], curso::find($curso->curso_id)->nome);
+                    array_push($changedFields[2], curso::find($usuario_curso->curso_id)->nome);
+                }
+                $usuario_curso->horario = Request::get('horario');
+                $usuario_curso->curso_id = $curso->curso_id;
+                $usuario_curso->save();
+
+                $historico_controller = new historicoController();
+                $historico_controller->store([implode(", ", $changedFields[0]), "editar", $usuario->usuario_id, Auth::user()->usuario_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
+
+                return ('alunos/' . $usuario->usuario_id . '/selfShow');
+            });
+            return Redirect::to($result);
+
+
+
+
+        }
+
+
+
+
+
+    }
+
     /**
      * Remove the specified resource from storage.
      *

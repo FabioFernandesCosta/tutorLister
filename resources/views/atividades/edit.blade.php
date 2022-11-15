@@ -203,6 +203,7 @@
                     <div>
                         <span>NPI ou Aluno Tutor?</span>
                         <div class="form-field form-field-littlePlus" id="or"> <span></span>
+
                             <select name="organizacao" required='required' id="organizacao">
                                 <option @php
                                     if($atv->organizacao == 'NPI'){
@@ -210,7 +211,7 @@
                                     }
                                 @endphp value="npi">NPI</option>
                                 <option @php
-                                    if($atv->organizacao == 'Aluno Tutor'){
+                                    if($atv->organizacao == 'aluno_tutor'){
                                         echo 'selected';
                                     }
                                 @endphp value="aluno tutor">Aluno Tutor</option>

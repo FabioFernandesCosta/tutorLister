@@ -182,16 +182,19 @@
                                 {{-- email input value if old is not null and if is null --}}
                                 <input type="text" value="{{ old('email') ?? $aluno->email }}" name="email" id="email" required>
                             </div>
-                            Senha
-                            {{ Html::ul($errors->get('password'), ['class' => 'ulError']) }}
-                            <div style="display: grid; grid-template-columns: 95% auto; gap: 1%">
-                                <div class="form-field form-field-little" id="req"> <span></span>
-                                    {{-- password input value if old is not null and if is null --}}
-                                    <input type="password" value="{{ old('password') ?? $aluno->password }}" name="password" id="password" required>
-                                </div><a href="javascript:void(0)" id="passwordImg" class="hidden"><img
-                                    style="margin: auto; margin-top: 0"
-                                    src="{{ url('/image/hidden.png') }}" /></a>
-                            </div>
+                            {{-- if url contains Auth::user()->usuario_id --}}
+                            @if ($aluno->usuario_id == Auth::user()->usuario_id)
+                                Senha
+                                {{ Html::ul($errors->get('password'), ['class' => 'ulError']) }}
+                                <div style="display: grid; grid-template-columns: 95% auto; gap: 1%">
+                                    <div class="form-field form-field-little" id="req"> <span></span>
+                                        {{-- password input value if old is not null and if is null --}}
+                                        <input type="password" value="{{ old('password') ?? $aluno->password }}" name="password" id="password" required>
+                                    </div><a href="javascript:void(0)" id="passwordImg" class="hidden"><img
+                                        style="margin: auto; margin-top: 0"
+                                        src="{{ url('/image/hidden.png') }}" /></a>
+                                </div>
+                            @endif
                             Telefone
                             {{ Html::ul($errors->get('telefone'), ['class' => 'ulError']) }}
                             <div class="form-field form-field-little" id="req"> <span></span>

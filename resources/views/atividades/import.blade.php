@@ -58,7 +58,7 @@
                 <select class="select" name="descricao" id=""></select>
                 <span>
 
-                    Usuários envolvidos:
+                    Alunos envolvidos:
                 </span>
                 <select class="select" name="usuarios_envolvidos" id=""></select>
                 <span>
@@ -107,7 +107,7 @@
                 <thead>
                     <tr>
                         <th>Descrição</th>
-                        <th>Usuários envolvidos</th>
+                        <th>Alunos envolvidos</th>
                         <th>Requisitante</th>
                         <th>Data de realização</th>
                         <th>Hora de realização</th>

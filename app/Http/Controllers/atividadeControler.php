@@ -484,7 +484,7 @@ class atividadeControler extends Controller
         $data = Request::all();
         
         
-        $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
+        $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6],$data[7]);
 
         
         foreach ($data as &$key){
@@ -505,24 +505,32 @@ class atividadeControler extends Controller
                 $key[5] = date("H:i:s", strtotime($key[5]));
             }
         }
+
         
         $rules = array(
             '*.0' => 'required|string|max:255',
             '*.1' => 'required|string|max:255',
             //string or null
-            '*.2' => 'nullable|string|max:255',
+            '*.2' => 'required|string|max:255',
             '*.3' => 'nullable|date_format:Y-m-d|before:today|after:2010-01-01',
-            '*.4' => 'nullable|date_format:H:i:s|before:today|after:2010-01-01',
+            '*.4' => 'nullable|date_format:H:i:s|before:now',
             '*.5' => 'nullable|string|date_format:H:i:s',
             '*.6' => 'nullable|string',
+            //7 is = NPI or Aluno tutor
+            '*.7' => 'nullable|string|max:255|in:NPI,Aluno tutor,',
+
+
         );
 
         $messages = array(
             '*.0.required' => 'O campo "Descrição" é obrigatório.',
             '*.1.required' => 'O campo "Usuarios envolvidos" é obrigatório.',
+            '*.2.required' => 'O campo "Requisitante" é obrigatório.',
             '*.3.date_format' => 'O campo "Data" na linha :attribute deve estar no formato "dd/mm/aaaa"',
             '*.4.date_format' => 'O campo "Hora" na linha :attribute deve estar no formato "hh:mm"',
             '*.5.date_format' => 'O campo "carga" na linha :attribute deve estar no formato "hh:mm:ss"',
+            '*.7.in' => 'O campo "NPI ou Aluno tutor" na linha :attribute deve ser "NPI" ou "Aluno tutor"',
+
         );
 
 
@@ -544,12 +552,32 @@ class atividadeControler extends Controller
                     $atv->hora_atividade = $key[4];
                     $atv->data_registro = date("Y-m-d");
                     $atv->hora_registro = date("h:i:s");
+                    
                     $atv->carga = $key[5];
-                    $atv->status = $key[6];
+                    // if key[6] is null, set status to 'Aberto'
+
+                    $atv->status = ($key[6] == null) ? 'Aberto' : $key[6];
+
+                    // $atv->organizacao = ($key[7] = null) ? ((Auth::user()->npi == 1) ? 'npi' : 'aluno tutor' : ($key[7] == 'NPI') ? 'npi' : (key[7] == 'Aluno tutor') ? 'aluno_tutor') : 'npi');
+                    // if key[7] is null, (if user is npi, set organizacao to 'npi', else (if user is aluno tutor set to 'aluno tutor')) if key[7] is 'NPI', set organizacao to 'npi', if key[7] is 'Aluno tutor', set organizacao to 'aluno tutor'
+                    if ($key[7] == null) {
+                        if (Auth::user()->npi == 1) {
+                            $atv->organizacao = 'npi';
+                        }else if (Auth::user()->aluno_tutor == 1) {
+                            $atv->organizacao = 'aluno_tutor';
+                        }
+                    }else if (strtolower($key[7]) == 'npi') {
+                        $atv->organizacao = 'npi';
+                    }else if (strtolower($key[7]) == 'aluno tutor' or strtolower($key[7]) == 'aluno_tutor') {
+                        $atv->organizacao = 'aluno_tutor';
+                    }
+
+
+
                     $atv->save();
 
                     //procura pelos usuarios no banco e se existirem cria a relação com a atividade
-                    $invUs = explode(",", $key[1]); //pega lista de nomes dos usuario envolvidos
+                    $invUs = explode(", ", $key[1]); //pega lista de nomes dos usuario envolvidos
                     $ind = 0;
                     foreach ($invUs as &$keyy) {
                         $usuario = '';
@@ -558,26 +586,29 @@ class atividadeControler extends Controller
                         ->where("nome", "=", $keyy)
                         ->get();
 
-                        if (strtolower($usuario[0]->nome)== strtolower($keyy)) {
+
+                        if (strtolower($usuario[0]->nome) == strtolower($keyy)) {
                             $us_atv = new usuario_atividade;
                             $us_atv->usuario_id = $usuario[0]->usuario_id;
                             $us_atv->atividade_id = $atv->atividade_id;
                             $us_atv->save();
+                            
                         }
                         $ind += 1;
+
                     }
                     $req = $key[2];
                     $requisitante = DB::table("requisitante") 
                     ->select("requisitante_id","nome")
                     ->where("nome", "=", $req)
                     ->first();
-
-                    if (strtolower($requisitante->nome) == strtolower($req)) {
+                    // and req not null
+                    if (($req != null) and (strtolower($requisitante->nome) == strtolower($req))) {
                         $atv_req = new atividade_requisitante;
                         $atv_req->requisitante_id = $requisitante->requisitante_id;
                         $atv_req->atividade_id = $atv->atividade_id;
+                        $atv_req->save();
                     }
-                    $atv_req->save();
                     
                     $user = Auth::user();
                     $user_id = $user->usuario_id;

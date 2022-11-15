@@ -43,8 +43,8 @@ return new class extends Migration
             $table->time('hora_registro');
             $table->time('carga');
             $table->text('descricao');
-            $table->text('status');
-            //organizacao npi ou aluno_tutor
+            // status default Aberto
+            $table->string('status')->default('Aberto');
             $table->text('organizacao');
         });
         

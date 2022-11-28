@@ -104,9 +104,14 @@ class sistemaPontoController extends Controller
         
         //if the newest horario in DB from the user is a null hora_fim, then edit its hora fim to the Request hora, else create a new horario
         $user = usuario::find(auth()->user()->usuario_id);
-        $horario = horario::where('usuario_id', $user->usuario_id)->orderBy('horario_id', 'desc')->first();
-        // if user already has a horario entrada and saida for the day, return error
-        if($horario->hora_fim != null){
+        $horario = horario::where('usuario_id', $user->usuario_id)
+        //where dia is today
+        ->whereRaw("DATE(horario.dia) = CURDATE()")
+        ->orderBy('horario_id', 'desc')
+        ->first();
+        
+        // if user already has a horario entrada and saida for today, return error
+        if($horario != null and $horario->hora_fim != null){
             return View::make('sistemaPonto.index')->with('erro', 'Você já fez o ponto de entrada e saída para o dia de hoje!');
         }
         // if horario exists

@@ -78,7 +78,7 @@ class cursoController extends Controller
             $user_id = $user->usuario_id;
             $historico_controller = new historicoController;
             // $historico_controller->store(["", "Curso criado", $usuario->usuario_id, $user_id, NULL, NULL, 2]);
-            $historico_controller->store(["", "Curso craido", $curso->curso_id, $user_id, NULL, NULL, 2]);
+            $historico_controller->store(["", "Curso criado", $curso->curso_id, $user_id, NULL, NULL, 2]);
 
             Session::flash('message', 'Curso cadastrado com sucesso!');
             return Redirect::to('cursos/'.$curso->curso_id.'/edit');
@@ -151,7 +151,7 @@ class cursoController extends Controller
             $user = Auth::user();
             $user_id = $user->usuario_id;
             $historico_controller = new historicoController;
-            $historico_controller->store([implode(", ", $changedFields[0]), "editar", $curso->curso_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),2]);
+            $historico_controller->store([implode(", ", $changedFields[0]), "Editar", $curso->curso_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),2]);
 
 
 

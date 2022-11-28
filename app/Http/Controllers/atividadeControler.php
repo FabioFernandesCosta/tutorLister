@@ -230,7 +230,7 @@ class atividadeControler extends Controller
                 $user_id = $user->usuario_id;
 
                 $historico_controller = new historicoController;
-                $historico_controller->store(["", "criar atividade", $atividade->atividade_id, $user_id, NULL, NULL, 0]);
+                $historico_controller->store(["", "Criar atividade", $atividade->atividade_id, $user_id, NULL, NULL, 0]);
 
                 Session::flash('message', 'Atividade registrada com successo!');
                 return ('atividades/' . $atividade->atividade_id);
@@ -455,7 +455,7 @@ class atividadeControler extends Controller
                         $user_id = $user->usuario_id;
 
                         $historico_controller = new historicoController;
-                        $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),0]);
+                        $historico_controller->store([implode(", ", $changedFields[0]), "Editar", $atv->atividade_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),0]);
 
                         Session::flash('message', 'Atividade registrada com successo!');
                     });
@@ -512,7 +512,8 @@ class atividadeControler extends Controller
             '*.1' => 'required|string|max:255',
             //string or null
             '*.2' => 'required|string|max:255',
-            '*.3' => 'nullable|date_format:Y-m-d|before:today|after:2010-01-01',
+            // before tomorrow
+            '*.3' => 'nullable|date_format:Y-m-d|after:2010-01-01|before:tomorrow',
             '*.4' => 'nullable|date_format:H:i:s|before:now',
             '*.5' => 'nullable|string|date_format:H:i:s',
             '*.6' => 'nullable|string',

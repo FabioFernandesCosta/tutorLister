@@ -99,6 +99,7 @@
                             @endif
                         </div>
                     </div>
+                    
                     <div>
 
                         <span>Requisitante</span>
@@ -111,7 +112,7 @@
                                         value="{{ old('Requisitante') }}" list="users">
                                 @else
                                     <input type="text" name="Requisitante" id="Requisitante" list="reqs"
-                                        value={{ $atv->requisitante->nome }}>
+                                        value="{{ $atv->requisitante->nome }}">
                                 @endif
                                 @include('autocomplete', ['campo' => '#Requisitante'])
                             </div>
@@ -199,25 +200,27 @@
                             </select>
                         </div>
                     </div>
-                    @if (Auth::user()->npi==1 and Auth::user()->aluno_tutor==1)
-                    <div>
-                        <span>NPI ou Aluno Tutor?</span>
-                        <div class="form-field form-field-littlePlus" id="or"> <span></span>
+                    @if (Auth::user()->npi == 1 and Auth::user()->aluno_tutor == 1)
+                        <div>
+                            <span>NPI ou Aluno Tutor?</span>
+                            <div class="form-field form-field-littlePlus" id="or"> <span></span>
 
-                            <select name="organizacao" required='required' id="organizacao">
-                                <option @php
-                                    if($atv->organizacao == 'NPI'){
+                                <select name="organizacao" required='required' id="organizacao">
+                                    <option
+                                        @php
+if($atv->organizacao == 'NPI'){
                                         echo 'selected';
-                                    }
-                                @endphp value="npi">NPI</option>
-                                <option @php
-                                    if($atv->organizacao == 'aluno_tutor'){
+                                    } @endphp
+                                        value="npi">NPI</option>
+                                    <option
+                                        @php
+if($atv->organizacao == 'aluno_tutor'){
                                         echo 'selected';
-                                    }
-                                @endphp value="aluno tutor">Aluno Tutor</option>
-                            </select>
+                                    } @endphp
+                                        value="aluno tutor">Aluno Tutor</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
                     @else
                         <input type="hidden" id="organizacao" name="organizacao" value="{{ $atv->organizacao }}">
                     @endif

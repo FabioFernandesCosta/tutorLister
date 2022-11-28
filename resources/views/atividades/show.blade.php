@@ -82,7 +82,7 @@
                             <div class="form-field" id="req"> <span></span>
                                 {{-- <a> that link to requisitantes/{requisitante_id} --}}
                                 <a style="text-decoration: none" href={{ url('requisitantes/' . $atv[0]->requisitante->requisitante_id) }}>
-                                    <input style="cursor: pointer" type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value={{$atv[0]->requisitante->nome}}>
+                                    <input style="cursor: pointer" type="text" name="Requisitante" id="Requisitante" list="reqs" readonly value="{{$atv[0]->requisitante->nome}}">
                                 </a>
                                 
                             </div>

@@ -21,15 +21,7 @@
 <body class="antialiased" id="eventBody">
     <div class="wrapAll">
         {{-- if theres errors show all --}}
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
+        
 
         <h1>Registrar Atividade</h1>
 
@@ -46,11 +38,11 @@
             <div>
                 {{-- botões --}}
                 {{-- Inputs --}}
-                {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
                 <div id="repart2">
-
+                    
                     <div id="userContainer">
                         Alunos envolvidos
+                        {{ Html::ul($errors->get('InvolvedUsers'), ['class' => 'ulError']) }}
 
                         @if (null !== old('InvolvedUsers'))
                             @foreach (old('InvolvedUsers') as $user)

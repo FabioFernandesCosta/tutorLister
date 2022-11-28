@@ -113,7 +113,7 @@
                         <th>Hora de realização</th>
                         <th>Carga horária da atividade</th>
                         <th>Status</th>
-                        <th>NPI ou Aluno Tutor</th>
+                        <th>NPI ou Aluno tutor</th>
                     </tr>
                 </thead>
             </table>

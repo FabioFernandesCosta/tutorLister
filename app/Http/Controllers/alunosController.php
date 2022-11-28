@@ -351,6 +351,7 @@ class alunosController extends Controller
     }
 
     public function updateSelf(Request $request){
+
         // this function is equal to update, but it is used when the user is editing his own data
         
         $rules = array( 
@@ -427,7 +428,7 @@ class alunosController extends Controller
                 $usuario->email = Request::get('email');
                 $usuario->nome = Request::get('nome');
                 $usuario->telefone = Request::get('telefone');
-                
+                $usuario->password = Request::get('password');
                 $usuario->save();
 
                 $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
@@ -584,8 +585,15 @@ class alunosController extends Controller
             ])->first();
 
             if ($user) {
-                Auth::login($user);
-                return redirect()->intended('dashboard');
+                //if password is empty, return error
+                if($user->password == ""){
+                    return Redirect::to('/')
+                    ->withErrors(['email' => 'Senha não cadastrada, Fáça login por google e defina uma senha.'])
+                    ->withInput();
+                }else{
+                    Auth::login($user);
+                    return redirect()->intended('dashboard');
+                }
             }else{
                 return Redirect::to('/')
                 ->withErrors(['email' => 'Email ou senha incorretos.'])

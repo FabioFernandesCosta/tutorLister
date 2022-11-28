@@ -169,6 +169,11 @@
                             "data": "alunos"
                         }
                     ],
+                    //alunos not searchable
+                    "columnDefs": [{
+                        "searchable": false,
+                        "targets": [3]
+                    }]
                 });
 
 

@@ -235,12 +235,7 @@
                         "data": "hora_fim"
                     }
                 ],
-                "columnDefs": [{
-                    "targets": 0,
-                    "render": function(data, type, row) {
-                        return moment(data).format('DD/MM/YYYY');
-                    }
-                }],
+                
             });
             
 
@@ -330,12 +325,7 @@
                     }
                 ],
                 // render all <td> from column 2 with data-sort='YYYYMMDD'
-                "columnDefs": [{
-                    "targets": 2,
-                    "render": function(data, type, row) {
-                        return moment(data).format('DD/MM/YYYY');
-                    }
-                }],
+                
             });
             
             

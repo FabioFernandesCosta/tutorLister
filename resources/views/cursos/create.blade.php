@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Novo Aluno - TutorLister</title>
+    <title>Novo Curso - TutorLister</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
@@ -22,7 +22,7 @@
     <div class="wrapAll">
 
 
-        <h1>Registrar Aluno</h1>
+        <h1>Registrar Curso</h1>
 
         <!-- if there are creation errors, they will show here -->
         {{-- show all errors --}}

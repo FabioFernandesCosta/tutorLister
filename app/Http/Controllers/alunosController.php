@@ -240,6 +240,7 @@ class alunosController extends Controller
             'treinamento_concluido' => 'required|in:0,1,2,3',
             'npi' => 'required|in:0,1',
             'aluno_tutor' => 'required|in:0,1',
+            'admin' => 'required|in:0,1',
         );
         $messages = [
             'nome.required' => 'O campo nome é obrigatório',
@@ -256,6 +257,8 @@ class alunosController extends Controller
             'npi.in' => 'O campo NPI deve ser sim ou não',
             'aluno_tutor.required' => 'O campo aluno tutor é obrigatório',
             'aluno_tutor.in' => 'O campo aluno tutor deve ser sim ou não',
+            'admin.required' => 'O campo admin é obrigatório',
+            'admin.in' => 'O campo admin deve ser sim ou não',
         ];
         $validator = Validator::make(Request::all(), $rules, $messages);
         
@@ -291,12 +294,7 @@ class alunosController extends Controller
                     array_push($changedFields[1], Request::get('telefone'));
                     array_push($changedFields[2], $usuario->telefone);
                 }
-                // if($usuario->nivel_de_acesso != Request::get('acesso')){
-                //     array_push($changedFields[0], 'Nível de acesso');
-                //     array_push($changedFields[1], Request::get('acesso'));
-                //     array_push($changedFields[2], $usuario->nivel_de_acesso);
-                // }
-                //npi
+                
                 if($usuario->npi != Request::get('npi')){
                     array_push($changedFields[0], 'NPI');
                     array_push($changedFields[1], Request::get('npi'));
@@ -308,6 +306,21 @@ class alunosController extends Controller
                     array_push($changedFields[1], Request::get('aluno_tutor'));
                     array_push($changedFields[2], $usuario->aluno_tutor);
                 }
+                if($usuario->admin != Request::get('admin')){
+                    array_push($changedFields[0], 'Admin');
+                    //if admin is 1 = Sim, if 0 = Não
+                    if(Request::get('admin') == 1){
+                        array_push($changedFields[1], 'Sim');
+                    }else{
+                        array_push($changedFields[1], 'Não');
+                    }
+                    //if admin is 1 = Sim, if 0 = Não
+                    if($usuario->admin == 1){
+                        array_push($changedFields[2], 'Sim');
+                    }else{
+                        array_push($changedFields[2], 'Não');
+                    }
+                }
 
                 $usuario->email = Request::get('email');
                 $usuario->nome = Request::get('nome');
@@ -316,6 +329,7 @@ class alunosController extends Controller
                 $usuario->aluno_tutor = Request::get('aluno_tutor');
                 $usuario->nivel_de_acesso = Request::get('acesso');
                 $usuario->treinamento_concluido = Request::get('treinamento_concluido');
+                $usuario->admin = Request::get('admin');
                 $usuario->save();
                 $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
                 

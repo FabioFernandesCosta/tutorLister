@@ -52,7 +52,7 @@
         <li>
           <a href={{ url('requisitantes') }}>
             <img src="{{url('/image/grupo.png')}}" />
-            <span>requisitantes</span></a>
+            <span>Requisitantes</span></a>
         </li>
         <li>
           <a href={{ url('ponto') }}>

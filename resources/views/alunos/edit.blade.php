@@ -97,6 +97,21 @@
                                 </div>
                             </div>
 
+                            {{-- é admin --}}
+                            <div>
+                                <span>É admin?</span>
+                                {{ Html::ul($errors->get('admin'), ['class' => 'ulError']) }}
+                                <div class="form-field form-field-littlePlus" id="ad"> <span></span>
+                                    {{-- acesso select default value if old is not null and if is null --}}
+                                    <select name="admin" id="admin">
+                                        <option value="1" {{ (old('admin') ?? $aluno->admin) == 1 ? 'selected' : '' }}>
+                                            Sim</option>
+                                        <option value="0" {{ (old('admin') ?? $aluno->admin) == 0 ? 'selected' : '' }}>
+                                            Não</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div>
                                 <span>Está no NPI?</span>
                                 {{ Html::ul($errors->get('npi'), ['class' => 'ulError']) }}

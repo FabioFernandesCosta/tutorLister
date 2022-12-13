@@ -110,6 +110,14 @@
 
                                 </div>
                             </div>
+                            {{-- admin --}}
+                            <div>
+                                <span>É admin?</span>
+                                <div class="form-field form-field-littlePlus" id="ad"> <span></span>
+                                    {{-- if $aluno->admin == 1 Sim, else Não --}}
+                                    <input type="text" readonly value="{{ $aluno->admin == 1 ? 'Sim' : 'Não' }}" id="admin">
+                                </div>
+                            </div>
                             <div>
                                 <span>Está no NPI?</span>
                                 <div class="form-field form-field-littlePlus" id="np"> <span></span>

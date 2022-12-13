@@ -270,7 +270,8 @@
 
                 scrollX: true,
 
-                dom: 'Brtlip',
+                dom: 'Bfrtlip',
+                
 
                 buttons: [
                     'csv', 'excel', 'pdf', 'print' //'columnsToggle'
@@ -312,7 +313,9 @@
 
                     },
                     {
-                        "data": "nome"
+                        "data": "nome",
+                        name: "usuario.nome"
+
                     },
                     {
                         "data": "dia"

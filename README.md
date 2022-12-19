@@ -1,15 +1,16 @@
 instalar o docker (linux terminal): https://docs.docker.com/engine/install/ubuntu/
+
 ou docker desktop: https://www.docker.com/products/docker-desktop/
 
 executar
-sudo apt install docker-compose
+`sudo apt install docker-compose`
 
 
 Clonar repositorio: `git clone https://github.com/FabioFernandesCosta/tutorLister.git`
 
-Instalar PHP: sudo apt-get php
+Instalar PHP: `sudo apt-get php`
 
-as extensões precisam estar habilitadas no php.ini:
+as seguintes extensões precisam estar habilitadas no php.ini:
 * curl
 * fileinfo
 * gd
@@ -24,28 +25,37 @@ as extensões precisam estar habilitadas no php.ini:
 caso a extensão não exista, pode ser instalada com `sudo apt-get install php-<nome-extensao>`
 
 
+
 Instalar composer de acordo com o site: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-composer-on-ubuntu-20-04
 
 
-no projeto: 
+na pasta do projeto execute o comando: 
 `composer update`
 
-criar .env
+crie o arquivo .env
+
 `cp .env.example .env`
+
 `php artisan key:generate`
 
+
 edite o .env conforme precisar
+
 `sudo nado .env`
 
+
 Habilitar docker group
+
 `sudo gpasswd -a $USER docker`
+
 `newgrp docker`
 
 
-inicie o banco de dados com docker, ainda na pasta do projeto o "&" permite executar e continuar usando o mesmo terminal
+
+inicie o banco de dados com docker, caso não seja possivel ter dois terminais abertos, ainda na pasta do projeto o `&` permite executar e continuar usando o mesmo terminal
 `docker-compose up &`
 
-na pasta do projeto execute `php artisan migrate` para configurar o banco, assm como testar conexão entre laravel e docker
+na pasta do projeto execute `php artisan migrate` para configurar o banco, assim como testar conexão entre laravel e docker
 
 execute `php artisan serve` para rodar projeto em host e porta padrão
 ou `php artisan serve --host=<ip> --port=<porta> ` para rodar projeto em ip e/ou porta especifica

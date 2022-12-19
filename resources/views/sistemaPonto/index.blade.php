@@ -89,12 +89,12 @@
                         <button type="submit" class="dt-button" style="margin-top: 1rem">Registrar</button>
                     </div> --}}
                     {{-- if variable $error exits show it --}}
-                    @if(isset($erro))
-                    <div class="alert alert-danger" role="alert">
-                        {{ $erro }}
-                    </div>
+                    @if (isset($erro))
+                        <div class="alert alert-danger" role="alert">
+                            {{ $erro }}
+                        </div>
                     @endif
-                    
+
 
 
                     {{ Form::submit('Registrar', ['class' => ' mt-3 dt-button', 'style' => 'margin-top: 45px']) }}
@@ -106,55 +106,58 @@
 
             </div>
             {{-- id = repart2 if auth user admin = 1 --}}
-            <div id="{{ Auth::user()->admin == 1 ? 'repart2' : '' }}" style="grid-template-columns: 36% 56%; gap:8%; padding:3.5rem 0">
+            <div id="{{ Auth::user()->admin == 1 ? 'repart2' : '' }}"
+                style="grid-template-columns: 36% 56%; gap:8%; padding:3.5rem 0">
                 <h3 style="">Seus registros</h3>
                 @if (Auth::user()->admin == 1)
-                <h3 id="histClick" class="itemTittle" ">Registro de pontos geral</h3>
-                @endif
-                <div>
+                    <h3 id="histClick" class="itemTittle" ">Registro de pontos geral</h3>
+ @endif
+                        <div>
 
-                    <br><br>
-                    <table id="JqueryAtvTable" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
-                        <thead>
-                            <tr>
-                                {{-- list of returned columns = ['requisitante_id', 'nome', 'email', 'telefone', 'empresa'] --}}
-                                <th>Dia</th>
-                                <th>Entrada</th>
-                                <th>Saída</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-                @if (Auth::user()->admin == 1)
-                <div>
-                    <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
-                        <tbody>
-                            <tr>
-                                <td>Data mínima:</td>
-                                <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="min"
-                                        name="min"></td>
-                                <td>Data máxima:</td>
-                                <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date" id="max"
-                                        name="max"></td>
-                            </tr>
-                            <tr>
-                            </tr>
-                        </tbody>
-                    </table>
-                        
-                    <table id="JqueryAtvTableAll" class="display nowrap dataTable " style="width:100%; cursor:pointer;">
-                        <thead>
-                            <tr id="tbr">
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Dia</th>
-                                <th>Entrada</th>
-                                <th>Saída</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-                @endif
+                            <br><br>
+                            <table id="JqueryAtvTable" class="display nowrap dataTable "
+                                style="width:100%; cursor:pointer;">
+                                <thead>
+                                    <tr>
+                                        {{-- list of returned columns = ['requisitante_id', 'nome', 'email', 'telefone', 'empresa'] --}}
+                                        <th>Dia</th>
+                                        <th>Entrada</th>
+                                        <th>Saída</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        @if (Auth::user()->admin == 1)
+                            <div>
+                                <table border="0" cellspacing="5" cellpadding="5" id="dateFilter">
+                                    <tbody>
+                                        <tr>
+                                            <td>Data mínima:</td>
+                                            <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date"
+                                                    id="min" name="min"></td>
+                                            <td>Data máxima:</td>
+                                            <td><input style="border: 1px solid #aaa; border-radius: 3px" type="date"
+                                                    id="max" name="max"></td>
+                                        </tr>
+                                        <tr>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table id="JqueryAtvTableAll" class="display nowrap dataTable "
+                                    style="width:100%; cursor:pointer;">
+                                    <thead>
+                                        <tr id="tbr">
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Dia</th>
+                                            <th>Entrada</th>
+                                            <th>Saída</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        @endif
 
             </div>
         </div>
@@ -235,9 +238,9 @@
                         "data": "hora_fim"
                     }
                 ],
-                
+
             });
-            
+
 
 
 
@@ -258,10 +261,15 @@
                 order: [
                     [2, 'desc'],
                     // column 2 desc order date format dd/mm/yyyy as yyyy-mm-dd
-                    
+
 
                     [1, 'asc'],
                 ],
+                "columnDefs": [{
+                    "searchable": false,
+
+                    "targets": [2, 3, 4]
+                }],
 
                 "lengthMenu": [
                     [10, 25, 50, -1],
@@ -271,7 +279,7 @@
                 scrollX: true,
 
                 dom: 'Bfrtlip',
-                
+
 
                 buttons: [
                     'csv', 'excel', 'pdf', 'print' //'columnsToggle'
@@ -307,8 +315,7 @@
                     }
                 },
 
-                "columns": [
-                    {
+                "columns": [{
                         "data": "usuario_id",
 
                     },
@@ -328,11 +335,11 @@
                     }
                 ],
                 // render all <td> from column 2 with data-sort='YYYYMMDD'
-                
+
             });
-            
-            
-            
+
+
+
 
             $('#min').change(function() {
                 minDateFilter = $("#min").val();
@@ -349,7 +356,7 @@
             });
         </script>
     @endif
-    
+
 
 </body>
 

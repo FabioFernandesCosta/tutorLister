@@ -379,6 +379,90 @@ class atividadeControler extends Controller
                             array_push($changedFields[2], $atv->hora_atividade);
                         }
 
+                        // same as above but for organizacao
+                        if ($atv->organizacao != $organizacao) {
+                            array_push($changedFields[0], 'Organização');
+                            array_push($changedFields[1], $organizacao);
+                            array_push($changedFields[2], $atv->organizacao);
+                        }
+
+                        // check if the atividade_requisitante and Request::get('Requisitante') are the same
+                        $ar = atividade_requisitante::where('atividade_id', '=', $atv->atividade_id)->get();
+                        $rq = requisitante::where('requisitante_id', '=', $ar[0]->requisitante_id)->get();
+                        if ($rq[0]->nome != Request::get('Requisitante')) {
+                            array_push($changedFields[0], 'Requisitante');
+                            array_push($changedFields[1], Request::get('Requisitante'));
+                            array_push($changedFields[2], $rq[0]->nome);
+                        }
+
+                        
+                        
+                        // historico usuario adicionado
+                        $usuarios = Request::get('InvolvedUsers');
+                        // find id usuario
+                        $user_id = [];
+                        foreach ($usuarios as $key => $value) {
+                            $user = usuario::where('nome', '=', $value)->get();
+                            array_push($user_id, [$user[0]->usuario_id, $value]);
+                        }
+                        // for each id usuario
+                        // if theres no usuario_atividade with the id of the user and the id of this atividade
+                        if (count($user_id) > 0) {
+                            foreach ($user_id as $key => $value) {
+                                $ua = usuario_atividade::where('usuario_id', '=', $value[0])->where('atividade_id', '=', $atv->atividade_id)->get();
+                                if (count($ua) == 0) {
+                                    $historico_addUser = new historicoController;
+                                    // get usuario name
+                                    // dd($value[1]);
+                                    // dd type of value[1]
+                                    $user = Auth::user();
+                                    $userr_id = $user->usuario_id;
+
+                                    $historico_addUser->store([$value[1], "Adicionar aluno", $atv->atividade_id, $userr_id, NULL, NULL, 0]);
+
+                                }
+                            }
+                        }
+
+                        // historico usuario removido
+                        $ua = usuario_atividade::where('atividade_id', '=', $atv->atividade_id)->get();
+                        // find usuario_nome
+                        $user_nome = [];
+                        foreach ($ua as $key => $value) {
+                            $user = usuario::where('usuario_id', '=', $value->usuario_id)->get();
+                            array_push($user_nome, [$user[0]->nome, $value->usuario_id]);
+                        }
+                        // compare $user_id with $user_nome and do ($historico_addUser->store([$value[1], "Remover aluno", $atv->atividade_id, $userr_id, NULL, NULL, 0]);) for each user that is not in $user_id
+                        if (count($user_nome) > 0) {
+                            foreach ($user_nome as $key => $value) {
+                                $found = false;
+                                foreach ($user_id as $key2 => $value2) {
+                                    if ($value[0] == $value2[1]) {
+                                        $found = true;
+                                    }
+                                }
+                                if ($found == false) {
+                                    $historico_addUser = new historicoController;
+                                    // get usuario name
+                                    // dd($value[1]);
+                                    // dd type of value[1]
+                                    $user = Auth::user();
+                                    $userr_id = $user->usuario_id;
+
+                                    $historico_addUser->store([$value[0], "Remover aluno", $atv->atividade_id, $userr_id, NULL, NULL, 0]);
+                                }
+                            }
+                        }
+                        
+
+                        
+                        
+
+                        
+
+
+                        
+
                         if ($atv->carga != Request::get('CargaHoraria')) {
                             array_push($changedFields[0], 'Carga Horária');
                             array_push($changedFields[1], Request::get('CargaHoraria'));

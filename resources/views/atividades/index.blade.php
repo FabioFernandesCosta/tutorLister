@@ -116,137 +116,145 @@
     @include('footer')
 
 
-        <script defer>
-            var minDate, maxDate;
+    <script defer>
+        var minDate, maxDate;
 
-            minDateFilter = "";
-            maxDateFilter = "";
+        minDateFilter = "";
+        maxDateFilter = "";
 
-            $(document).ready(function() {
+        $(document).ready(function() {
 
-                var table = $('#JqueryAtvTable').DataTable({
-                    order: [[0, 'desc']],
-                    columnDefs: [{
-                        orderable: false,
-                        targets: [2, 3]
-                    }],
+            var table = $('#JqueryAtvTable').DataTable({
+                order: [
+                    [0, 'desc']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: [2, 3]
+                }],
 
-                    //max characters per column
+                //max characters per column
 
-                    "lengthMenu": [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ],
-                    scrollX: true,
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                scrollX: true,
 
-                    dom: 'Bfrtlip',
+                dom: 'Bfrtlip',
 
-                    buttons: [
-                        'colvis', 'csv', 'excel', 'pdf', 'print' //'columnsToggle'
-                    ],
+                buttons: [
+                    'colvis', 'csv', 'excel', 'print', //'columnsToggle'
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    }
+                ],
 
 
-                    "createdRow": function(row, data, dataIndex) {
-                        $(row).attr('onclick', 'location.href="{{ URL::to('atividades') }}/' + data
-                            .atividade_id + '";');
+                "createdRow": function(row, data, dataIndex) {
+                    $(row).attr('onclick', 'location.href="{{ URL::to('atividades') }}/' + data
+                        .atividade_id + '";');
+                },
+
+                "processing": true,
+                "serverSide": true,
+                ajax: {
+                    url: "{{ url('atividades/getdata') }}",
+                    data: function(d) {
+                        d.min = minDateFilter;
+                        d.max = maxDateFilter;
+                    }
+                },
+
+                //linguagem
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "Nada encontrado - desculpe",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum registro disponível",
+                    "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                    "search": "Pesquisar:",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior"
                     },
+                    //colvis button language
+                    buttons: {
+                        colvis: 'Mostrar/Ocultar colunas'
+                    }
+                },
 
-                    "processing": true,
-                    "serverSide": true,
-                    ajax: {
-                        url: "{{ url('atividades/getdata') }}",
-                        data: function(d) {
-                            d.min = minDateFilter;
-                            d.max = maxDateFilter;
-                        }
+                "columns": [{
+                        "data": "atividade_id"
                     },
-
-                    //linguagem
-                    "language": {
-                        "lengthMenu": "Mostrar _MENU_ registros por página",
-                        "zeroRecords": "Nada encontrado - desculpe",
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "Nenhum registro disponível",
-                        "infoFiltered": "(filtrado de _MAX_ registros no total)",
-                        "search": "Pesquisar:",
-                        "paginate": {
-                            "first": "Primeiro",
-                            "last": "Último",
-                            "next": "Próximo",
-                            "previous": "Anterior"
-                        },
-                        //colvis button language
-                        buttons: {
-                            colvis: 'Mostrar/Ocultar colunas'
-                        }
+                    {
+                        "data": "descricao",
+                        name: "descricao"
                     },
-
-                    "columns": [{
-                            "data": "atividade_id"
-                        },
-                        {
-                            "data": "descricao",
-                            name: "descricao"
-                        },
-                        {
-                            "data": "IDUs",
-                            name: "usuario.usuario_id"
-                        },
-                        {
-                            "data": "nomeUs",
-                            name: "usuario.nome"
-                        },
-                        {
-                            "data": "requisitante",
-                            name: 'requisitante.nome'
-                        },
-                        {
-                            "data": "data_atividade"
-                        },
-                        {
-                            "data": "hora_atividade"
-                        },
-                        {
-                            "data": "data_registro"
-                        },
-                        {
-                            "data": "hora_registro"
-                        },
-                        {
-                            "data": "carga"
-                        },
-                        {
-                            "data": "status"
-                        }
-                    ],
-                });
-
-
-                //detach buttons class dtbuttons from table and put as first child under indexButtons div
-                var indexButtons = $('#indexButtons');
-                var buttons = $('.dt-buttons').detach();
-                indexButtons.prepend(buttons);
-
-
-                //detach dateFilter table and put it side to side with JqueryAtvTable_filter
-                var dateFilter = $('#dateFilter').detach();
-                $('#JqueryAtvTable_filter').after(dateFilter);
-
-
-
-                //once #min or #max are changed, filter the table date columns with #min and #max values
-                $('#min').change(function() {
-                    minDateFilter = $("#min").val();
-                    console.log("test");
-                    table.draw();
-                });
-                $('#max').change(function() {
-                    maxDateFilter = $("#max").val();
-                    table.draw();
-                });
-
+                    {
+                        "data": "IDUs",
+                        name: "usuario.usuario_id"
+                    },
+                    {
+                        "data": "nomeUs",
+                        name: "usuario.nome"
+                    },
+                    {
+                        "data": "requisitante",
+                        name: 'requisitante.nome'
+                    },
+                    {
+                        "data": "data_atividade"
+                    },
+                    {
+                        "data": "hora_atividade"
+                    },
+                    {
+                        "data": "data_registro"
+                    },
+                    {
+                        "data": "hora_registro"
+                    },
+                    {
+                        "data": "carga"
+                    },
+                    {
+                        "data": "status"
+                    }
+                ],
             });
-        </script>
-        
+
+
+            //detach buttons class dtbuttons from table and put as first child under indexButtons div
+            var indexButtons = $('#indexButtons');
+            var buttons = $('.dt-buttons').detach();
+            indexButtons.prepend(buttons);
+
+
+            //detach dateFilter table and put it side to side with JqueryAtvTable_filter
+            var dateFilter = $('#dateFilter').detach();
+            $('#JqueryAtvTable_filter').after(dateFilter);
+
+
+
+            //once #min or #max are changed, filter the table date columns with #min and #max values
+            $('#min').change(function() {
+                minDateFilter = $("#min").val();
+                console.log("test");
+                table.draw();
+            });
+            $('#max').change(function() {
+                maxDateFilter = $("#max").val();
+                table.draw();
+            });
+
+        });
+    </script>
+
 </body>
+
 </html>

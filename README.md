@@ -2,7 +2,7 @@ instalar o docker (linux terminal): https://docs.docker.com/engine/install/ubunt
 
 ou docker desktop: https://www.docker.com/products/docker-desktop/
 
-executar
+executar:
 `sudo apt install docker-compose`
 
 
@@ -22,7 +22,7 @@ as seguintes extensões precisam estar habilitadas no php.ini:
 * xml
 * zip
 
-caso a extensão não exista, pode ser instalada com `sudo apt-get install php-<nome-extensao>`
+caso a extensão não exista, pode ser instalada com: `sudo apt-get install php-<nome-extensao>`
 
 
 
@@ -32,16 +32,18 @@ Instalar composer de acordo com o site: https://www.digitalocean.com/community/t
 na pasta do projeto execute o comando: 
 `composer update`
 
-crie o arquivo .env
+crie o arquivo .env:
 
 `cp .env.example .env`
 
 `php artisan key:generate`
 
 
-edite o .env conforme precisar
+
+edite o .env conforme precisar:
 
 `sudo nado .env`
+
 
 
 Habilitar docker group
@@ -52,7 +54,7 @@ Habilitar docker group
 
 
 
-inicie o banco de dados com docker, caso não seja possivel ter dois terminais abertos, ainda na pasta do projeto o `&` permite executar e continuar usando o mesmo terminal
+inicie o banco de dados com docker, caso não seja possivel ter dois terminais abertos, o `&` permite executar e continuar usando o mesmo terminal.
 `docker-compose up &`
 
 na pasta do projeto execute `php artisan migrate` para configurar o banco, assim como testar conexão entre laravel e docker

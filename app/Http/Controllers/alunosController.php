@@ -116,7 +116,6 @@ class alunosController extends Controller
                 $loctoRed = $usuario->usuario_id;
                 $usuario_curso = new usuario_curso;
                 $usuario_curso->usuario_id = $usuario->usuario_id;
-                //find curso_id based on curso name (request curso)
                 $curso = curso::where('nome', Request::get('curso'))->first();
                 $usuario_curso->curso_id = $curso->curso_id;
                 $usuario_curso->horario = Request::get('horario');
@@ -297,13 +296,38 @@ class alunosController extends Controller
                 
                 if($usuario->npi != Request::get('npi')){
                     array_push($changedFields[0], 'NPI');
-                    array_push($changedFields[1], Request::get('npi'));
-                    array_push($changedFields[2], $usuario->npi);
+                    // 1 = Sim, 0 = Não
+                    array_push($changedFields[1], (Request::get('npi') == 1) ? 'Sim' : 'Não');
+                    array_push($changedFields[2], ($usuario->npi == 1) ? 'Sim' : 'Não');
                 }
                 if($usuario->aluno_tutor != Request::get('aluno_tutor')){
                     array_push($changedFields[0], 'Aluno Tutor');
-                    array_push($changedFields[1], Request::get('aluno_tutor'));
-                    array_push($changedFields[2], $usuario->aluno_tutor);
+                    array_push($changedFields[1], (Request::get('aluno_tutor') == 1) ? 'Sim' : 'Não');
+                    array_push($changedFields[2], ($usuario->aluno_tutor == 1) ? 'Sim' : 'Não');
+                }
+                // treinamento concluido
+                if($usuario->treinamento_concluido != Request::get('treinamento_concluido')){
+                    array_push($changedFields[0], 'Treinamento Concluído');
+                    // 1 = NPI, 2 = Aluno Tutor, 3 = NPI e Aluno Tutor, 0 = Não
+                    if(Request::get('treinamento_concluido') == 0){
+                        array_push($changedFields[1], 'Não');
+                    }elseif(Request::get('treinamento_concluido') == 1){
+                        array_push($changedFields[1], 'NPI');
+                    }elseif(Request::get('treinamento_concluido') == 2){
+                        array_push($changedFields[1], 'Aluno Tutor');
+                    }elseif(Request::get('treinamento_concluido') == 3){
+                        array_push($changedFields[1], 'NPI e Aluno Tutor');
+                    }
+                    if($usuario->treinamento_concluido == 0){
+                        array_push($changedFields[2], 'Não');
+                    }elseif($usuario->treinamento_concluido == 1){
+                        array_push($changedFields[2], 'NPI');
+                    }elseif($usuario->treinamento_concluido == 2){
+                        array_push($changedFields[2], 'Aluno Tutor');
+                    }elseif($usuario->treinamento_concluido == 3){
+                        array_push($changedFields[2], 'NPI e Aluno Tutor');
+                    }
+
                 }
                 // like above but for nivel de acesso, 0 = Não, 1 = NPI, 2 = Aluno Tutor, 3 = NPI e Aluno Tutor
                 if($usuario->nivel_de_acesso != Request::get('acesso')){
@@ -355,27 +379,42 @@ class alunosController extends Controller
                 $usuario->treinamento_concluido = Request::get('treinamento_concluido');
                 $usuario->admin = Request::get('admin');
                 $usuario->save();
-                $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
                 
-                if($usuario_curso->horario != Request::get('horario')){
+                $oldUsuario_curso = usuario_curso::where('usuario_id', $id)->first();
+                $oldHor = $oldUsuario_curso->horario;
+                $oldCurso = $oldUsuario_curso->curso_id;
+                $oldCurNome = curso::where('curso_id', $oldUsuario_curso->curso_id)->first()->nome;
+                DB::delete('delete from usuario_curso where usuario_id = ?', [$id]);
+                
+                if($oldHor != Request::get('horario')){
                     array_push($changedFields[0], 'Horário');
                     array_push($changedFields[1], Request::get('horario'));
-                    array_push($changedFields[2], $usuario_curso->horario);
+                    array_push($changedFields[2], $oldHor);
                 }
-
-                
-                
-
                 $curso = curso::where('nome', Request::get('curso'))->first();
-                if($usuario_curso->curso_id != $curso->curso_id){
-                    array_push($changedFields[0], 'Curso');
-                    array_push($changedFields[1], $curso->nome);
-                    array_push($changedFields[2], curso::find($usuario_curso->curso_id)->nome);
-                }
+                // dd($usuario_curso,$id, $curso);
 
+                if($oldCurso != $curso->curso_id){
+                    array_push($changedFields[0], 'Curso');
+                    array_push($changedFields[1], Request::get('curso'));
+                    array_push($changedFields[2], $oldCurNome);
+                }
+                // create new usuario_curso
+                $usuario_curso = new usuario_curso;
+                $usuario_curso->usuario_id = $usuario->usuario_id;
+                $curso = curso::where('nome', Request::get('curso'))->first();
                 $usuario_curso->curso_id = $curso->curso_id;
                 $usuario_curso->horario = Request::get('horario');
                 $usuario_curso->save();
+                // $usuario_curso = usuario_curso::where('usuario_id', $id)->get()[0];
+                
+                
+                
+                
+                
+                
+
+                
 
                 
                 $user = Auth::user();
@@ -471,20 +510,24 @@ class alunosController extends Controller
                 $usuario->password = Request::get('password');
                 $usuario->save();
 
-                $usuario_curso = usuario_curso::where('usuario_id', $id)->first();
                 if($usuario_curso->horario != Request::get('horario')){
                     array_push($changedFields[0], 'Horário');
                     array_push($changedFields[1], Request::get('horario'));
                     array_push($changedFields[2], $usuario_curso->horario);
                 }
+
+                
+                
+
                 $curso = curso::where('nome', Request::get('curso'))->first();
                 if($usuario_curso->curso_id != $curso->curso_id){
                     array_push($changedFields[0], 'Curso');
-                    array_push($changedFields[1], curso::find($curso->curso_id)->nome);
+                    array_push($changedFields[1], $curso->nome);
                     array_push($changedFields[2], curso::find($usuario_curso->curso_id)->nome);
                 }
-                $usuario_curso->horario = Request::get('horario');
+
                 $usuario_curso->curso_id = $curso->curso_id;
+                $usuario_curso->horario = Request::get('horario');
                 $usuario_curso->save();
 
                 $historico_controller = new historicoController();

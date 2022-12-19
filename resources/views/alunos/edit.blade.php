@@ -84,14 +84,15 @@
                                 {{ Html::ul($errors->get('acesso'), ['class' => 'ulError']) }}
                                 <div class="form-field form-field-littlePlus" id="ac"> <span></span>
                                     {{-- acesso select default value if old is not null and if is null --}}
+                                    
                                     <select name="acesso" id="acesso">
-                                        <option value="1" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 1 ? 'selected' : '' }}>
+                                        <option value="1" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 'NPI' ? 'selected' : '' }}>
                                             NPI</option>
-                                        <option value="2" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 2 ? 'selected' : '' }}>
+                                        <option value="2" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 'Aluno Tutor' ? 'selected' : '' }}>
                                             Aluno Tutor</option>
-                                        <option value="3" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 3 ? 'selected' : '' }}>
+                                        <option value="3" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 'NPI e Aluno Tutor' ? 'selected' : '' }}>
                                             NPI e Aluno Tutor</option>
-                                        <option value="0" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 0 ? 'selected' : '' }}>
+                                        <option value="0" {{ (old('acesso') ?? $aluno->nivel_de_acesso) == 'Não' ? 'selected' : '' }}>
                                             Não</option>
                                     </select>
                                 </div>

@@ -210,7 +210,7 @@ class alunosController extends Controller
         $usuario->npi = $usuario->npi == 1 ? 'Sim' : 'Não';
         $usuario->aluno_tutor = $usuario->aluno_tutor == 1 ? 'Sim' : 'Não';
         $usuario->treinamento_concluido = $usuario->treinamento_concluido == 1 ? 'NPI' : ($usuario->treinamento_concluido == 2 ? 'Aluno Tutor' : ($usuario->treinamento_concluido == 3 ? 'NPI e Aluno Tutor' : 'Nenhum'));
-        $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'Sim' : 'Não';
+        $usuario->nivel_de_acesso = $usuario->nivel_de_acesso == 1 ? 'NPI' : ($usuario->nivel_de_acesso == 2 ? 'Aluno Tutor' : ($usuario->nivel_de_acesso == 3 ? 'NPI e Aluno Tutor' : 'Não'));
         return (View::make('alunos.edit')->with('aluno', $usuario));
     }
 
@@ -300,11 +300,34 @@ class alunosController extends Controller
                     array_push($changedFields[1], Request::get('npi'));
                     array_push($changedFields[2], $usuario->npi);
                 }
-                //aluno tutor
                 if($usuario->aluno_tutor != Request::get('aluno_tutor')){
                     array_push($changedFields[0], 'Aluno Tutor');
                     array_push($changedFields[1], Request::get('aluno_tutor'));
                     array_push($changedFields[2], $usuario->aluno_tutor);
+                }
+                // like above but for nivel de acesso, 0 = Não, 1 = NPI, 2 = Aluno Tutor, 3 = NPI e Aluno Tutor
+                if($usuario->nivel_de_acesso != Request::get('acesso')){
+                    array_push($changedFields[0], 'Nível de Acesso');
+
+                    if(Request::get('acesso') == 0){
+                        array_push($changedFields[1], 'Não');
+                    }elseif(Request::get('acesso') == 1){
+                        array_push($changedFields[1], 'NPI');
+                    }elseif(Request::get('acesso') == 2){
+                        array_push($changedFields[1], 'Aluno Tutor');
+                    }elseif(Request::get('acesso') == 3){
+                        array_push($changedFields[1], 'NPI e Aluno Tutor');
+                    }
+
+                    if($usuario->nivel_de_acesso == 0){
+                        array_push($changedFields[2], 'Não');
+                    }elseif($usuario->nivel_de_acesso == 1){
+                        array_push($changedFields[2], 'NPI');
+                    }elseif($usuario->nivel_de_acesso == 2){
+                        array_push($changedFields[2], 'Aluno Tutor');
+                    }elseif($usuario->nivel_de_acesso == 3){
+                        array_push($changedFields[2], 'NPI e Aluno Tutor');
+                    }
                 }
                 if($usuario->admin != Request::get('admin')){
                     array_push($changedFields[0], 'Admin');
@@ -322,6 +345,7 @@ class alunosController extends Controller
                     }
                 }
 
+
                 $usuario->email = Request::get('email');
                 $usuario->nome = Request::get('nome');
                 $usuario->telefone = Request::get('telefone');
@@ -338,6 +362,8 @@ class alunosController extends Controller
                     array_push($changedFields[1], Request::get('horario'));
                     array_push($changedFields[2], $usuario_curso->horario);
                 }
+
+                
                 
 
                 $curso = curso::where('nome', Request::get('curso'))->first();

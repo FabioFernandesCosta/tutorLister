@@ -61,3 +61,7 @@ na pasta do projeto execute `php artisan migrate` para configurar o banco, assim
 
 execute `php artisan serve` para rodar projeto em host e porta padrão
 ou `php artisan serve --host=<ip> --port=<porta> ` para rodar projeto em ip e/ou porta especifica
+
+
+
+O primeiro usuario precisa ser inserido manualmente no banco de dados no docker

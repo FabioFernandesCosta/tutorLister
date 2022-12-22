@@ -64,4 +64,5 @@ ou `php artisan serve --host=<ip> --port=<porta> ` para rodar projeto em ip e/ou
 
 
 
-O primeiro usuario precisa ser inserido manualmente no banco de dados no docker
+O primeiro usuario precisa ser inserido manualmente no banco de dados no docker,
+Tambem há a opção de criar uma migration para fazer isso automaticamente.

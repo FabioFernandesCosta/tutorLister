@@ -28,7 +28,7 @@ class DashboardController extends Controller
             ->where('organizacao', '=', $whereValue)
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
-            
+
         $atividadesAbertas = atividade::selectRaw('concat(year(data_atividade), date_format(data_atividade, "%m")) as mes, count(*) as total')
             ->where('data_atividade', '>=', date('Y-m-d', strtotime('-13 months')))
             ->where('organizacao', '=', $whereValue)
@@ -57,7 +57,7 @@ class DashboardController extends Controller
             ->groupBy('mes')
             ->pluck('total', 'mes')->all();
 
-        //add a 0 to the beginning of the array key name if it has less than 6 characters	
+        //add a 0 to the beginning of the array key name if it has less than 6 characters
 
 
 
@@ -113,7 +113,7 @@ class DashboardController extends Controller
             $borderColour[3] = ' 1)';
             $borderColours[] = implode(',', $borderColour);
         }
-        
+
 
         //Prepare the data for returning with the view
         $chart = new dashboard;
@@ -185,12 +185,12 @@ class DashboardController extends Controller
         $alunosAtividades = usuario::selectRaw('usuario.nome as aluno, count(*) as total')
             ->join('usuario_atividade', 'usuario.usuario_id', '=', 'usuario_atividade.usuario_id')
             ->join('atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
-            ->where('organizacao', '=', $whereValue)
+            ->where('usuario.organizacao', '=', $whereValue)
             ->groupBy('aluno')
             ->orderBy('total', 'desc')
             ->limit(10)
             ->pluck('total', 'aluno')->all();
-        
+
         // Generate random colours for the groups
         $AlunosAtividadesChart = new dashboard;
         $AlunosAtividadesChart->labels = (array_keys($alunosAtividades));
@@ -200,16 +200,16 @@ class DashboardController extends Controller
         $AlunosAtividadesChart->colours = $backgroundColours;
         $AlunosAtividadesChart->borderColours = $borderColours;
 
-        
+
         //numero de alunos que concluiram e não concluiram o treinamento
         $alunosTreinoConcluido = usuario::selectRaw('usuario.treinamento_concluido as concluido, count(*) as total');
-            
+
         if ($whereValue == 'npi') {
             $alunosTreinoConcluido = $alunosTreinoConcluido->where('usuario.npi', '=', 1);
         } else if ($whereValue == 'aluno_tutor') {
             $alunosTreinoConcluido = $alunosTreinoConcluido->where('usuario.aluno_tutor', '=', 1);
         }
-            
+
         $alunosTreinoConcluido = $alunosTreinoConcluido
             ->groupBy('concluido')
             ->pluck('total', 'concluido')->all();

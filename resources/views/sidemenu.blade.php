@@ -4,11 +4,12 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <link rel="icon" href="{{ asset('/image/logo.svg') }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Login</title>
-    
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 
@@ -61,7 +62,7 @@
         </li>
         <li>
           <a id="usuarioContainer" href="javascript:void(0);">
-            
+
             {{-- img src null --}}
             <img id="userAvatar" style="border-radius: 50%;" src="{{url('/image/user.png')}}" onerror="this.src='{{url('/image/user.png')}}'" />
             <span id="userName" >usuario</span></a>
@@ -81,7 +82,7 @@
         </div>
       </div>
     {{-- hide/show menu with name and logout button --}}
-    
+
 </header>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <link rel="stylesheet" type="text/css"
@@ -103,8 +104,8 @@
           $('#fullName').text(data.name);
         }else{
 
-          //retrieve first name from string data.name 
-          
+          //retrieve first name from string data.name
+
           $('#userName').text(data.name.substr(0, data.name.indexOf(' ')));
 
           //retrieve full name from string data.name
@@ -125,7 +126,7 @@
         });
     //when usuarioContainer is clicked, show menuHide or hide menuHide
     $('#usuarioContainer').click(function(){
-      
+
       if($('#menuHide').css('visibility') == 'hidden'){
         //position menuHide as absolute to the right of usuarioContainer
 
@@ -162,7 +163,7 @@
 
   });
 
-  
+
 </script>
 
 </html>

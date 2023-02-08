@@ -67,7 +67,7 @@ class alunosController extends Controller
     public function store(Request $request)
     {
         //
-        $rules = array( 
+        $rules = array(
             'nome' => 'required',
             'email' => 'required|email',
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
@@ -95,7 +95,7 @@ class alunosController extends Controller
             'aluno_tutor.in' => 'O campo aluno tutor deve ser sim ou não',
         ];
         $validator = Validator::make(Request::all(), $rules, $messages);
-        
+
         if ($validator->fails()) {
             return Redirect::to('alunos/create')
             ->withErrors($validator)
@@ -120,12 +120,12 @@ class alunosController extends Controller
                 $usuario_curso->curso_id = $curso->curso_id;
                 $usuario_curso->horario = Request::get('horario');
                 $usuario_curso->save();
-                
+
                 $user = Auth::user();
                 $user_id = $user->usuario_id;
                 $historico_controller = new historicoController;
                 $historico_controller->store(["", "Usuário criado", $usuario->usuario_id, $user_id, NULL, NULL, 1]);
-                
+
                 return ('alunos/' . $usuario->usuario_id);
             });
             return Redirect::to($result);
@@ -174,7 +174,7 @@ class alunosController extends Controller
             DB::raw('SUBSTRING(atividade.descricao, 1, 45) as descricao'),
             DB::raw("DATE_FORMAT(atividade.data_atividade, '%d/%m/%Y') as data_atividade"),
             DB::raw("TIME_FORMAT(atividade.hora_atividade, '%H:%i') as hora_atividade"),
-            'atividade.atividade_id') 
+            'atividade.atividade_id')
         // DB::raw("DATE_FORMAT(atividade.data_atividade, '%d/%m/%Y') as data_atividade"),
         ->join('atividade', 'usuario_atividade.atividade_id', '=', 'atividade.atividade_id')
         ->where('usuario_atividade.usuario_id', $id)
@@ -229,7 +229,7 @@ class alunosController extends Controller
             }
         }
 
-        $rules = array( 
+        $rules = array(
             'nome' => 'required',
             'email' => 'required|email',
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
@@ -260,19 +260,19 @@ class alunosController extends Controller
             'admin.in' => 'O campo admin deve ser sim ou não',
         ];
         $validator = Validator::make(Request::all(), $rules, $messages);
-        
+
         if ($validator->fails()) {
             return Redirect::to('alunos/' . $id . '/edit')
             ->withErrors($validator)
             ->withInput(Request::all());
         } else {
-            
-            
+
+
             $result = DB::transaction(function () use ($id) {
                 //get a deep copy of usuario and usuario_curso before update
 
-                
-                
+
+
 
                 //update usuario
                 $usuario = usuario::find($id);
@@ -293,7 +293,7 @@ class alunosController extends Controller
                     array_push($changedFields[1], Request::get('telefone'));
                     array_push($changedFields[2], $usuario->telefone);
                 }
-                
+
                 if($usuario->npi != Request::get('npi')){
                     array_push($changedFields[0], 'NPI');
                     // 1 = Sim, 0 = Não
@@ -379,13 +379,13 @@ class alunosController extends Controller
                 $usuario->treinamento_concluido = Request::get('treinamento_concluido');
                 $usuario->admin = Request::get('admin');
                 $usuario->save();
-                
+
                 $oldUsuario_curso = usuario_curso::where('usuario_id', $id)->first();
                 $oldHor = $oldUsuario_curso->horario;
                 $oldCurso = $oldUsuario_curso->curso_id;
                 $oldCurNome = curso::where('curso_id', $oldUsuario_curso->curso_id)->first()->nome;
                 DB::delete('delete from usuario_curso where usuario_id = ?', [$id]);
-                
+
                 if($oldHor != Request::get('horario')){
                     array_push($changedFields[0], 'Horário');
                     array_push($changedFields[1], Request::get('horario'));
@@ -407,22 +407,22 @@ class alunosController extends Controller
                 $usuario_curso->horario = Request::get('horario');
                 $usuario_curso->save();
                 // $usuario_curso = usuario_curso::where('usuario_id', $id)->get()[0];
-                
-                
-                
-                
-                
-                
 
-                
 
-                
+
+
+
+
+
+
+
+
                 $user = Auth::user();
                 $user_id = $user->usuario_id;
                 $historico_controller = new historicoController;
                 // $historico_controller->store([implode(", ", $changedFields[0]), "editar", $atv->atividade_id, 5, implode(", ", $changedFields[2]), implode(", ", $changedFields[1])]);
                 $historico_controller->store([implode(", ", $changedFields[0]), "editar", $usuario->usuario_id, $user_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
-                
+
                 return ('alunos/' . $usuario->usuario_id);
             });
             return Redirect::to($result);
@@ -432,24 +432,21 @@ class alunosController extends Controller
     public function updateSelf(Request $request){
 
         // this function is equal to update, but it is used when the user is editing his own data
-        
-        $rules = array( 
+
+        $rules = array(
             'nome' => 'required',
             'email' => 'required|email',
             'telefone' => 'regex:/^\d{2}\s\d{9}$/',
             //check if curso with name exists in the database
-            'curso' => 'required|exists:curso,nome',
-            
-            
-            
+
+
+
         );
         $messages = [
             'nome.required' => 'O campo nome é obrigatório',
             'email.required' => 'O campo email é obrigatório',
             'email.email' => 'O campo email deve ser um email válido',
             'telefone.regex' => 'O campo telefone deve ser no formato (xx xxxxxxxxx)',
-            'curso.required' => 'O campo curso é obrigatório',
-            'curso.exists' => 'O curso informado não existe nos registros',
             'acesso.required' => 'O campo acesso é obrigatório',
             'acesso.in' => 'O campo acesso deve ser sim ou não',
             'treinamento_concluido.required' => 'O campo treinamento concluído é obrigatório',
@@ -510,25 +507,7 @@ class alunosController extends Controller
                 $usuario->password = Request::get('password');
                 $usuario->save();
 
-                if($usuario_curso->horario != Request::get('horario')){
-                    array_push($changedFields[0], 'Horário');
-                    array_push($changedFields[1], Request::get('horario'));
-                    array_push($changedFields[2], $usuario_curso->horario);
-                }
 
-                
-                
-
-                $curso = curso::where('nome', Request::get('curso'))->first();
-                if($usuario_curso->curso_id != $curso->curso_id){
-                    array_push($changedFields[0], 'Curso');
-                    array_push($changedFields[1], $curso->nome);
-                    array_push($changedFields[2], curso::find($usuario_curso->curso_id)->nome);
-                }
-
-                $usuario_curso->curso_id = $curso->curso_id;
-                $usuario_curso->horario = Request::get('horario');
-                $usuario_curso->save();
 
                 $historico_controller = new historicoController();
                 $historico_controller->store([implode(", ", $changedFields[0]), "editar", $usuario->usuario_id, Auth::user()->usuario_id, implode(", ", $changedFields[2]), implode(", ", $changedFields[1]),1]);
@@ -565,7 +544,7 @@ class alunosController extends Controller
         $data = Request::all();
         $data = array_map(null, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6]);
 
-        
+
         $rules = array(
             '*.0' => 'required|string|max:255',
             '*.1' => 'required|string|max:255|exists:curso,nome',
@@ -623,7 +602,7 @@ class alunosController extends Controller
 
                     //cria usuario_curso
                     $usuario_curso = new usuario_curso;
-                    $usuario_curso->usuario_id = $usuario->usuario_id; 
+                    $usuario_curso->usuario_id = $usuario->usuario_id;
                     $usuario_curso->curso_id = curso::where('nome', $key[1])->first()->curso_id;
                     $usuario_curso->horario = $key[2];
                     $usuario_curso->save();
@@ -631,12 +610,12 @@ class alunosController extends Controller
                     //cria historico
                     $user = Auth::user();
                     $user_id = $user->usuario_id;
-                    
+
                     $historico_controller = new historicoController;
                     $historico_controller->store(["", "Aluno importado", $usuario->usuario_id, $user_id, NULL, NULL, 1]);
 
                     return ('alunos/');
-                    
+
                 }
             });
             return Redirect::to($result);
@@ -663,7 +642,7 @@ class alunosController extends Controller
             ->withInput();
         }else{
             $user = usuario::where([
-                'email' => Request::get('email'), 
+                'email' => Request::get('email'),
                 'password' => Request::get('password')
             ])->first();
 

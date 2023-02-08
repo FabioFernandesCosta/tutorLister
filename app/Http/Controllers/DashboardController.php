@@ -185,7 +185,7 @@ class DashboardController extends Controller
         $alunosAtividades = usuario::selectRaw('usuario.nome as aluno, count(*) as total')
             ->join('usuario_atividade', 'usuario.usuario_id', '=', 'usuario_atividade.usuario_id')
             ->join('atividade', 'atividade.atividade_id', '=', 'usuario_atividade.atividade_id')
-            ->where('usuario.organizacao', '=', $whereValue)
+            ->where('atividade.organizacao', '=', $whereValue)
             ->groupBy('aluno')
             ->orderBy('total', 'desc')
             ->limit(10)

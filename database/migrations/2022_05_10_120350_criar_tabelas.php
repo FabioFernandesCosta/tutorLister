@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('treinamento_concluido')->default(0);
             $table->integer('nivel_de_acesso');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->default("12345678");
             //provider_id
             $table->string('provider_id')->nullable();
             //avatar
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->string('status')->default('Aberto');
             $table->text('organizacao');
         });
-        
+
 
         Schema::create('usuario_atividade', function (Blueprint $table) {
             $table->bigInteger('usuario_id') -> unsigned();
@@ -59,7 +59,7 @@ return new class extends Migration
             $table->foreign('atividade_id') -> references('atividade_id') -> on('atividade') -> onDelete('cascade');
         });
 
-        
+
 
         Schema::create('requisitante', function (Blueprint $table) {
             $table->id('requisitante_id');
@@ -81,14 +81,14 @@ return new class extends Migration
         });
 
         /*
-        
+
         Schema::create('atividade_requisitante', function (Blueprint $table) {
             $table->foreign('requisitante_id') -> references('requisitante_id') -> on('requisitante') -> onUpdate('cascade') -> onDelete('cascade');
             $table->foreign('atividade_id') -> references('atividade_id') -> on('atividade') -> onUpdate('cascade') -> onDelete('cascade');
         });
 
         */
-        
+
 
 
         Schema::create('horario', function (Blueprint $table) {
@@ -137,7 +137,7 @@ return new class extends Migration
             $table->string('valor_anterior');
             $table->string('novo_valor');
         });
-        
+
         Schema::create('historicoUser', function (Blueprint $table){
             $table->id('historico_id');
             $table->string('campo_modificado');
@@ -150,7 +150,7 @@ return new class extends Migration
             $table->string('valor_anterior')->nullable();
             $table->string('novo_valor')->nullable();
         });
-        
+
         Schema::create('historicoCurso', function (Blueprint $table){
             $table->id('historico_id');
             $table->string('campo_modificado');
@@ -163,7 +163,7 @@ return new class extends Migration
             $table->string('valor_anterior')->nullable();
             $table->string('novo_valor')->nullable();
         });
-        
+
         Schema::create('historicoRequisitante', function (Blueprint $table){
             $table->id('historico_id');
             $table->string('campo_modificado');

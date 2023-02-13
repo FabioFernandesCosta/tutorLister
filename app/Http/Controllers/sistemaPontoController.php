@@ -76,7 +76,6 @@ class sistemaPontoController extends Controller
         }else if(auth()->user()->aluno_tutor == 1){
             $horario = $horario->where('usuario.aluno_tutor', 1);
         }
-        
 
         return datatables()->of($horario)->toJson();
 

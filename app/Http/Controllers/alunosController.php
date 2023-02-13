@@ -38,7 +38,7 @@ class alunosController extends Controller
             ->join('usuario_curso', 'usuario.usuario_id', '=', 'usuario_curso.usuario_id')
             ->join('curso', 'usuario_curso.curso_id', '=', 'curso.curso_id')
             ->select('usuario.usuario_id','usuario.nome as usNome', 'usuario.email', 'usuario.telefone', 'curso.nome as crNome')
-            ->groupBy('usuario.usuario_id', 'curso.nome')
+            ->groupBy('usuario.usuario_id', 'curso.nome','usuario.nome','usuario.email','usuario.telefone')
         )->toJson());
     }
     public function index()

@@ -62,7 +62,7 @@ class atividadeControler extends Controller
                     "atividade.status",
                     DB::raw('group_concat(DISTINCT requisitante.nome ) as requisitante'))
                     //DB::raw('group_concat( usuario.nome) as nomeUs'))
-                    ->groupBy('atividade.atividade_id')
+                    ->groupBy('atividade.atividade_id','atividade.data_atividade','atividade.data_registro','atividade.hora_registro','atividade.hora_atividade','atividade.carga','atividade.descricao','atividade.status')
                     ->addSelect(DB::raw("group_concat(usuario.nome SEPARATOR ', ') as nomeUs"))
                     ->addSelect(DB::raw("group_concat(usuario.usuario_id SEPARATOR ', ') as IDUs"))
                     
